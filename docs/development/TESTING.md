@@ -1,12 +1,12 @@
 # Pruebas
 
-| Tipo                                          | Herramienta                              | Comando                          | Dónde corre                     |
-| --------------------------------------------- | ---------------------------------------- | -------------------------------- | ------------------------------- |
-| Unitarias (dominio, utilidades, traducciones) | Vitest + jsdom                           | `npm run test`                   | Local, CI                       |
-| Traducciones completas                        | script Node                              | `npm run i18n:check`             | Local, CI                       |
-| Seguridad RLS / RPC con usuarios reales       | Vitest + supabase-js                     | `npm run test:integration`       | Local / nube contra **pruebas** |
-| End-to-end públicos (sin backend)             | Playwright (Chromium móvil y escritorio) | `npm run test:e2e`               | Local, CI                       |
-| End-to-end con backend                        | Playwright                               | `E2E_BACKEND=1 npm run test:e2e` | Contra **pruebas**              |
+| Tipo                                          | Herramienta                              | Comando                          | Dónde corre                                   |
+| --------------------------------------------- | ---------------------------------------- | -------------------------------- | --------------------------------------------- |
+| Unitarias (dominio, utilidades, traducciones) | Vitest + jsdom                           | `npm run test`                   | Local, CI                                     |
+| Traducciones completas                        | script Node                              | `npm run i18n:check`             | Local, CI                                     |
+| Seguridad RLS / RPC con usuarios reales       | Vitest + supabase-js                     | `npm run test:integration`       | Local / CI (job `backend`) contra **pruebas** |
+| End-to-end públicos (sin backend)             | Playwright (Chromium móvil y escritorio) | `npm run test:e2e`               | Local, CI                                     |
+| End-to-end con backend                        | Playwright                               | `E2E_BACKEND=1 npm run test:e2e` | Contra **pruebas**                            |
 
 Reglas:
 
@@ -17,3 +17,5 @@ Reglas:
 - Usuarios de prueba: se crean y no se borran (no tenemos `service_role` en cliente). Limpieza periódica manual en el proyecto de pruebas: Authentication → Users → filtrar por `example.com`.
 
 Los resultados reales de cada ejecución se registran en `docs/STATUS.md` y en la PR.
+
+> La nube de Claude Code no puede conectar con `*.supabase.co` (la política de red lo bloquea), así que las pruebas con backend se ejecutan en GitHub Actions (job `backend`) o en local.

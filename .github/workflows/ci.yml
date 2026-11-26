@@ -59,3 +59,29 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 7
+
+  backend:
+    name: Backend (RLS + E2E against the TEST Supabase project)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    needs: quality
+    # Creates throwaway users in the TEST project only (never production). Skipped on forks.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:integration
+      - run: npx playwright test --trace off
+        env:
+          E2E_BACKEND: '1'
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-backend
+          path: playwright-report
+          retention-days: 7
