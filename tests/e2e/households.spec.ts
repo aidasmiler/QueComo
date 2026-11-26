@@ -61,7 +61,7 @@ test.describe('households (real backend)', () => {
     await page.getByRole('button', { name: 'Crear hogar' }).click();
     await expect(page).toHaveURL(/\/$/);
     await page.goto('/profile');
-    await page.getByLabel('Idioma').selectOption('en-GB');
+    await page.getByLabel('Idioma', { exact: true }).selectOption('en-GB');
     await expect(page.getByText('Language updated')).toBeVisible();
     await page.evaluate(() => localStorage.removeItem('qc.locale'));
     await page.reload();
