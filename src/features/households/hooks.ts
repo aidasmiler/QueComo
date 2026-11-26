@@ -39,7 +39,9 @@ function useInvalidateHouseholds() {
   const qc = useQueryClient();
   return async (householdId?: string) => {
     await Promise.all([
-      qc.invalidateQueries({ queryKey: queryKeys.households(user.id) }),
+      // 'all': also refetch when no screen is observing the list (e.g. accepting an invitation on
+      // /invite, outside the authed shell), so the guards never read a stale empty list.
+      qc.invalidateQueries({ queryKey: queryKeys.households(user.id), refetchType: 'all' }),
       householdId ? qc.invalidateQueries({ queryKey: queryKeys.household(householdId) }) : null,
     ]);
   };
