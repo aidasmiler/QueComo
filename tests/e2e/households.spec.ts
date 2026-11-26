@@ -15,6 +15,7 @@ test.describe('households (real backend)', () => {
     await expect(owner).toHaveURL(/\/welcome$/);
     await owner.getByLabel('Nombre del hogar').fill('Casa E2E');
     await owner.getByRole('button', { name: 'Crear hogar' }).click();
+    await expect(owner).toHaveURL(/\/$/);
     await expect(owner.getByRole('heading', { name: /Aída E2E/ })).toBeVisible();
     await expectNoHorizontalOverflow(owner);
 
@@ -52,6 +53,7 @@ test.describe('households (real backend)', () => {
     await signUp(page, 'Idioma E2E', uniqueEmail('lang'));
     await page.getByLabel('Nombre del hogar').fill('Hogar idioma');
     await page.getByRole('button', { name: 'Crear hogar' }).click();
+    await expect(page).toHaveURL(/\/$/);
     await page.goto('/profile');
     await page.getByLabel('Idioma').selectOption('en-GB');
     await expect(page.getByText('Language updated')).toBeVisible();

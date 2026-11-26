@@ -37,14 +37,17 @@ export function useInvitationPreview(token: string) {
 function useInvalidateHouseholds() {
   const user = useCurrentUser();
   const qc = useQueryClient();
-  return (householdId?: string) => {
-    void qc.invalidateQueries({ queryKey: queryKeys.households(user.id) });
-    if (householdId) void qc.invalidateQueries({ queryKey: queryKeys.household(householdId) });
+  return async (householdId?: string) => {
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: queryKeys.households(user.id) }),
+      householdId ? qc.invalidateQueries({ queryKey: queryKeys.household(householdId) }) : null,
+    ]);
   };
 }
 
 export function useCreateHousehold() {
   const invalidate = useInvalidateHouseholds();
+  // Awaited so the membership list is fresh before the caller navigates (the guards read it).
   return useMutation({ mutationFn: api.createHousehold, onSuccess: () => invalidate() });
 }
 
@@ -74,6 +77,7 @@ export function useRevokeInvitation(householdId: string) {
 
 export function useAcceptInvitation() {
   const invalidate = useInvalidateHouseholds();
+  // Awaited so the membership list is fresh before the caller navigates (the guards read it).
   return useMutation({ mutationFn: api.acceptInvitation, onSuccess: (id) => invalidate(id) });
 }
 
