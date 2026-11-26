@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/auth-context';
 import { AuthLayout } from '@/features/auth/auth-layout';
 import { FullPageSpinner } from '@/features/auth/pages';
-import { rememberInvitation } from '@/features/auth/pending-invitation';
+import { rememberInvitation, takePendingInvitation } from '@/features/auth/pending-invitation';
 import { errorMessage } from '@/lib/supabase/errors';
 import { useAcceptInvitation, useInvitationPreview } from './hooks';
 
@@ -47,6 +47,12 @@ function AuthedInvite({ token }: { token: string }) {
   const navigate = useNavigate();
   const preview = useInvitationPreview(token);
   const accept = useAcceptInvitation();
+
+  // The user is already looking at the invitation: forget the remembered token so the guards don't
+  // send them back here after accepting (the link would then show as already used).
+  useEffect(() => {
+    takePendingInvitation();
+  }, [token]);
 
   async function onAccept() {
     const householdId = await accept.mutateAsync(token);

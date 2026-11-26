@@ -35,7 +35,13 @@ test.describe('households (real backend)', () => {
     await signUp(member, 'Pareja E2E', uniqueEmail('member'));
     await expect(member.getByText('Aída E2E te invita a unirte a «Casa E2E».')).toBeVisible();
     await member.getByRole('button', { name: 'Unirme al hogar' }).click();
-    await expect(member.getByRole('button', { name: /Casa E2E/ }).first()).toBeVisible();
+    await expect(member).toHaveURL(/\/$/);
+    await expect(
+      member
+        .getByRole('button', { name: /Casa E2E/ })
+        .filter({ visible: true })
+        .first(),
+    ).toBeVisible();
 
     // The same link can't be used twice.
     const outsider = await (await browser.newContext()).newPage();
