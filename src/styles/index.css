@@ -74,14 +74,14 @@
   }
 
   body {
-    @apply bg-bg font-sans text-fg antialiased;
+    @apply bg-bg text-fg font-sans antialiased;
     min-height: 100dvh;
   }
 
   h1,
   h2,
   h3 {
-    @apply font-display tracking-tight text-fg;
+    @apply font-display text-fg tracking-tight;
     font-optical-sizing: auto;
   }
 

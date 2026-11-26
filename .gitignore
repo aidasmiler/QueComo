@@ -44,3 +44,4 @@ Desktop.ini
 .idea/
 *.code-workspace
 .vscode/*.local.json
+backups/

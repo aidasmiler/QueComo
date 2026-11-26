@@ -7,14 +7,21 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Supabase URL and publishable key are public by design (RLS protects the data), so they are
+# versioned here. Previews and branch deploys ALWAYS use the test project; production gets its own
+# project once it exists (until then production builds show the "missing configuration" screen).
 [context.production.environment]
   VITE_APP_ENV = "production"
 
 [context.deploy-preview.environment]
   VITE_APP_ENV = "preview"
+  VITE_SUPABASE_URL = "https://hbdcxaynxkaidqdsqdqv.supabase.co"
+  VITE_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1vrJwn3pz_ByTUvpcwF0iA_86SmJJ5I"
 
 [context.branch-deploy.environment]
   VITE_APP_ENV = "preview"
+  VITE_SUPABASE_URL = "https://hbdcxaynxkaidqdsqdqv.supabase.co"
+  VITE_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1vrJwn3pz_ByTUvpcwF0iA_86SmJJ5I"
 
 # SPA fallback for React Router.
 [[redirects]]
