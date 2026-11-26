@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Claude Code local configuration
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Supabase local files
+supabase/.temp/
+supabase/.branches/
+
+# Netlify local files
+.netlify/
+
+# Testing
+playwright-report/
+test-results/
+playwright/.auth/
+
+# Logs
+*.log
+
+# Cache
+.cache/
+.vite/
+
+# Operating system
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE local configuration
+.idea/
+*.code-workspace
+.vscode/*.local.json
