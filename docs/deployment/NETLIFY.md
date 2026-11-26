@@ -13,7 +13,7 @@
 
 ## Conexión con GitHub (manual, una vez)
 
-Project configuration → Build & deploy → _Link repository_ → GitHub → `aidasmiler/QueComo`; rama de producción `main`; _Deploy Previews: Any pull request_; _Branch deploys: All_. Netlify publica el enlace de la preview como check/comentario en la PR.
+Project configuration → Build & deploy → _Link repository_ → GitHub → `aidasmiler/QueComo`; rama de producción `main` (lo único que pide el asistente de enlace). Las Deploy Previews para PR vienen activadas por defecto; los ajustes están después en Project configuration → Build & deploy → Continuous deployment → _Branches and deploy contexts_ → _Configure_. Branch deploys no son necesarios. Netlify publica el enlace de la preview como check/comentario en la PR.
 
 ## Protección de previews
 

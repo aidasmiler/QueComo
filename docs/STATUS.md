@@ -24,11 +24,12 @@ Primera entrega en revisión: base técnica + cuentas + hogares + perfil (PR #1 
 - `npm run lint` ✔ · `npm run typecheck` ✔ · `npm run i18n:check` ✔ · `npm run format:check` ✔
 - `npm run test` → 12 pasan, 8 omitidas (integración sin backend habilitado).
 - `npm run test:e2e` → 14 pasan (públicos, Pixel 7 + Desktop Chrome), 4 omitidas (requieren `E2E_BACKEND=1`).
+- GitHub Actions en la PR #1 (commit 0e22d81): calidad ✔ y E2E ✔.
 - No probado: WebKit/Safari, dispositivos físicos, flujo real de registro con correo.
 
 ## Bloqueos / acciones de Aída
 
-1. Enlazar el repositorio al proyecto Netlify **quecomo-app** y activar Deploy Previews (ver `docs/deployment/NETLIFY.md`).
+1. ~~Enlazar el repositorio a Netlify **quecomo-app**~~ (hecho por Aída el 27/11, rama de producción `main`; Deploy Previews quedan activas por defecto). Pendiente comprobar la primera preview.
 2. Supabase pruebas: Site URL, Redirect URLs y desactivar _Confirm email_ (ver `docs/deployment/SUPABASE.md`).
 3. (Más adelante) SMTP gratuito para correos reales en producción; crear el proyecto Supabase de producción.
 
