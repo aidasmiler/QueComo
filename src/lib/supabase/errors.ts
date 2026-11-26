@@ -17,6 +17,8 @@ const SERVER_CODES = [
   'QC_USE_LEAVE',
   'QC_NOT_A_MEMBER',
   'QC_INVALID_TARGET',
+  'QC_RECIPE_INGREDIENTS',
+  'QC_RECIPE_STEPS',
 ] as const;
 export type ServerErrorCode = (typeof SERVER_CODES)[number];
 

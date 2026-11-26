@@ -40,7 +40,21 @@ supabase/migrations  SQL versionado · tests/{unit,integration,e2e}
 | `household_invitations`    | `token_hash` (SHA-256, único), `expires_at` (7 días), `accepted_at/by`, `revoked_at`. El token en claro solo se devuelve una vez al crearlo.       |
 | `user_dietary_preferences` | Personales: `preset_key` (lista cerrada, identificador estable) **o** `custom_label`; `kind` preferencia/restricción.                              |
 
-Pendiente (llegará con cada módulo, ver §45 de la spec): recetas, ingredientes, pasos, categorías, etiquetas, favoritos, valoraciones, plan de comidas, listas de compra con procedencia (`shopping_item_sources`).
+### Recetario (migración `20261127000000_recipes.sql`, ADR 0006)
+
+| Tabla                   | Notas                                                                                                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `recipes`               | Del hogar (`household_id`). Raciones base, dificultad, tiempos activo/pasivo/total (§7.2), etiquetas (`text[]`), fuente, notas y conservación, foto, `archived_at`. |
+| `recipe_ingredients`    | Texto original + `quantity`/`unit`/`name` solo si el análisis es seguro; `scalable=false` para «al gusto»; `optional`; `position`.                                  |
+| `recipe_steps`          | Texto y temporizador opcional; `position`.                                                                                                                          |
+| `recipe_categories`     | Editables por hogar, nombre único sin distinguir mayúsculas.                                                                                                        |
+| `recipe_category_links` | N:M; un trigger impide enlazar categorías de otro hogar.                                                                                                            |
+| `recipe_user_state`     | Personal: favorita y valoración 1–5 por persona.                                                                                                                    |
+| Storage `recipe-photos` | Bucket **privado**, ruta `<household_id>/<recipe_id>/<archivo>`; solo miembros; URLs firmadas de 1 h; 5 MB, JPEG/PNG/WebP; se reduce en el navegador.               |
+
+Las tablas hijas llevan `household_id` con FK compuesta `(recipe_id, household_id)`, así una fila nunca puede apuntar a una receta de otro hogar. Las recetas se guardan con la RPC `save_recipe(jsonb)` (**SECURITY INVOKER**: añade validación y atomicidad, pero todo se ejecuta bajo la RLS de quien llama). El escalado vive en `src/domain/recipes/quantity.ts` (puro, con tests) y nunca modifica la receta.
+
+Pendiente (llegará con cada módulo, ver §45 de la spec): plan de comidas, listas de compra con procedencia (`shopping_item_sources`).
 
 ## Seguridad
 
@@ -51,7 +65,7 @@ Pendiente (llegará con cada módulo, ver §45 de la spec): recetas, ingrediente
 - El linter de Supabase avisa (`0029`) de que `authenticated` puede ejecutar estas funciones: es **intencionado**; cada una valida internamente.
 - Regla de negocio: el último propietario no puede abandonar el hogar (`QC_LAST_OWNER`); debe transferir o eliminar.
 - Invitaciones: 32 bytes aleatorios, hash SHA-256, un solo uso, caducidad y revocación validadas en servidor; aceptación transaccional.
-- Pruebas: `tests/integration/rls.test.ts` usa identidades reales (sin `service_role`) contra el proyecto de pruebas.
+- Pruebas: `tests/integration/rls.test.ts` usa identidades reales (sin `service_role`) contra el proyecto de pruebas (job `backend` de CI). `npm run db:verify` aplica todas las migraciones en PGlite (Postgres en WASM, sin Docker) y comprueba la RLS del recetario con dos usuarios.
 
 ## Autenticación
 

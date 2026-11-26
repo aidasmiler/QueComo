@@ -12,6 +12,7 @@ const load = (locale, ns) =>
 const guides = {
   'GETTING_STARTED.md': ['gettingStarted'],
   'HOUSEHOLDS.md': ['households', 'invitations'],
+  'RECIPES.md': ['recipes', 'servings'],
   'INSTALLATION.md': ['install'],
   'SETTINGS.md': ['language'],
   'FAQ.md': ['faq'],

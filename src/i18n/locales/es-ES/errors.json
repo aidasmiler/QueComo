@@ -16,6 +16,8 @@
   "QC_USE_LEAVE": "Para salir tú del hogar, usa «Abandonar hogar».",
   "QC_NOT_A_MEMBER": "Esa persona ya no forma parte del hogar.",
   "QC_INVALID_TARGET": "Elige a otra persona del hogar.",
+  "QC_RECIPE_INGREDIENTS": "Añade al menos un ingrediente (máximo 100).",
+  "QC_RECIPE_STEPS": "Añade al menos un paso (máximo 100).",
   "auth": {
     "invalid_credentials": "El correo o la contraseña no son correctos.",
     "email_not_confirmed": "Todavía no has confirmado tu correo. Revisa tu bandeja de entrada.",

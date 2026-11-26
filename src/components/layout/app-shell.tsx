@@ -1,4 +1,4 @@
-import { House, UserRound, type LucideIcon } from 'lucide-react';
+import { BookOpen, House, UserRound, type LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router';
 import { env } from '@/lib/env';
@@ -17,6 +17,7 @@ interface NavItem {
 // Sections are added here as each module ships (no placeholder screens for unfinished features).
 const NAV_ITEMS: NavItem[] = [
   { to: '/', labelKey: 'nav.home', icon: House, end: true },
+  { to: '/recipes', labelKey: 'nav.recipes', icon: BookOpen },
   { to: '/profile', labelKey: 'nav.profile', icon: UserRound },
 ];
 

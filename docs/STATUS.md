@@ -1,10 +1,10 @@
 # Estado del proyecto
 
-_Última actualización: 2026-11-27 (sesión de arranque, Claude Code en la nube)._
+_Última actualización: 2026-11-27 (Claude Code en la nube)._
 
 ## Resumen
 
-Primera entrega en revisión: base técnica + cuentas + hogares + perfil (PR #1 desde `claude/project-thread-p97x4g`). Aún no hay recetas, menú ni compra.
+PR #1 (base + cuentas + hogares + perfil) en revisión con preview real. Segunda entrega en curso: **recetario** en `feature/recipes` (PR apilado sobre el #1). Aún no hay menú ni compra.
 
 ## Leyenda
 
@@ -17,7 +17,9 @@ Primera entrega en revisión: base técnica + cuentas + hogares + perfil (PR #1 
 | 3 · Hogares compartidos            | Sí                                                 | RLS escrita (`tests/integration`), pendiente de ejecutar (misma causa)                                                | No                                   | No       |
 | 9 · Internacionalización y ajustes | Sí (es-ES, en-GB, perfil)                          | Unit + E2E                                                                                                            | No                                   | No       |
 | 10 · Inicio y preferencias         | Parcial (inicio básico, preferencias alimentarias) | Manual pendiente                                                                                                      | No                                   | No       |
-| 4–8, 11                            | No                                                 | —                                                                                                                     | —                                    | —        |
+| 4 · Recetario                      | Sí (`feature/recipes`)                             | Unit (escalado), `db:verify` (RLS en PGlite), E2E con backend en CI tras aplicar la migración                         | Tras aplicar la migración            | No       |
+| 5 · Escalado de raciones           | Sí                                                 | Unit (ejemplos §7.1)                                                                                                  | Con el recetario                     | No       |
+| 6–8, 11                            | No                                                 | —                                                                                                                     | —                                    | —        |
 
 ## Pruebas ejecutadas (2026-11-26/27, nube Linux, Chromium 1243 de Playwright)
 
@@ -30,7 +32,8 @@ Primera entrega en revisión: base técnica + cuentas + hogares + perfil (PR #1 
 ## Bloqueos / acciones de Aída
 
 1. ~~Enlazar el repositorio a Netlify **quecomo-app**~~ (hecho por Aída el 27/11, rama de producción `main`; Deploy Previews quedan activas por defecto). Pendiente comprobar la primera preview.
-2. Supabase pruebas: Site URL, Redirect URLs y desactivar _Confirm email_ (ver `docs/deployment/SUPABASE.md`).
+2. ~~Supabase pruebas: Site URL, Redirect URLs y desactivar _Confirm email_~~ (hecho por Aída el 27/11).
+   2b. Aplicar `supabase/migrations/20261127000000_recipes.sql` en el SQL Editor del proyecto de pruebas.
 3. (Más adelante) SMTP gratuito para correos reales en producción; crear el proyecto Supabase de producción.
 
 ## Decisiones pendientes
@@ -42,7 +45,9 @@ Primera entrega en revisión: base técnica + cuentas + hogares + perfil (PR #1 
 
 ## Problemas conocidos
 
-- Bundle JS de ~270 kB gzip en un solo chunk: dividir por rutas cuando lleguen recetas/menú.
+- Bundle JS en un solo chunk: dividir por rutas cuando llegue el menú.
+- Al reducir raciones el nombre del ingrediente no cambia de número («1 cebollas»).
+- La nube de Claude Code no alcanza `*.supabase.co` ni las previews de Netlify: las pruebas con backend se ejecutan en CI.
 - Los usuarios de prueba creados por E2E/integración no se borran automáticamente.
 - Límites actuales de los planes gratuitos (Netlify, Supabase, GitHub Actions) pendientes de verificar en sus páginas oficiales y documentar con cifras.
 
@@ -52,4 +57,4 @@ Actualizado el 26/11/2026: ficha de entrega de la PR #1 (En revisión, CI pendie
 
 ## Siguiente acción concreta
 
-Cuando la preview exista: ejecutar `E2E_BACKEND=1 npm run test:e2e` y `npm run test:integration` contra pruebas, adjuntar resultados a la PR. En paralelo, empezar `feature/recipes`: migración de recetas (ingredientes, pasos, categorías, etiquetas, favoritos, valoraciones, bucket privado de fotos) + dominio de escalado con tests.
+Aída aplica la migración del recetario; entonces el job `backend` valida el recetario en CI y se revisa en la preview del PR del recetario. Siguiente módulo: menú semanal (§28).

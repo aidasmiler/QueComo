@@ -27,6 +27,23 @@
         "La persona invitada debe abrir el enlace, crear su cuenta o iniciar sesión, y pulsar «Unirme al hogar»."
       ]
     },
+    "recipes": {
+      "title": "Recetas",
+      "body": [
+        "En Recetas está el recetario del hogar activo: todos sus miembros ven y pueden editar las mismas recetas.",
+        "Pulsa «Nueva receta» y escribe cada ingrediente como lo dirías («400 g de arroz», «sal al gusto»). QuéComo separa la cantidad cuando es segura y conserva tu texto.",
+        "Desde una receta puedes marcarla como favorita, valorarla, duplicarla, archivarla o eliminarla. Favoritas y valoraciones son tuyas; el resto del hogar tiene las suyas.",
+        "Las fotos son privadas del hogar. Puedes añadirlas al editar una receta ya guardada."
+      ]
+    },
+    "servings": {
+      "title": "Ajustar raciones",
+      "body": [
+        "En la receta, usa los botones − y + junto a los ingredientes para cambiar las raciones.",
+        "Las cantidades se recalculan en proporción y la receta original no cambia. Lo que no tiene cantidad («al gusto») no se escala.",
+        "Revisa los tiempos y el tamaño del recipiente: no aumentan en la misma proporción."
+      ]
+    },
     "install": {
       "title": "Instalar la app",
       "body": [

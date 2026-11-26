@@ -6,6 +6,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). L
 
 ### Añadido
 
+- Recetario: crear, editar, duplicar, archivar, restaurar y eliminar recetas del hogar; ingredientes en texto libre con cantidad detectada, pasos con temporizador, tiempos activo/pasivo/total, dificultad, categorías editables, etiquetas, notas de conservación y fuente; foto privada; búsqueda y filtros (favoritas, archivadas, categoría); favoritas y valoración personales.
+- Escalado de raciones con fracciones y decimales sin modificar la receta original; lo cualitativo («al gusto») no se escala.
+- `npm run db:verify`: verificación de migraciones y RLS en PGlite, sin Docker.
 - Base técnica: React + TypeScript + Vite, Tailwind con tokens de diseño, PWA instalable, i18n es-ES/en-GB, CI en GitHub Actions y configuración de Netlify.
 - Identidad visual: logotipo, icono, favicon e iconos PWA.
 - Cuentas: registro, inicio y cierre de sesión, recuperación de contraseña, sesión persistente y rutas protegidas.
