@@ -12,7 +12,7 @@ import { supabase } from '@/lib/supabase/client';
 import { useChangeLocale, useProfile } from './hooks';
 
 export function ProfilePage() {
-  const { t } = useTranslation(['profile', 'auth', 'households']);
+  const { t, i18n } = useTranslation(['profile', 'auth', 'households']);
   const user = useCurrentUser();
   const profile = useProfile();
   const { households } = useActiveHousehold();
@@ -72,7 +72,10 @@ export function ProfilePage() {
             value={profile.data?.locale}
             onChange={(locale) =>
               void changeLocale(locale).then((saved) =>
-                saved ? toast.show(t('languageSaved')) : toast.show(t('languageNotSaved'), 'error'),
+                // i18n.t (not t): `t` is bound to the language of the previous render.
+                saved
+                  ? toast.show(i18n.t('profile:languageSaved'))
+                  : toast.show(i18n.t('profile:languageNotSaved'), 'error'),
               )
             }
           />
