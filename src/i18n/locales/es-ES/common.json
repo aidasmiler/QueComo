@@ -1,0 +1,65 @@
+{
+  "appName": "QuéComo",
+  "tagline": "Planifica, compra y cocina en casa sin carga mental.",
+  "nav": {
+    "home": "Inicio",
+    "recipes": "Recetas",
+    "planner": "Menú",
+    "shopping": "Compra",
+    "profile": "Perfil",
+    "main": "Navegación principal"
+  },
+  "actions": {
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "continue": "Continuar",
+    "back": "Volver",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "share": "Compartir",
+    "retry": "Reintentar",
+    "skip": "Omitir por ahora",
+    "edit": "Editar",
+    "reload": "Recargar"
+  },
+  "status": {
+    "loading": "Cargando…",
+    "saved": "Cambios guardados",
+    "offline": "Sin conexión",
+    "offlineDetail": "Puedes seguir consultando lo que ya está en este dispositivo.",
+    "backOnline": "Conexión recuperada"
+  },
+  "env": {
+    "preview": "Preview de pruebas",
+    "local": "Desarrollo local"
+  },
+  "pwa": {
+    "updateAvailable": "Hay una versión nueva de QuéComo.",
+    "update": "Actualizar",
+    "offlineReady": "QuéComo ya puede abrirse sin conexión."
+  },
+  "household": {
+    "active": "Hogar activo",
+    "switch": "Cambiar de hogar"
+  },
+  "error": {
+    "title": "Algo no ha ido bien",
+    "body": "No hemos podido cargar esta pantalla. Comprueba tu conexión e inténtalo de nuevo.",
+    "notFoundTitle": "Esta página no existe",
+    "notFoundBody": "Puede que el enlace esté incompleto o que la página se haya movido.",
+    "goHome": "Ir al inicio"
+  },
+  "language": {
+    "label": "Idioma",
+    "es-ES": "Español",
+    "en-GB": "English"
+  },
+  "roles": {
+    "owner": "Propietaria/o",
+    "member": "Miembro"
+  }
+}

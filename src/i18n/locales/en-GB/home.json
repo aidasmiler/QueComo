@@ -1,0 +1,20 @@
+{
+  "greeting": {
+    "morning": "Good morning, {{name}}",
+    "afternoon": "Good afternoon, {{name}}",
+    "evening": "Good evening, {{name}}"
+  },
+  "question": "What's for dinner today?",
+  "today": "Today, {{date}}",
+  "householdCard": {
+    "title": "Your household",
+    "people_one": "Just you for now",
+    "people_other": "{{count}} people share this household",
+    "invite": "Invite someone",
+    "manage": "View household"
+  },
+  "comingNext": {
+    "title": "We're setting up your kitchen",
+    "body": "This is an early version of QuéComo. The recipe book, weekly menu and shared shopping list are coming in the next releases."
+  }
+}

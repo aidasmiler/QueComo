@@ -1,0 +1,28 @@
+{
+  "generic": "No se ha podido completar la acción. Inténtalo de nuevo.",
+  "network": "No hay conexión con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+  "QC_NOT_AUTHENTICATED": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+  "QC_FORBIDDEN": "No tienes permiso para hacer esto en este hogar.",
+  "QC_NOT_OWNER": "Solo la persona propietaria del hogar puede hacer esto.",
+  "QC_INVALID_NAME": "El nombre debe tener entre 1 y 60 caracteres.",
+  "QC_TOO_MANY_HOUSEHOLDS": "Has alcanzado el número máximo de hogares.",
+  "QC_TOO_MANY_INVITATIONS": "Este hogar tiene demasiadas invitaciones pendientes. Revoca alguna antes de crear otra.",
+  "QC_INVITATION_INVALID": "Esta invitación no es válida. Pide un enlace nuevo.",
+  "QC_INVITATION_REVOKED": "Esta invitación se ha cancelado. Pide un enlace nuevo.",
+  "QC_INVITATION_USED": "Esta invitación ya se ha utilizado.",
+  "QC_INVITATION_EXPIRED": "Esta invitación ha caducado. Pide un enlace nuevo.",
+  "QC_ALREADY_MEMBER": "Ya formas parte de este hogar.",
+  "QC_LAST_OWNER": "Eres la única persona propietaria. Transfiere la propiedad o elimina el hogar antes de salir.",
+  "QC_USE_LEAVE": "Para salir tú del hogar, usa «Abandonar hogar».",
+  "QC_NOT_A_MEMBER": "Esa persona ya no forma parte del hogar.",
+  "QC_INVALID_TARGET": "Elige a otra persona del hogar.",
+  "auth": {
+    "invalid_credentials": "El correo o la contraseña no son correctos.",
+    "email_not_confirmed": "Todavía no has confirmado tu correo. Revisa tu bandeja de entrada.",
+    "user_already_exists": "Ya existe una cuenta con este correo. Inicia sesión.",
+    "weak_password": "La contraseña es demasiado débil. Usa al menos 8 caracteres.",
+    "over_email_send_rate_limit": "Se han enviado demasiados correos. Espera unos minutos y vuelve a intentarlo.",
+    "over_request_rate_limit": "Demasiados intentos. Espera unos minutos.",
+    "same_password": "La nueva contraseña debe ser distinta de la anterior."
+  }
+}

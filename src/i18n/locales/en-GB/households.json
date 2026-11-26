@@ -1,0 +1,74 @@
+{
+  "onboarding": {
+    "title": "Welcome to QuéComo",
+    "subtitle": "A household is the space you share with your partner, family or flatmates. You can have several.",
+    "createTitle": "Create a household",
+    "createHint": "For example: “Home”, “With Marta” or “Family”.",
+    "nameLabel": "Household name",
+    "namePlaceholder": "Home",
+    "create": "Create household",
+    "joinTitle": "Have you been invited?",
+    "joinHint": "Paste the invitation link you were sent.",
+    "joinLabel": "Invitation link",
+    "join": "View invitation",
+    "joinInvalid": "That link doesn't look like a QuéComo invitation."
+  },
+  "list": {
+    "title": "My households",
+    "new": "New household",
+    "active": "Active",
+    "members_one": "{{count}} person",
+    "members_other": "{{count}} people",
+    "makeActive": "Use this household"
+  },
+  "detail": {
+    "members": "People",
+    "you": "You",
+    "rename": "Rename",
+    "renameTitle": "Rename household",
+    "invitations": "Pending invitations",
+    "noInvitations": "There are no pending invitations.",
+    "invite": "Invite someone",
+    "inviteTitle": "Invite to {{household}}",
+    "inviteBody": "Share this link with the person you want to invite. It works once and expires on {{date}}.",
+    "inviteShareText": "Join our household “{{household}}” on QuéComo:",
+    "inviteCreated": "Created on {{date}} · expires on {{expires}}",
+    "revoke": "Revoke",
+    "revokeConfirm": "Revoke this invitation? The link will stop working.",
+    "revoked": "Invitation revoked",
+    "remove": "Remove from household",
+    "removeConfirm": "Remove {{name}} from this household? They will no longer see its recipes, menus and lists.",
+    "removed": "{{name}} is no longer part of the household",
+    "makeOwner": "Make owner",
+    "transferConfirm": "Transfer ownership to {{name}}? You'll become a member and can't undo this yourself.",
+    "transferred": "Ownership transferred to {{name}}",
+    "dangerZone": "Danger zone",
+    "leave": "Leave household",
+    "leaveConfirm": "Leave “{{household}}”? You'll lose access to its data and will need a new invitation to come back.",
+    "left": "You have left the household",
+    "lastOwnerHint": "You're the only owner: transfer ownership before leaving, or delete the household.",
+    "delete": "Delete household",
+    "deleteConfirm": "Delete “{{household}}” and all its data for everyone? This can't be undone.",
+    "deleteTypeName": "Type the household name to confirm",
+    "deleted": "Household deleted"
+  },
+  "invite": {
+    "title": "Household invitation",
+    "body": "{{inviter}} has invited you to join “{{household}}”.",
+    "bodyNoInviter": "You've been invited to join “{{household}}”.",
+    "accept": "Join household",
+    "accepted": "You're now part of {{household}}!",
+    "alreadyMember": "You're already part of this household.",
+    "goToHousehold": "Go to household",
+    "status": {
+      "revoked": "This invitation was cancelled.",
+      "accepted": "This invitation has already been used.",
+      "expired": "This invitation has expired."
+    },
+    "askNew": "Ask the person who invited you for a new link."
+  },
+  "switcher": {
+    "title": "Choose a household",
+    "manage": "Manage households"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "title": "Perfil",
+  "sections": {
+    "account": "Tu cuenta",
+    "households": "Hogares",
+    "settings": "Configuración",
+    "support": "Ayuda y privacidad"
+  },
+  "editProfile": "Editar perfil",
+  "editTitle": "Tu perfil",
+  "preferences": "Preferencias alimentarias",
+  "language": "Idioma",
+  "languageSaved": "Idioma actualizado",
+  "languageNotSaved": "Hemos cambiado el idioma en este dispositivo, pero no se ha podido guardar en tu cuenta. Lo intentaremos de nuevo.",
+  "install": "Instalar la app",
+  "help": "Ayuda y soporte",
+  "privacy": "Privacidad y datos",
+  "signedInAs": "Sesión iniciada como {{email}}",
+  "prefs": {
+    "title": "Preferencias alimentarias",
+    "intro": "Son personales: las demás personas de tu hogar no las cambian. Nos ayudarán a sugerirte recetas.",
+    "restrictionsTitle": "No como / no puedo comer",
+    "preferencesTitle": "Me interesa",
+    "customTitle": "Otras etiquetas",
+    "customPlaceholder": "Ej.: sin picante",
+    "add": "Añadir",
+    "disclaimer": "Las etiquetas de recetas las escriben las personas usuarias y no garantizan la ausencia de alérgenos. Revisa siempre los ingredientes.",
+    "presets": {
+      "vegetarian": "Vegetariano",
+      "vegan": "Vegano",
+      "gluten_free": "Sin gluten",
+      "lactose_free": "Sin lactosa",
+      "quick": "Rápido",
+      "budget": "Económico",
+      "low_prep": "Poca preparación",
+      "batch_cooking": "Batch cooking",
+      "freezer_friendly": "Apto para congelar",
+      "make_ahead": "Se puede preparar antes"
+    }
+  },
+  "installGuide": {
+    "title": "Instalar QuéComo",
+    "intro": "Instala QuéComo en tu pantalla de inicio para abrirla como una app, incluso sin conexión.",
+    "installed": "QuéComo ya está instalada en este dispositivo.",
+    "installButton": "Instalar ahora",
+    "ios": {
+      "title": "iPhone o iPad",
+      "steps": [
+        "Abre QuéComo en Safari.",
+        "Toca el botón Compartir (el cuadrado con una flecha hacia arriba).",
+        "Elige «Añadir a pantalla de inicio» y confirma.",
+        "Abre QuéComo desde su nuevo icono."
+      ]
+    },
+    "android": {
+      "title": "Android",
+      "steps": [
+        "Abre QuéComo en Chrome.",
+        "Toca «Instalar» si aparece el aviso, o abre el menú ⋮ y elige «Instalar aplicación» o «Añadir a pantalla de inicio».",
+        "Abre QuéComo desde su icono."
+      ]
+    },
+    "desktop": {
+      "title": "Ordenador",
+      "steps": [
+        "Abre QuéComo en Chrome o Edge.",
+        "Pulsa el icono de instalar en la barra de direcciones, o usa el menú del navegador y elige «Instalar QuéComo».",
+        "En Safari para Mac: menú Archivo → «Añadir al Dock»."
+      ]
+    }
+  },
+  "privacyPage": {
+    "title": "Privacidad y datos",
+    "body1": "Tus recetas, menús y listas se guardan en nuestro servidor (Supabase, en la Unión Europea) y solo las ven las personas de cada hogar.",
+    "body2": "QuéComo no usa publicidad ni analítica de terceros.",
+    "body3": "Para descargar una copia de tus datos o eliminar tu cuenta, escribe a la administradora de QuéComo. Pronto podrás hacerlo desde aquí."
+  }
+}

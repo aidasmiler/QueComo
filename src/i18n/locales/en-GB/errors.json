@@ -1,0 +1,28 @@
+{
+  "generic": "We couldn't complete that. Please try again.",
+  "network": "We can't reach the server. Check your connection and try again.",
+  "QC_NOT_AUTHENTICATED": "Your session has expired. Please sign in again.",
+  "QC_FORBIDDEN": "You don't have permission to do this in this household.",
+  "QC_NOT_OWNER": "Only the household owner can do this.",
+  "QC_INVALID_NAME": "The name must be between 1 and 60 characters.",
+  "QC_TOO_MANY_HOUSEHOLDS": "You have reached the maximum number of households.",
+  "QC_TOO_MANY_INVITATIONS": "This household has too many pending invitations. Revoke one before creating another.",
+  "QC_INVITATION_INVALID": "This invitation isn't valid. Ask for a new link.",
+  "QC_INVITATION_REVOKED": "This invitation was cancelled. Ask for a new link.",
+  "QC_INVITATION_USED": "This invitation has already been used.",
+  "QC_INVITATION_EXPIRED": "This invitation has expired. Ask for a new link.",
+  "QC_ALREADY_MEMBER": "You're already part of this household.",
+  "QC_LAST_OWNER": "You're the only owner. Transfer ownership or delete the household before leaving.",
+  "QC_USE_LEAVE": "To remove yourself, use “Leave household”.",
+  "QC_NOT_A_MEMBER": "That person is no longer part of the household.",
+  "QC_INVALID_TARGET": "Choose another household member.",
+  "auth": {
+    "invalid_credentials": "The email or password is incorrect.",
+    "email_not_confirmed": "You haven't confirmed your email yet. Check your inbox.",
+    "user_already_exists": "An account with this email already exists. Sign in instead.",
+    "weak_password": "That password is too weak. Use at least 8 characters.",
+    "over_email_send_rate_limit": "Too many emails have been sent. Wait a few minutes and try again.",
+    "over_request_rate_limit": "Too many attempts. Please wait a few minutes.",
+    "same_password": "The new password must be different from the old one."
+  }
+}

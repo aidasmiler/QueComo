@@ -1,0 +1,65 @@
+{
+  "appName": "QuéComo",
+  "tagline": "Plan, shop and cook at home without the mental load.",
+  "nav": {
+    "home": "Home",
+    "recipes": "Recipes",
+    "planner": "Menu",
+    "shopping": "Shopping",
+    "profile": "Profile",
+    "main": "Main navigation"
+  },
+  "actions": {
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "close": "Close",
+    "continue": "Continue",
+    "back": "Back",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "copy": "Copy",
+    "copied": "Copied",
+    "share": "Share",
+    "retry": "Try again",
+    "skip": "Skip for now",
+    "edit": "Edit",
+    "reload": "Reload"
+  },
+  "status": {
+    "loading": "Loading…",
+    "saved": "Changes saved",
+    "offline": "Offline",
+    "offlineDetail": "You can keep browsing what is already on this device.",
+    "backOnline": "Back online"
+  },
+  "env": {
+    "preview": "Test preview",
+    "local": "Local development"
+  },
+  "pwa": {
+    "updateAvailable": "A new version of QuéComo is available.",
+    "update": "Update",
+    "offlineReady": "QuéComo can now open offline."
+  },
+  "household": {
+    "active": "Active household",
+    "switch": "Switch household"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "body": "We couldn't load this screen. Check your connection and try again.",
+    "notFoundTitle": "This page doesn't exist",
+    "notFoundBody": "The link may be incomplete or the page may have moved.",
+    "goHome": "Go home"
+  },
+  "language": {
+    "label": "Language",
+    "es-ES": "Español",
+    "en-GB": "English"
+  },
+  "roles": {
+    "owner": "Owner",
+    "member": "Member"
+  }
+}
