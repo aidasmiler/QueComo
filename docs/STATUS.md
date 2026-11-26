@@ -47,7 +47,7 @@ Primera entrega en revisión: base técnica + cuentas + hogares + perfil (PR #1 
 
 ## Notion
 
-Actualizado en esta sesión: ficha de entrega de la PR #1 y estado de funcionalidades 1, 2, 3, 9 → «En revisión».
+Actualizado el 26/11/2026: ficha de entrega de la PR #1 (En revisión, CI pendiente), funcionalidades 1, 2, 3 y 9 → «En revisión», 10 (Inicio y preferencias) → «En desarrollo» (falta completar Inicio) y estado/bloqueo/próximo paso del dashboard.
 
 ## Siguiente acción concreta
 
