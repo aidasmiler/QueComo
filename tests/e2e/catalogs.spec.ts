@@ -38,6 +38,10 @@ test.describe('kitchen equipment and cooking history (real backend)', () => {
     await page.getByRole('button', { name: 'Guardar receta' }).click();
 
     await expect(page.getByRole('heading', { name: 'Salmón Lékué E2E' })).toBeVisible();
+    const equipment = page.getByRole('heading', { name: 'Utensilios necesarios' }).locator('..');
+    await expect(equipment).toContainText('Estuche de vapor Lékué');
+    // Printed so a failure in CI shows what the card said (the report artifact is not always at hand).
+    console.log('equipment card:', await equipment.innerText());
     await expect(page.getByText('Me falta equipamiento')).toBeVisible();
     await expect(page.getByText('Os falta: Estuche de vapor Lékué.')).toBeVisible();
     await expect(page.getByText('Muy rápida')).toBeVisible();
