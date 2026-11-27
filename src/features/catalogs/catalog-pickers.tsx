@@ -1,4 +1,4 @@
-import { Check, Plus, Search, X } from 'lucide-react';
+import { Plus, Search, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from '@/components/ui/alert';
@@ -7,7 +7,6 @@ import { Dialog } from '@/components/ui/dialog';
 import type { ItemKey } from '@/domain/recipes/catalog';
 import { normalise } from '@/features/recipes/format';
 import { errorMessage } from '@/lib/supabase/errors';
-import { cn } from '@/lib/utils/cn';
 import type { CatalogKind } from './api';
 import { TAG_GROUPS, UTENSIL_GROUPS } from './catalog-constants';
 import { CategoryIcon, ToggleChip } from './catalog-ui';
@@ -217,17 +216,8 @@ export function UtensilChecklist({
                         type="checkbox"
                         checked={checked}
                         onChange={() => onToggle(item.key)}
-                        className="peer sr-only"
+                        className="accent-primary size-5 shrink-0 cursor-pointer"
                       />
-                      <span
-                        aria-hidden="true"
-                        className={cn(
-                          'peer-focus-visible:ring-accent-strong grid size-6 shrink-0 place-items-center rounded-md border-2 peer-focus-visible:ring-2',
-                          checked ? 'border-primary bg-primary text-primary-fg' : 'border-border',
-                        )}
-                      >
-                        {checked && <Check className="size-4" />}
-                      </span>
                       <span className="text-base">{item.name}</span>
                     </label>
                   </li>

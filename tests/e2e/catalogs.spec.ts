@@ -52,7 +52,9 @@ test.describe('kitchen equipment and cooking history (real backend)', () => {
 
     // Ticking the steam case makes it doable.
     await page.goto('/kitchen');
-    await page.getByLabel('Estuche de vapor Lékué').check();
+    // Saved to the server with an optimistic update, so assert the state instead of check().
+    await page.getByLabel('Estuche de vapor Lékué').click();
+    await expect(page.getByLabel('Estuche de vapor Lékué')).toBeChecked();
     await expect(page.getByText('2 marcados')).toBeVisible();
     await page.goto('/recipes');
     await expect(page.getByText('Puedo prepararla')).toBeVisible();
