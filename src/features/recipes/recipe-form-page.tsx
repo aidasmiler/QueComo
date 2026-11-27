@@ -20,16 +20,12 @@ import { formatQuantity, parseIngredientLine, parseNumber } from '@/domain/recip
 import { useActiveHousehold } from '@/features/households/active-household';
 import { errorMessage } from '@/lib/supabase/errors';
 import { cn } from '@/lib/utils/cn';
+import { keyRef, type ItemKey } from '@/domain/recipes/catalog';
+import type { EquipmentStatus } from '@/domain/recipes/equipment';
+import { ChipPicker, UtensilPicker } from '@/features/catalogs/catalog-pickers';
+import { useCatalog } from '@/features/catalogs/hooks';
 import type { RecipeDetail, RecipeInput } from './api';
-import {
-  useCreateCategory,
-  useDeleteCategory,
-  useRecipe,
-  useRecipeCategories,
-  useRemovePhoto,
-  useSaveRecipe,
-  useUploadPhoto,
-} from './hooks';
+import { useRecipe, useRemovePhoto, useSaveRecipe, useUploadPhoto } from './hooks';
 import { preparePhoto } from './image';
 import { RecipePhoto } from './recipe-photo';
 
@@ -52,8 +48,12 @@ const schema = z.object({
   activeMinutes: optionalMinutes,
   passiveMinutes: optionalMinutes,
   totalMinutes: optionalMinutes,
-  tags: z.string().max(400),
-  categoryIds: z.array(z.string()),
+  categories: z.array(z.custom<ItemKey>()).max(20),
+  tagKeys: z.array(z.custom<ItemKey>()).max(30),
+  equipmentStatus: z.enum(['unspecified', 'none', 'defined']),
+  methods: z
+    .array(z.object({ label: z.string().max(60), utensils: z.array(z.custom<ItemKey>()).max(20) }))
+    .max(5),
   sourceUrl: z
     .string()
     .trim()
@@ -73,7 +73,13 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 type ValidationKey =
-  'titleRequired' | 'servings' | 'ingredientsRequired' | 'stepsRequired' | 'minutes' | 'url';
+  | 'titleRequired'
+  | 'servings'
+  | 'ingredientsRequired'
+  | 'stepsRequired'
+  | 'minutes'
+  | 'url'
+  | 'equipmentRequired';
 
 const minutesOrNull = (v: string) => (v.trim() === '' ? null : Number(v));
 const textOrNull = (v: string) => (v.trim() === '' ? null : v.trim());
@@ -87,8 +93,12 @@ function toFormValues(recipe?: RecipeDetail): FormValues {
     activeMinutes: recipe?.active_minutes?.toString() ?? '',
     passiveMinutes: recipe?.passive_minutes?.toString() ?? '',
     totalMinutes: recipe?.total_minutes?.toString() ?? '',
-    tags: recipe?.tags.join(', ') ?? '',
-    categoryIds: recipe?.categoryIds ?? [],
+    categories: recipe?.categoryKeys ?? [],
+    tagKeys: recipe?.tagKeys ?? [],
+    equipmentStatus: recipe?.equipment.status ?? 'unspecified',
+    methods: recipe?.equipment.methods.length
+      ? recipe.equipment.methods.map((m) => ({ label: m.label ?? '', utensils: m.utensils }))
+      : [{ label: '', utensils: [] }],
     sourceUrl: recipe?.source_url ?? '',
     sourceAuthor: recipe?.source_author ?? '',
     notes: recipe?.notes ?? '',
@@ -152,6 +162,10 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
     ].filter((row) => row.body.trim() !== '');
     if (!ingredientRows.length) return setListError('ingredientsRequired');
     if (!stepRows.length) return setListError('stepsRequired');
+    const methods = values.methods.filter((m) => m.utensils.length > 0);
+    if (values.equipmentStatus === 'defined' && !methods.length) {
+      return setListError('equipmentRequired');
+    }
     setListError(null);
     if (!active) return;
 
@@ -165,18 +179,19 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
       active_minutes: minutesOrNull(values.activeMinutes),
       passive_minutes: minutesOrNull(values.passiveMinutes),
       total_minutes: minutesOrNull(values.totalMinutes),
-      tags: values.tags
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter(Boolean)
-        .slice(0, 20),
       source_url: textOrNull(values.sourceUrl),
       source_author: textOrNull(values.sourceAuthor),
       notes: textOrNull(values.notes),
       storage_notes: textOrNull(values.storageNotes),
       freezing_notes: textOrNull(values.freezingNotes),
       reheating_notes: textOrNull(values.reheatingNotes),
-      category_ids: values.categoryIds,
+      categories: values.categories.map(keyRef),
+      tag_links: values.tagKeys.map(keyRef),
+      equipment_status: values.equipmentStatus,
+      methods:
+        values.equipmentStatus === 'defined'
+          ? methods.map((m) => ({ label: textOrNull(m.label), utensils: m.utensils.map(keyRef) }))
+          : [],
       ingredients: ingredientRows.map((row) => {
         const parsed = parseIngredientLine(row.text);
         return {
@@ -443,14 +458,13 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
 
         <Card className="flex flex-col gap-5">
           <h2 className="text-xl">{t('form.organisation')}</h2>
-          <CategoryPicker
-            value={useWatch({ control: form.control, name: 'categoryIds' })}
-            onChange={(ids) => form.setValue('categoryIds', ids, { shouldDirty: true })}
-          />
-          <Field label={t('form.tags')} hint={t('form.tagsHint')}>
-            <Input maxLength={400} autoComplete="off" {...form.register('tags')} />
-          </Field>
+          <OrganisationFields control={form.control} />
         </Card>
+
+        <EquipmentSection
+          control={form.control}
+          error={listError === 'equipmentRequired' ? v(listError) : undefined}
+        />
 
         <Card className="flex flex-col gap-5">
           <h2 className="text-xl">{t('form.extra')}</h2>
@@ -681,112 +695,6 @@ function PasteList({
   );
 }
 
-function CategoryPicker({
-  value,
-  onChange,
-}: {
-  value: string[];
-  onChange: (ids: string[]) => void;
-}) {
-  const { t } = useTranslation(['recipes', 'common']);
-  const categories = useRecipeCategories();
-  const create = useCreateCategory();
-  const remove = useDeleteCategory();
-  const [name, setName] = useState('');
-  const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null);
-
-  async function add() {
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    const category = await create.mutateAsync(trimmed);
-    onChange([...value, category.id]);
-    setName('');
-  }
-
-  return (
-    <fieldset className="flex flex-col gap-3">
-      <legend className="text-sm font-semibold">{t('form.categories')}</legend>
-      {(create.isError || remove.isError) && (
-        <Alert tone="error">{errorMessage(create.error ?? remove.error)}</Alert>
-      )}
-      <ul className="flex flex-wrap gap-2">
-        {categories.data?.map((category) => {
-          const selected = value.includes(category.id);
-          return (
-            <li key={category.id} className="flex items-center">
-              <button
-                type="button"
-                aria-pressed={selected}
-                onClick={() =>
-                  onChange(
-                    selected ? value.filter((id) => id !== category.id) : [...value, category.id],
-                  )
-                }
-                className={cn(
-                  'min-h-10 rounded-l-full border py-1 pr-2 pl-4 text-sm font-semibold',
-                  selected
-                    ? 'border-primary bg-primary text-primary-fg'
-                    : 'border-border bg-surface text-fg',
-                )}
-              >
-                {category.name}
-              </button>
-              <button
-                type="button"
-                aria-label={t('form.deleteCategory', { name: category.name })}
-                onClick={() => setPendingDelete(category)}
-                className={cn(
-                  'text-fg-muted hover:text-danger grid min-h-10 w-9 place-items-center rounded-r-full border border-l-0',
-                  selected ? 'border-primary' : 'border-border',
-                )}
-              >
-                <Trash2 aria-hidden="true" className="size-4" />
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      <div className="flex gap-2">
-        <Input
-          aria-label={t('form.newCategory')}
-          placeholder={t('form.newCategory')}
-          maxLength={40}
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault();
-              void add();
-            }
-          }}
-          className="max-w-xs"
-        />
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => void add()}
-          loading={create.isPending}
-          disabled={!name.trim()}
-        >
-          {t('form.addCategory')}
-        </Button>
-      </div>
-      <ConfirmDialog
-        open={pendingDelete !== null}
-        onOpenChange={(open) => !open && setPendingDelete(null)}
-        title={t('form.deleteCategoryTitle', { name: pendingDelete?.name ?? '' })}
-        description={t('form.deleteCategoryBody')}
-        confirmLabel={t('common:actions.delete')}
-        onConfirm={async () => {
-          if (!pendingDelete) return;
-          await remove.mutateAsync(pendingDelete.id);
-          onChange(value.filter((id) => id !== pendingDelete.id));
-        }}
-      />
-    </fieldset>
-  );
-}
-
 function PhotoField({ recipe }: { recipe: RecipeDetail }) {
   const { t } = useTranslation('recipes');
   const toast = useToast();
@@ -857,5 +765,154 @@ function PhotoField({ recipe }: { recipe: RecipeDetail }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function OrganisationFields({ control }: { control: Control<FormValues> }) {
+  const { t } = useTranslation('recipes');
+  const catalog = useCatalog();
+  const categories = useController({ control, name: 'categories' });
+  const tags = useController({ control, name: 'tagKeys' });
+  if (catalog.isError) return <Alert tone="error">{errorMessage(catalog.error)}</Alert>;
+  if (!catalog.data) return <Skeleton className="h-40 w-full" />;
+  return (
+    <>
+      <ChipPicker
+        kind="category"
+        legend={t('form.categories')}
+        items={catalog.data.categories}
+        value={categories.field.value}
+        onChange={categories.field.onChange}
+        max={20}
+      />
+      <ChipPicker
+        kind="tag"
+        legend={t('form.tags')}
+        items={catalog.data.tags}
+        value={tags.field.value}
+        onChange={tags.field.onChange}
+        max={30}
+      />
+      <p className="text-fg-muted text-sm">{t('form.autoTagsHint')}</p>
+    </>
+  );
+}
+
+const EQUIPMENT_STATUSES: EquipmentStatus[] = ['unspecified', 'none', 'defined'];
+
+function EquipmentSection({ control, error }: { control: Control<FormValues>; error?: string }) {
+  const { t } = useTranslation('recipes');
+  const catalog = useCatalog();
+  const status = useController({ control, name: 'equipmentStatus' });
+  const methods = useFieldArray({ control, name: 'methods' });
+  return (
+    <Card className="flex flex-col gap-4">
+      <div>
+        <h2 className="text-xl">{t('equipment.title')}</h2>
+        <p className="text-fg-muted mt-1 text-sm">{t('equipment.formHint')}</p>
+      </div>
+      <fieldset className="flex flex-col gap-2">
+        <legend className="sr-only">{t('equipment.title')}</legend>
+        {EQUIPMENT_STATUSES.map((option) => (
+          <label
+            key={option}
+            className={cn(
+              'flex min-h-12 cursor-pointer items-start gap-3 rounded-md border px-4 py-3',
+              status.field.value === option ? 'border-primary bg-primary-soft/40' : 'border-border',
+            )}
+          >
+            <input
+              type="radio"
+              name={status.field.name}
+              value={option}
+              checked={status.field.value === option}
+              onChange={() => status.field.onChange(option)}
+              className="accent-primary mt-1 size-4"
+            />
+            <span>
+              <span className="block font-semibold">{t(`equipment.status.${option}`)}</span>
+              <span className="text-fg-muted block text-sm">
+                {t(`equipment.statusHint.${option}`)}
+              </span>
+            </span>
+          </label>
+        ))}
+      </fieldset>
+      {error && <Alert tone="error">{error}</Alert>}
+      {status.field.value === 'defined' &&
+        (catalog.data ? (
+          <ol className="flex flex-col gap-4">
+            {methods.fields.map((method, index) => (
+              <li
+                key={method.id}
+                className="border-border/70 flex flex-col gap-3 rounded-md border p-4"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-sans text-base font-semibold">
+                    {methods.fields.length > 1
+                      ? t('equipment.methodNumber', { number: index + 1 })
+                      : t('equipment.utensils')}
+                  </h3>
+                  {methods.fields.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="dangerGhost"
+                      size="sm"
+                      onClick={() => methods.remove(index)}
+                    >
+                      <Trash2 aria-hidden="true" />
+                      {t('equipment.removeMethod')}
+                    </Button>
+                  )}
+                </div>
+                {methods.fields.length > 1 && <MethodLabel control={control} index={index} />}
+                <MethodUtensils control={control} index={index} />
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <Skeleton className="h-24 w-full" />
+        ))}
+      {status.field.value === 'defined' && methods.fields.length < 5 && (
+        <div className="flex flex-col gap-1">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-fit"
+            onClick={() => methods.append({ label: '', utensils: [] })}
+          >
+            <Plus aria-hidden="true" />
+            {t('equipment.addMethod')}
+          </Button>
+          <p className="text-fg-muted text-sm">{t('equipment.addMethodHint')}</p>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function MethodLabel({ control, index }: { control: Control<FormValues>; index: number }) {
+  const { t } = useTranslation('recipes');
+  const label = useController({ control, name: `methods.${index}.label` });
+  return (
+    <Field label={t('equipment.methodLabel')} hint={t('equipment.methodLabelHint')}>
+      <Input maxLength={60} {...label.field} />
+    </Field>
+  );
+}
+
+function MethodUtensils({ control, index }: { control: Control<FormValues>; index: number }) {
+  const { t } = useTranslation('recipes');
+  const catalog = useCatalog();
+  const utensils = useController({ control, name: `methods.${index}.utensils` });
+  if (!catalog.data) return null;
+  return (
+    <UtensilPicker
+      label={t('equipment.utensils')}
+      items={catalog.data.utensils}
+      maps={catalog.data.maps.utensil}
+      value={utensils.field.value}
+      onChange={utensils.field.onChange}
+    />
   );
 }

@@ -26,5 +26,7 @@
     "over_email_send_rate_limit": "Too many emails have been sent. Wait a few minutes and try again.",
     "over_request_rate_limit": "Too many attempts. Please wait a few minutes.",
     "same_password": "The new password must be different from the old one."
-  }
+  },
+  "QC_CATALOG_DUPLICATE": "An item with that name already exists in the catalogue.",
+  "QC_RECIPE_EQUIPMENT": "Add at least one utensil to each preparation method (5 methods and 20 utensils per method at most)."
 }

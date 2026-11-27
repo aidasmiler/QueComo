@@ -24,7 +24,8 @@
     "retry": "Try again",
     "skip": "Skip for now",
     "edit": "Edit",
-    "reload": "Reload"
+    "reload": "Reload",
+    "done": "Done"
   },
   "status": {
     "loading": "Loading…",

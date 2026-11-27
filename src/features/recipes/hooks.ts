@@ -25,14 +25,6 @@ export function useRecipe(recipeId: string) {
   });
 }
 
-export function useRecipeCategories() {
-  const householdId = useHouseholdId();
-  return useQuery({
-    queryKey: queryKeys.recipeCategories(householdId),
-    queryFn: () => api.fetchCategories(householdId),
-  });
-}
-
 /** Favourites and ratings of the current user for the given recipes, as a map by recipe id. */
 export function useRecipeUserState(recipeIds: string[]) {
   const user = useCurrentUser();
@@ -114,28 +106,6 @@ export function usePhotoUrl(path: string | null) {
     queryFn: () => (path ? api.signedPhotoUrl(path) : null),
     enabled: Boolean(path),
     staleTime: 50 * 60 * 1000,
-  });
-}
-
-export function useCreateCategory() {
-  const qc = useQueryClient();
-  const householdId = useHouseholdId();
-  return useMutation({
-    mutationFn: (name: string) => api.createCategory(householdId, name),
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.recipeCategories(householdId) }),
-  });
-}
-
-export function useDeleteCategory() {
-  const qc = useQueryClient();
-  const householdId = useHouseholdId();
-  return useMutation({
-    mutationFn: api.deleteCategory,
-    onSuccess: () =>
-      Promise.all([
-        qc.invalidateQueries({ queryKey: queryKeys.recipeCategories(householdId) }),
-        qc.invalidateQueries({ queryKey: queryKeys.recipes(householdId) }),
-      ]),
   });
 }
 

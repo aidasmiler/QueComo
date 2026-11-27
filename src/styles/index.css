@@ -58,6 +58,30 @@
   --color-warning: #8a5a00;
   --color-warning-soft: #fff4d6;
 
+  /* Category colours (PRODUCT_SPEC catalogue): soft background + AA text colour. */
+  --color-cat-amber: #fdf0d5;
+  --color-cat-amber-fg: #7a4b00;
+  --color-cat-green: #e3efd9;
+  --color-cat-green-fg: #35552a;
+  --color-cat-orange: #fde5d4;
+  --color-cat-orange-fg: #8a3f12;
+  --color-cat-yellow: #fbf3c8;
+  --color-cat-yellow-fg: #6b5600;
+  --color-cat-brown: #efe3d6;
+  --color-cat-brown-fg: #5e3f26;
+  --color-cat-red: #f9dfdc;
+  --color-cat-red-fg: #8f2a20;
+  --color-cat-blue: #dde9f5;
+  --color-cat-blue-fg: #24507a;
+  --color-cat-purple: #ebe1f3;
+  --color-cat-purple-fg: #5b3a7a;
+  --color-cat-pink: #f8e0ea;
+  --color-cat-pink-fg: #86304f;
+  --color-cat-teal: #d9efec;
+  --color-cat-teal-fg: #1f5c55;
+  --color-cat-gray: #e9e8e3;
+  --color-cat-gray-fg: #4a4e47;
+
   --radius-sm: 0.5rem;
   --radius-md: 0.875rem;
   --radius-lg: 1.25rem;

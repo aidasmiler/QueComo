@@ -1,17 +1,20 @@
 import { supabase } from '@/lib/supabase/client';
 import { unwrap } from '@/lib/supabase/errors';
 import type { Database } from '@/lib/supabase/database.types';
+import { rowKey, type ItemKey, type ItemRef } from '@/domain/recipes/catalog';
+import type { EquipmentStatus, RecipeEquipment } from '@/domain/recipes/equipment';
 
 type Tables = Database['public']['Tables'];
 export type Recipe = Tables['recipes']['Row'];
 export type RecipeIngredient = Tables['recipe_ingredients']['Row'];
 export type RecipeStep = Tables['recipe_steps']['Row'];
-export type RecipeCategory = Tables['recipe_categories']['Row'];
 export type RecipeUserState = Tables['recipe_user_state']['Row'];
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export interface RecipeSummary extends Recipe {
-  categoryIds: string[];
+  categoryKeys: ItemKey[];
+  tagKeys: ItemKey[];
+  equipment: RecipeEquipment;
 }
 
 export interface RecipeDetail extends RecipeSummary {
@@ -19,7 +22,10 @@ export interface RecipeDetail extends RecipeSummary {
   steps: RecipeStep[];
 }
 
-/** Shape sent to the save_recipe RPC (see supabase/migrations/20261127000000_recipes.sql). */
+/**
+ * Shape sent to the save_recipe RPC (supabase/migrations/20261127120000_recipe_catalogs.sql).
+ * `tags` (legacy free text) is left out so the stored value is kept untouched.
+ */
 export interface RecipeInput {
   id?: string;
   household_id: string;
@@ -30,14 +36,16 @@ export interface RecipeInput {
   active_minutes: number | null;
   passive_minutes: number | null;
   total_minutes: number | null;
-  tags: string[];
   source_url: string | null;
   source_author: string | null;
   notes: string | null;
   storage_notes: string | null;
   freezing_notes: string | null;
   reheating_notes: string | null;
-  category_ids: string[];
+  categories: ItemRef[];
+  tag_links: ItemRef[];
+  equipment_status: EquipmentStatus;
+  methods: { label: string | null; utensils: ItemRef[] }[];
   ingredients: {
     original_text: string;
     quantity: number | null;
@@ -51,35 +59,69 @@ export interface RecipeInput {
 
 const PHOTO_BUCKET = 'recipe-photos';
 
+const LINKS =
+  'recipe_category_links(category_id, category_def_id), recipe_tag_links(tag_def_id, household_tag_id), recipe_methods(position, label, recipe_method_utensils(utensil_def_id, household_utensil_id))';
+
 export async function fetchRecipes(householdId: string): Promise<RecipeSummary[]> {
   const { data, error } = await supabase
     .from('recipes')
-    .select('*, recipe_category_links(category_id)')
+    .select(`*, ${LINKS}`)
     .eq('household_id', householdId)
     .order('updated_at', { ascending: false });
-  return unwrap({ data: data as RecipeRow[] | null, error }).map(toSummary);
+  return unwrap({ data: data as unknown as RecipeRow[] | null, error }).map(toSummary);
 }
 
 type RecipeRow = Recipe & {
-  recipe_category_links: { category_id: string }[];
+  recipe_category_links: { category_id: string | null; category_def_id: string | null }[];
+  recipe_tag_links: { tag_def_id: string | null; household_tag_id: string | null }[];
+  recipe_methods: {
+    position: number;
+    label: string | null;
+    recipe_method_utensils: {
+      utensil_def_id: string | null;
+      household_utensil_id: string | null;
+    }[];
+  }[];
   recipe_ingredients?: RecipeIngredient[];
   recipe_steps?: RecipeStep[];
 };
 
-function toSummary({ recipe_category_links: links, ...recipe }: RecipeRow): RecipeSummary {
-  const { recipe_ingredients: _i, recipe_steps: _s, ...rest } = recipe;
+function toSummary(row: RecipeRow): RecipeSummary {
+  const {
+    recipe_category_links: categories,
+    recipe_tag_links: tags,
+    recipe_methods: methods,
+    recipe_ingredients: _i,
+    recipe_steps: _s,
+    ...rest
+  } = row;
   void _i;
   void _s;
-  return { ...rest, categoryIds: links.map((l) => l.category_id) };
+  return {
+    ...rest,
+    categoryKeys: categories.map((l) => rowKey(l.category_def_id, l.category_id)),
+    tagKeys: tags.map((l) => rowKey(l.tag_def_id, l.household_tag_id)),
+    equipment: {
+      status: rest.equipment_status as EquipmentStatus,
+      methods: [...methods]
+        .sort((a, b) => a.position - b.position)
+        .map((m) => ({
+          label: m.label,
+          utensils: m.recipe_method_utensils.map((u) =>
+            rowKey(u.utensil_def_id, u.household_utensil_id),
+          ),
+        })),
+    },
+  };
 }
 
 export async function fetchRecipe(recipeId: string): Promise<RecipeDetail | null> {
   const { data, error } = await supabase
     .from('recipes')
-    .select('*, recipe_category_links(category_id), recipe_ingredients(*), recipe_steps(*)')
+    .select(`*, ${LINKS}, recipe_ingredients(*), recipe_steps(*)`)
     .eq('id', recipeId)
     .maybeSingle();
-  const row = unwrap({ data: data as RecipeRow | null, error });
+  const row = unwrap({ data: data as unknown as RecipeRow | null, error });
   if (!row) return null;
   return {
     ...toSummary(row),
@@ -104,30 +146,6 @@ export async function setArchived(recipeId: string, archived: boolean) {
 export async function deleteRecipe(recipe: Pick<Recipe, 'id' | 'photo_path'>) {
   unwrap(await supabase.from('recipes').delete().eq('id', recipe.id));
   if (recipe.photo_path) await supabase.storage.from(PHOTO_BUCKET).remove([recipe.photo_path]);
-}
-
-export async function fetchCategories(householdId: string): Promise<RecipeCategory[]> {
-  return unwrap(
-    await supabase
-      .from('recipe_categories')
-      .select('*')
-      .eq('household_id', householdId)
-      .order('name'),
-  );
-}
-
-export async function createCategory(householdId: string, name: string): Promise<RecipeCategory> {
-  return unwrap(
-    await supabase
-      .from('recipe_categories')
-      .insert({ household_id: householdId, name: name.trim() })
-      .select('*')
-      .single(),
-  );
-}
-
-export async function deleteCategory(categoryId: string) {
-  unwrap(await supabase.from('recipe_categories').delete().eq('id', categoryId));
 }
 
 export async function fetchUserState(recipeIds: string[]): Promise<RecipeUserState[]> {

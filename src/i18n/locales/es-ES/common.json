@@ -24,7 +24,8 @@
     "retry": "Reintentar",
     "skip": "Omitir por ahora",
     "edit": "Editar",
-    "reload": "Recargar"
+    "reload": "Recargar",
+    "done": "Listo"
   },
   "status": {
     "loading": "Cargando…",

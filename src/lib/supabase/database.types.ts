@@ -55,13 +55,13 @@ export type Database = {
         Relationships: [];
       };
       recipe_categories: {
-        Row: { created_at: string; household_id: string; id: string; name: string };
-        Insert: { household_id: string; id?: string; name: string };
-        Update: { name?: string };
+        Row: { color: string | null; created_at: string; household_id: string; icon: string | null; id: string; name: string };
+        Insert: { color?: string | null; household_id: string; icon?: string | null; id?: string; name: string };
+        Update: { color?: string | null; icon?: string | null; name?: string };
         Relationships: [];
       };
       recipe_category_links: {
-        Row: { category_id: string; household_id: string; recipe_id: string };
+        Row: { category_def_id: string | null; category_id: string | null; household_id: string; recipe_id: string };
         Insert: never;
         Update: never;
         Relationships: [
@@ -148,6 +148,7 @@ export type Database = {
           created_by: string | null;
           description: string | null;
           difficulty: string | null;
+          equipment_status: string;
           freezing_notes: string | null;
           household_id: string;
           id: string;
@@ -166,6 +167,115 @@ export type Database = {
         Insert: never;
         Update: { archived_at?: string | null; photo_path?: string | null };
         Relationships: [];
+      };
+      category_definitions: {
+        Row: { color: string; icon: string; id: string; name_en: string; name_es: string; position: number };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      tag_definitions: {
+        Row: { id: string; name_en: string; name_es: string; position: number; tag_group: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      utensil_definitions: {
+        Row: { common: boolean; id: string; name_en: string; name_es: string; position: number; utensil_group: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      household_tags: {
+        Row: { created_at: string; household_id: string; id: string; name: string };
+        Insert: { household_id: string; name: string };
+        Update: { name?: string };
+        Relationships: [];
+      };
+      household_utensils: {
+        Row: { created_at: string; household_id: string; id: string; name: string };
+        Insert: { household_id: string; name: string };
+        Update: { name?: string };
+        Relationships: [];
+      };
+      household_hidden_items: {
+        Row: { household_id: string; item_id: string; kind: string };
+        Insert: { household_id: string; item_id: string; kind: string };
+        Update: never;
+        Relationships: [];
+      };
+      household_utensil_availability: {
+        Row: { created_at: string; household_id: string; household_utensil_id: string | null; id: string; utensil_def_id: string | null };
+        Insert: { household_id: string; household_utensil_id?: string | null; utensil_def_id?: string | null };
+        Update: never;
+        Relationships: [];
+      };
+      household_kitchen: {
+        Row: { configured_at: string; household_id: string };
+        Insert: { household_id: string };
+        Update: never;
+        Relationships: [];
+      };
+      recipe_tag_links: {
+        Row: { household_id: string; household_tag_id: string | null; id: string; recipe_id: string; tag_def_id: string | null };
+        Insert: never;
+        Update: never;
+        Relationships: [{ foreignKeyName: 'recipe_tag_links_recipe_id_household_id_fkey'; columns: ['recipe_id', 'household_id']; isOneToOne: false; referencedRelation: 'recipes'; referencedColumns: ['id', 'household_id'] }];
+      };
+      recipe_methods: {
+        Row: { household_id: string; id: string; label: string | null; position: number; recipe_id: string };
+        Insert: never;
+        Update: never;
+        Relationships: [{ foreignKeyName: 'recipe_methods_recipe_id_household_id_fkey'; columns: ['recipe_id', 'household_id']; isOneToOne: false; referencedRelation: 'recipes'; referencedColumns: ['id', 'household_id'] }];
+      };
+      recipe_method_utensils: {
+        Row: { household_id: string; household_utensil_id: string | null; id: string; method_id: string; utensil_def_id: string | null };
+        Insert: never;
+        Update: never;
+        Relationships: [{ foreignKeyName: 'recipe_method_utensils_method_id_household_id_fkey'; columns: ['method_id', 'household_id']; isOneToOne: false; referencedRelation: 'recipe_methods'; referencedColumns: ['id', 'household_id'] }];
+      };
+      recipe_cook_logs: {
+        Row: {
+          active_minutes: number | null;
+          cooked_on: string;
+          created_at: string;
+          finished_at: string | null;
+          household_id: string;
+          id: string;
+          method_position: number | null;
+          notes: string | null;
+          recipe_id: string;
+          servings: number | null;
+          source: string;
+          started_at: string | null;
+          total_minutes: number | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          active_minutes?: number | null;
+          cooked_on?: string;
+          household_id: string;
+          method_position?: number | null;
+          notes?: string | null;
+          recipe_id: string;
+          servings?: number | null;
+          source?: string;
+          started_at?: string | null;
+          finished_at?: string | null;
+          total_minutes?: number | null;
+        };
+        Update: {
+          active_minutes?: number | null;
+          cooked_on?: string;
+          method_position?: number | null;
+          notes?: string | null;
+          servings?: number | null;
+          started_at?: string | null;
+          finished_at?: string | null;
+          total_minutes?: number | null;
+        };
+        Relationships: [{ foreignKeyName: 'recipe_cook_logs_recipe_id_household_id_fkey'; columns: ['recipe_id', 'household_id']; isOneToOne: false; referencedRelation: 'recipes'; referencedColumns: ['id', 'household_id'] }];
       };
       user_dietary_preferences: {
         Row: {

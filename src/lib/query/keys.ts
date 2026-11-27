@@ -10,5 +10,10 @@ export const queryKeys = {
   recipeCategories: (householdId: string) => ['recipe-categories', householdId] as const,
   recipeUserState: (userId: string, householdId: string) =>
     ['recipe-user-state', userId, householdId] as const,
+  catalogDefinitions: ['catalog-definitions'] as const,
+  householdCatalog: (householdId: string) => ['household-catalog', householdId] as const,
+  kitchen: (householdId: string) => ['kitchen', householdId] as const,
+  cookTimes: (householdId: string) => ['cook-times', householdId] as const,
+  cookLogs: (recipeId: string) => ['cook-logs', recipeId] as const,
   dietaryPreferences: (userId: string) => ['dietary-preferences', userId] as const,
 };

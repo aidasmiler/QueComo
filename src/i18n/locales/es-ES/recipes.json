@@ -19,7 +19,9 @@
     "count_one": "{{count}} receta",
     "count_other": "{{count}} recetas",
     "servings_one": "{{count}} ración",
-    "servings_other": "{{count}} raciones"
+    "servings_other": "{{count}} raciones",
+    "kitchenInvite": "Indica qué utensilios tenéis en casa y te diremos qué recetas puedes preparar.",
+    "kitchenInviteAction": "Configurar equipamiento"
   },
   "detail": {
     "servings": "Raciones",
@@ -60,7 +62,9 @@
     "deleteBody": "Se borrará para todo el hogar, con su foto. No se puede deshacer. Si solo quieres quitarla de la vista, archívala.",
     "deleted": "Receta eliminada",
     "notFoundTitle": "No encontramos esta receta",
-    "notFoundBody": "Puede que se haya eliminado o que pertenezca a otro hogar."
+    "notFoundBody": "Puede que se haya eliminado o que pertenezca a otro hogar.",
+    "autoTag": "Etiqueta automática",
+    "autoTagPersonalised": "Etiqueta automática calculada con vuestros tiempos reales"
   },
   "time": {
     "active": "Activo",
@@ -125,13 +129,7 @@
     "totalAuto": "Si lo dejas vacío, se calcula sumando activo y pasivo.",
     "organisation": "Organización",
     "categories": "Categorías",
-    "newCategory": "Nueva categoría",
-    "addCategory": "Crear",
-    "deleteCategory": "Borrar la categoría «{{name}}»",
-    "deleteCategoryTitle": "¿Borrar la categoría «{{name}}»?",
-    "deleteCategoryBody": "Se quitará de todas las recetas del hogar. Las recetas no se borran.",
     "tags": "Etiquetas",
-    "tagsHint": "Separadas por comas: rápida, sin horno, tupper…",
     "extra": "Notas y conservación",
     "notes": "Notas personales",
     "storageNotes": "Conservación",
@@ -151,7 +149,8 @@
       "ingredientsRequired": "Añade al menos un ingrediente.",
       "stepsRequired": "Añade al menos un paso.",
       "minutes": "Escribe minutos enteros (0 a 10 000).",
-      "url": "Escribe un enlace que empiece por http:// o https://."
+      "url": "Escribe un enlace que empiece por http:// o https://.",
+      "equipmentRequired": "Añade al menos un utensilio al método de preparación, o elige «Sin especificar» o «No necesita nada especial»."
     },
     "pasteIngredientsPlaceholder": "400 g de arroz\n2 cebollas\nSal al gusto",
     "pasteStepsPlaceholder": "1. Pica la cebolla.\n2. Sofríe 10 minutos.\n3. Añade el arroz.",
@@ -159,6 +158,204 @@
     "split": "Separar",
     "splitCount_one": "Separar en {{count}} fila",
     "splitCount_other": "Separar en {{count}} filas",
-    "addOneByOne": "Añadir uno a uno"
+    "addOneByOne": "Añadir uno a uno",
+    "autoTagsHint": "Etiquetas como «Rápida», «Fácil», «Sin horno» o «Air fryer» se calculan solas a partir de los tiempos, la dificultad y los utensilios."
+  },
+  "catalog": {
+    "searchCategories": "Buscar categorías",
+    "searchTags": "Buscar etiquetas",
+    "searchUtensils": "Buscar utensilios",
+    "createNamed": "Crear «{{name}}»",
+    "ownerOnlyCreate": "No está en el catálogo. Solo quien administra el hogar puede crear categorías, etiquetas y utensilios nuevos.",
+    "empty": "No hay elementos disponibles.",
+    "noMatches": "No hay coincidencias.",
+    "removeNamed": "Quitar {{name}}",
+    "unknownItem": "Elemento eliminado"
+  },
+  "equipment": {
+    "title": "Utensilios necesarios",
+    "formHint": "Opcional. Sirve para saber qué recetas puedes preparar con lo que tenéis en casa.",
+    "status": {
+      "unspecified": "Sin especificar",
+      "none": "No necesita nada especial",
+      "defined": "Indicar utensilios"
+    },
+    "statusHint": {
+      "unspecified": "No se sabe qué hace falta: la receta nunca se oculta por equipamiento.",
+      "none": "Se puede preparar en cualquier cocina.",
+      "defined": "Elige los utensilios. Si hay otra forma de prepararla, añade un método alternativo."
+    },
+    "utensils": "Utensilios",
+    "methodNumber": "Método {{number}}",
+    "methodLabel": "Nombre del método",
+    "methodLabelHint": "Por ejemplo: «En horno» o «En Lékué al microondas».",
+    "addMethod": "Añadir método alternativo",
+    "addMethodHint": "La receta se podrá preparar si tenéis todos los utensilios de al menos un método.",
+    "removeMethod": "Quitar método",
+    "chooseUtensils": "Elegir utensilios",
+    "noUtensilsYet": "Todavía no has elegido utensilios.",
+    "detailUnspecified": "Esta receta no indica qué utensilios necesita.",
+    "detailNone": "No necesita ningún utensilio especial.",
+    "notConfigured": "Para saber si puedes prepararla, indica qué utensilios tenéis en casa.",
+    "configureNow": "Configurar equipamiento",
+    "missingList": "Os falta: {{list}}.",
+    "methodDoable": "puedes usar este",
+    "youLackIt": "no lo tenéis"
+  },
+  "availability": {
+    "can": "Puedo prepararla",
+    "missing": "Me falta equipamiento",
+    "unknown": "Sin información"
+  },
+  "estimates": {
+    "personal": "{{time}} según tus {{count}} últimas veces",
+    "household": "{{time}} según las {{count}} veces del hogar",
+    "totalLine": "Tiempo total estimado: {{text}}.",
+    "activeLine": "Tiempo activo estimado: {{text}}.",
+    "originalKept": "Los tiempos de la receta no cambian; esta estimación se usa en filtros y etiquetas automáticas.",
+    "personalisedShort": "(estimación personalizada)"
+  },
+  "history": {
+    "title": "Historial",
+    "cooked": "He cocinado esta receta",
+    "logTitle": "He cocinado esta receta",
+    "editTitle": "Editar registro",
+    "logHint": "Es voluntario y sirve para estimar cuánto os lleva de verdad.",
+    "date": "Fecha",
+    "servings": "Raciones",
+    "totalMinutes": "Tiempo total real (min)",
+    "activeMinutes": "Tiempo activo (min)",
+    "optional": "Opcional",
+    "method": "Método usado",
+    "methodUnknown": "No lo sé",
+    "notes": "Notas",
+    "save": "Guardar registro",
+    "you": "Tú",
+    "household": "Todo el hogar",
+    "never": "Aún no hay registros",
+    "times_one": "{{count}} vez",
+    "times_other": "{{count}} veces",
+    "median": "mediana {{time}}",
+    "last": "última: {{date}}",
+    "empty": "Nadie ha registrado esta receta todavía.",
+    "totalValue": "{{time}} en total",
+    "activeValue": "{{time}} activos",
+    "servingsValue_one": "{{count}} ración",
+    "servingsValue_other": "{{count}} raciones",
+    "edit": "Editar registro",
+    "delete": "Eliminar registro",
+    "deleteTitle": "¿Eliminar este registro?",
+    "deleteBody": "Se recalcularán las estimaciones de tiempo.",
+    "privacy": "Cada persona del hogar ve el historial; solo quien lo creó puede editarlo o borrarlo.",
+    "validation": {
+      "date": "Indica una fecha válida.",
+      "servings": "Entre 0,5 y 100 raciones.",
+      "totalRequired": "Indica el tiempo total en minutos.",
+      "minutes": "Usa un número de minutos."
+    }
+  },
+  "filters": {
+    "open": "Filtros",
+    "openCount": "Filtros ({{count}})",
+    "title": "Filtrar recetas",
+    "active": "Filtros aplicados",
+    "removeChip": "Quitar filtro {{name}}",
+    "showResults_one": "Ver {{count}} receta",
+    "showResults_other": "Ver {{count}} recetas",
+    "equipmentTitle": "Según nuestro equipamiento",
+    "availability": {
+      "auto": "Puedo prepararla o sin información",
+      "all": "Mostrar todas",
+      "can": "Solo las que puedo preparar",
+      "missing": "Me falta equipamiento",
+      "unknown": "Sin información"
+    },
+    "autoDefault": "Filtrar automáticamente según nuestro equipamiento",
+    "kitchenNotConfigured": "Aún no habéis indicado vuestros utensilios, así que no se oculta nada.",
+    "utensil": "Con un utensilio concreto",
+    "anyUtensil": "Cualquier utensilio",
+    "withUtensil": "Con {{name}}",
+    "categories": "Categorías",
+    "autoTags": "Etiquetas automáticas",
+    "totalTime": "Tiempo total",
+    "activeTime": "Tiempo activo",
+    "duration": {
+      "le15": "15 min o menos",
+      "le30": "30 min o menos",
+      "le60": "1 h o menos",
+      "gt60": "Más de 1 h"
+    },
+    "durationHint": "Los tiempos usan vuestra estimación personal o del hogar cuando hay al menos 3 registros.",
+    "totalChip": "Total: {{value}}",
+    "activeChip": "Activo: {{value}}",
+    "hiddenByEquipment_one": "{{count}} receta oculta por falta de equipamiento.",
+    "hiddenByEquipment_other": "{{count}} recetas ocultas por falta de equipamiento.",
+    "showAll": "Mostrar todas",
+    "allHiddenByEquipment": "Las recetas que coinciden necesitan utensilios que no tenéis."
+  },
+  "kitchen": {
+    "title": "Equipamiento de cocina",
+    "short": "Mi cocina",
+    "subtitle": "Lo que hay en la cocina de {{household}}. Se comparte con todo el hogar.",
+    "listTitle": "Utensilios",
+    "listHint": "Marca lo que tenéis. Cualquier persona del hogar puede cambiarlo y se sincroniza para todos.",
+    "count_one": "{{count}} marcado",
+    "count_other": "{{count}} marcados",
+    "quickTitle": "Configuración rápida",
+    "quickHint": "Toca lo que tengáis de esta lista de básicos. No hay nada marcado de antemano; luego podrás completar la lista.",
+    "quickSave_one": "Guardar {{count}} utensilio",
+    "quickSave_other": "Guardar {{count}} utensilios",
+    "quickSaved": "Equipamiento guardado",
+    "manageOwner": "Crea utensilios propios del hogar u oculta los que no uséis.",
+    "manageMember": "Solo quien administra el hogar puede crear u ocultar utensilios.",
+    "manageLink": "Gestionar catálogo"
+  },
+  "catalogs": {
+    "title": "Categorías, etiquetas y utensilios",
+    "subtitle": "Catálogo del hogar activo.",
+    "memberNotice": "Puedes usar todo el catálogo; solo quien administra el hogar puede crear, editar u ocultar elementos.",
+    "tabs": {
+      "category": "Categorías",
+      "tag": "Etiquetas",
+      "utensil": "Utensilios"
+    },
+    "add": {
+      "category": "Nueva categoría",
+      "tag": "Nueva etiqueta",
+      "utensil": "Nuevo utensilio"
+    },
+    "customTitle": "Del hogar",
+    "customEmpty": "Todavía no hay elementos propios.",
+    "globalTitle": "Catálogo común",
+    "globalHint": "Es igual para todos los hogares y no se puede editar. Ocultar un elemento lo quita de las listas sin borrarlo de las recetas que ya lo usan.",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "hidden": "Oculto",
+    "editNamed": "Editar {{name}}",
+    "deleteNamed": "Eliminar {{name}}",
+    "editTitle": "Editar",
+    "deleteTitle": "¿Eliminar «{{name}}»?",
+    "deleteBody": {
+      "category": "Se quitará de todas las recetas del hogar. Las recetas no se borran.",
+      "tag": "Se quitará de todas las recetas del hogar. Las recetas no se borran.",
+      "utensil": "Se quitará de las recetas y del equipamiento del hogar."
+    },
+    "name": "Nombre",
+    "icon": "Icono",
+    "color": "Color",
+    "preview": "Vista previa",
+    "colors": {
+      "amber": "Ámbar",
+      "green": "Verde",
+      "orange": "Naranja",
+      "yellow": "Amarillo",
+      "brown": "Marrón",
+      "red": "Rojo",
+      "blue": "Azul",
+      "purple": "Morado",
+      "pink": "Rosa",
+      "teal": "Turquesa",
+      "gray": "Gris"
+    }
   }
 }

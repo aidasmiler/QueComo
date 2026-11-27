@@ -7,6 +7,8 @@ import {
   SignInPage,
   SignUpPage,
 } from '@/features/auth/pages';
+import { CatalogsPage } from '@/features/catalogs/catalogs-page';
+import { KitchenPage } from '@/features/catalogs/kitchen-page';
 import { HelpPage } from '@/features/help/help-page';
 import { HomePage } from '@/features/home/home-page';
 import { HouseholdDetailPage } from '@/features/households/household-detail-page';
@@ -54,6 +56,8 @@ export const router = createBrowserRouter([
                   { index: true, path: '/', element: <HomePage /> },
                   { path: '/recipes', element: <RecipesPage /> },
                   { path: '/recipes/new', element: <RecipeFormPage /> },
+                  { path: '/recipes/catalogs', element: <CatalogsPage /> },
+                  { path: '/kitchen', element: <KitchenPage /> },
                   { path: '/recipes/:recipeId', element: <RecipeDetailPage /> },
                   { path: '/recipes/:recipeId/edit', element: <RecipeFormPage /> },
                   { path: '/profile', element: <ProfilePage /> },

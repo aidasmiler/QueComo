@@ -12,7 +12,7 @@ import {
   Timer,
   Trash2,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router';
 import { PageHeader } from '@/components/shared/page-header';
@@ -26,18 +26,24 @@ import { useToast } from '@/components/ui/toast';
 import { formatQuantity, nextServings, scaleQuantity } from '@/domain/recipes/quantity';
 import { errorMessage } from '@/lib/supabase/errors';
 import { cn } from '@/lib/utils/cn';
-import type { Difficulty, RecipeDetail } from './api';
+import type { RecipeDetail } from './api';
 import { formatMinutes, totalMinutes } from './format';
 import { toRecipeInput } from './input';
 import {
   useDeleteRecipe,
   useRecipe,
-  useRecipeCategories,
   useRecipeUserState,
   useSaveRecipe,
   useSetArchived,
   useUpdateUserState,
 } from './hooks';
+import { useRecipeInsights } from './insights';
+import {
+  CookHistory,
+  EquipmentCard,
+  EstimateNote,
+  OrganisationBadges,
+} from './recipe-detail-sections';
 import { RecipePhoto } from './recipe-photo';
 
 export function RecipeDetailPage() {
@@ -76,7 +82,8 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
   const navigate = useNavigate();
   const [servings, setServings] = useState(Number(recipe.base_servings));
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const categories = useRecipeCategories();
+  const recipes = useMemo(() => [recipe], [recipe]);
+  const insight = useRecipeInsights(recipes).insights.get(recipe.id);
   const userState = useRecipeUserState([recipe.id]);
   const state = userState.data?.get(recipe.id);
   const updateState = useUpdateUserState();
@@ -87,9 +94,6 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
   const base = Number(recipe.base_servings);
   const scaled = servings !== base;
   const total = totalMinutes(recipe);
-  const categoryNames = (categories.data ?? [])
-    .filter((c) => recipe.categoryIds.includes(c.id))
-    .map((c) => c.name);
   const locale = i18n.language;
   const servingsLabel = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
     servings,
@@ -174,31 +178,9 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
             ))}
           </dl>
 
-          {(recipe.difficulty || categoryNames.length > 0 || recipe.tags.length > 0) && (
-            <ul className="flex flex-wrap gap-2" aria-label={t('form.organisation')}>
-              {recipe.difficulty && (
-                <li className="bg-accent-soft text-accent-strong rounded-full px-3 py-1 text-sm font-semibold">
-                  {t(`difficulty.${recipe.difficulty as Difficulty}`)}
-                </li>
-              )}
-              {categoryNames.map((name) => (
-                <li
-                  key={name}
-                  className="bg-primary-soft rounded-full px-3 py-1 text-sm font-semibold text-olive-800"
-                >
-                  {name}
-                </li>
-              ))}
-              {recipe.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="border-border text-fg-muted rounded-full border px-3 py-1 text-sm"
-                >
-                  #{tag}
-                </li>
-              ))}
-            </ul>
-          )}
+          {insight && <EstimateNote times={insight.times} />}
+
+          <OrganisationBadges recipe={recipe} insight={insight} />
         </div>
       </div>
 
@@ -320,6 +302,11 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
             ))}
           </ol>
         </section>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+        <EquipmentCard recipe={recipe} insight={insight} />
+        <CookHistory recipe={recipe} insight={insight} />
       </div>
 
       <NotesSection recipe={recipe} />
