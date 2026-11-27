@@ -3,32 +3,10 @@
  * role). Run with `npm run test:integration`; requires email confirmation disabled in that project.
  * They never touch production: the URL must be the test project.
  */
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { Database } from '@/lib/supabase/database.types';
-
-const enabled = import.meta.env.MODE === 'integration';
-const url = (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? '';
-const key = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ?? '';
-const TEST_PROJECT = 'hbdcxaynxkaidqdsqdqv';
-
-type Client = SupabaseClient<Database>;
-
-async function newUser(label: string): Promise<{ client: Client; id: string }> {
-  const client = createClient<Database>(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const email = `qc-it-${label}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}@example.com`;
-  const { data, error } = await client.auth.signUp({
-    email,
-    password: 'quecomo-it-Passw0rd',
-    options: { data: { display_name: `IT ${label}` } },
-  });
-  if (error) throw error;
-  if (!data.session || !data.user)
-    throw new Error('Email confirmation must be disabled in the test project');
-  return { client, id: data.user.id };
-}
+import { enabled, key, newUser, TEST_PROJECT, url, type Client } from './helpers';
 
 describe.skipIf(!enabled)('households RLS and RPCs (test project)', () => {
   let a: { client: Client; id: string };

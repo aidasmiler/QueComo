@@ -29,9 +29,10 @@ test.describe('recipes (real backend)', () => {
     await expect(page.getByLabel('Paso 2')).toHaveValue('Servir.');
     await page.getByLabel('Activo (min)').fill('20');
     await page.getByLabel('Pasivo (min)').fill('25');
-    await page.getByLabel('Nueva categoría').fill('Arroces');
-    await page.getByRole('button', { name: 'Crear', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Arroces', pressed: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Arroces y cereales' }).click();
+    await expect(
+      page.getByRole('button', { name: 'Arroces y cereales', pressed: true }),
+    ).toBeVisible();
     await page.getByRole('button', { name: 'Guardar receta' }).click();
 
     // Detail: scaling 4 → 2 halves numeric quantities and leaves "al gusto" alone.

@@ -6,6 +6,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). L
 
 ### Añadido
 
+- Catálogos del recetario: 17 categorías comunes con icono y color, etiquetas comunes (dieta, práctico, momento del día) y 36 utensilios; categorías, etiquetas y utensilios propios del hogar; ocultar elementos comunes. Solo quien administra el hogar los gestiona (aplicado en RLS).
+- «Mi cocina»: equipamiento por hogar con búsqueda, grupos y configuración rápida (nada marcado por defecto).
+- «Utensilios necesarios» en cada receta (sin especificar, nada especial o lista) con métodos alternativos; el recetario oculta por defecto lo que no podéis preparar, con «Mostrar todas», filtro automático desactivable y utensilios que faltan.
+- Filtros combinables: varias categorías, etiquetas, etiquetas automáticas, utensilio concreto, tiempo total y activo.
+- Etiquetas automáticas calculadas: Muy rápida, Rápida, Poco tiempo activo, Fácil, Air fryer y Sin horno.
+- Historial «He cocinado esta receta» y tiempos estimados (mediana personal o del hogar con 3 o más registros).
 - Recetario: crear, editar, duplicar, archivar, restaurar y eliminar recetas del hogar; ingredientes en texto libre con cantidad detectada, pasos con temporizador, tiempos activo/pasivo/total, dificultad, categorías editables, etiquetas, notas de conservación y fuente; foto privada; búsqueda y filtros (favoritas, archivadas, categoría); favoritas y valoración personales.
 - Al crear una receta se empieza pegando de golpe los ingredientes y los pasos («Separar» los convierte en filas revisables); los pasos se separan por numeración («1.», «Paso 2»), párrafos o líneas. «Pegar más» en recetas existentes.
 - Escalado de raciones con fracciones y decimales sin modificar la receta original; lo cualitativo («al gusto») no se escala.

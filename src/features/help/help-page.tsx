@@ -11,6 +11,8 @@ const ARTICLES = [
   'invitations',
   'recipes',
   'servings',
+  'equipment',
+  'history',
   'install',
   'language',
   'faq',

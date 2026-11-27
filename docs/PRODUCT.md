@@ -18,6 +18,8 @@ Crear cuenta → crear hogar → invitar familiares → guardar recetas → ajus
 
 **P0 (lanzamiento):** autenticación, perfiles, hogares compartidos, invitaciones, recetario (ingredientes, pasos, fotos, categorías, etiquetas, favoritos, búsqueda), escalado de raciones, planificador semanal con varias preparaciones por comida, lista de compra generada + productos manuales + comprado / disponible en casa + sincronización, preferencias alimentarias, inicio, responsive, seguridad, PWA instalable, **funcionamiento offline con cola de operaciones (§97–§101)**, i18n es-ES/en-GB (§88), despliegue y pruebas críticas.
 
+**Ampliación del recetario pedida por Aída (27/11, ADR 0007):** catálogos comunes y propios de categorías, etiquetas y utensilios gestionados solo por propietarios; equipamiento del hogar y filtrado por «puedo prepararla»; métodos alternativos; etiquetas automáticas; historial de cocinado y tiempos estimados.
+
 **P1:** duplicar/archivar recetas, copiar semanas, valoraciones, filtros por tiempo, sugerencias simples, modo cocina básico, exportación, tema oscuro, importación JSON-LD.
 
 **P2:** inventario, caducidades, calendario, batch cooking, mapa de preparación, compra inteligente, nutrición, hardware.
