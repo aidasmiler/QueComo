@@ -79,6 +79,13 @@ const cases = {
     ),
   'B favorite A recipe': (c) =>
     c.as(B, `insert into public.recipe_user_state (recipe_id, favorite) values ($1, true)`, [c.id]),
+  // Regression guard: a PostgREST-style upsert also SETs recipe_id, which is not updatable.
+  'A favourite via upsert (recipe_id not updatable)': async (c) => {
+    const sql = `insert into public.recipe_user_state (recipe_id, favorite) values ($1, true)
+      on conflict (user_id, recipe_id) do update set recipe_id = excluded.recipe_id, favorite = excluded.favorite`;
+    await c.as(A, sql, [c.id]);
+    return c.as(A, sql, [c.id]);
+  },
   'B upload photo': (c) =>
     c.as(B, `insert into storage.objects (bucket_id, name) values ('recipe-photos', $1)`, [
       `${c.h}/${c.id}/a.webp`,
@@ -136,6 +143,9 @@ await as(
   `insert into public.recipe_user_state (recipe_id, favorite, rating) values ($1, true, 5)`,
   [id],
 );
+// The app toggles favourites with a plain UPDATE of the granted columns (not an upsert).
+await as(A, `update public.recipe_user_state set favorite = false where recipe_id = $1`, [id]);
+await as(A, `update public.recipe_user_state set favorite = true where recipe_id = $1`, [id]);
 console.log(
   'A fav',
   (await as(A, `select favorite, rating, user_id = '${A}' as mine from public.recipe_user_state`))

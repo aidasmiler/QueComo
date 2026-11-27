@@ -139,11 +139,25 @@ export async function upsertUserState(
   recipeId: string,
   patch: { favorite?: boolean; rating?: number | null },
 ) {
-  unwrap(
+  // Not an upsert: PostgREST's ON CONFLICT DO UPDATE would also set recipe_id, which is not an
+  // updatable column (only favorite and rating are granted). Update first, insert if missing.
+  const updated = unwrap(
     await supabase
       .from('recipe_user_state')
-      .upsert({ recipe_id: recipeId, ...patch }, { onConflict: 'user_id,recipe_id' }),
+      .update(patch)
+      .eq('recipe_id', recipeId)
+      .select('recipe_id'),
   );
+  if (updated.length) return;
+  const { error } = await supabase
+    .from('recipe_user_state')
+    .insert({ recipe_id: recipeId, ...patch });
+  // 23505: a parallel request created the row first, so apply the change to it.
+  if (error?.code === '23505') {
+    unwrap(await supabase.from('recipe_user_state').update(patch).eq('recipe_id', recipeId));
+    return;
+  }
+  unwrap({ data: null, error });
 }
 
 /** Uploads a (pre-resized) photo and stores its path on the recipe. Returns the new path. */
