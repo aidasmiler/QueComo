@@ -33,6 +33,8 @@ function recipe(id: string, patch: Partial<RecipeSummary> = {}): RecipeSummary {
     created_by: null,
     updated_at: '',
     equipment_status: 'unspecified',
+    dismissed_suggestions: [],
+    optionalUtensils: [],
     categoryKeys: [],
     tagKeys: [],
     equipment: { status: 'unspecified', methods: [] },

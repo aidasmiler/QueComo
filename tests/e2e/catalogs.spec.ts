@@ -26,7 +26,10 @@ test.describe('kitchen equipment and cooking history (real backend)', () => {
     await page.getByLabel('Título').fill('Salmón Lékué E2E');
     await page.getByLabel('Pega aquí los ingredientes').fill('2 lomos de salmón');
     await page.getByLabel('Pega aquí los pasos').fill('Cocinar 8 minutos.');
-    await page.getByRole('button', { name: 'Pescados y mariscos' }).click();
+    // "Salmón" in the title: preselected by the classifier.
+    await expect(
+      page.getByRole('button', { name: 'Pescados y mariscos', pressed: true }),
+    ).toBeVisible();
     await page.getByRole('button', { name: 'Cena' }).click();
     await page.getByLabel('Indicar utensilios').check();
     await page.getByRole('button', { name: 'Elegir utensilios' }).click();

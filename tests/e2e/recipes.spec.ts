@@ -29,7 +29,8 @@ test.describe('recipes (real backend)', () => {
     await expect(page.getByLabel('Paso 2')).toHaveValue('Servir.');
     await page.getByLabel('Activo (min)').fill('20');
     await page.getByLabel('Pasivo (min)').fill('25');
-    await page.getByRole('button', { name: 'Arroces y cereales' }).click();
+    // "Arroz" in the title: the classifier preselects the category (shown as added by QuéComo).
+    await expect(page.getByRole('button', { name: 'Quitar Arroces y cereales' })).toBeVisible();
     await expect(
       page.getByRole('button', { name: 'Arroces y cereales', pressed: true }),
     ).toBeVisible();
