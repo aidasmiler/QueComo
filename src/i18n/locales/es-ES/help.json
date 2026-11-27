@@ -27,6 +27,24 @@
         "La persona invitada debe abrir el enlace, crear su cuenta o iniciar sesión, y pulsar «Unirme al hogar»."
       ]
     },
+    "recipes": {
+      "title": "Recetas",
+      "body": [
+        "En Recetas está el recetario del hogar activo: todos sus miembros ven y pueden editar las mismas recetas.",
+        "Pulsa «Nueva receta» y escribe cada ingrediente como lo dirías («400 g de arroz», «sal al gusto»). QuéComo separa la cantidad cuando es segura y conserva tu texto.",
+        "Al crear una receta, pega de golpe todos los ingredientes y todos los pasos en sus recuadros y pulsa «Separar»: QuéComo los divide en filas que puedes revisar antes de guardar. Si prefieres, «Añadir uno a uno»; y en una receta ya creada, «Pegar más».",
+        "Desde una receta puedes marcarla como favorita, valorarla, duplicarla, archivarla o eliminarla. Favoritas y valoraciones son tuyas; el resto del hogar tiene las suyas.",
+        "Las fotos son privadas del hogar. Puedes añadirlas al editar una receta ya guardada."
+      ]
+    },
+    "servings": {
+      "title": "Ajustar raciones",
+      "body": [
+        "En la receta, usa los botones − y + junto a los ingredientes para cambiar las raciones.",
+        "Las cantidades se recalculan en proporción y la receta original no cambia. Lo que no tiene cantidad («al gusto») no se escala.",
+        "Revisa los tiempos y el tamaño del recipiente: no aumentan en la misma proporción."
+      ]
+    },
     "install": {
       "title": "Instalar la app",
       "body": [
@@ -47,6 +65,24 @@
         "¿Funciona sin conexión? Puedes abrir la app instalada sin conexión. A medida que lleguen el recetario, el menú y la compra, podrás consultarlos también sin conexión.",
         "¿Cuesta dinero? No. QuéComo es una beta privada y gratuita.",
         "¿Las etiquetas «sin gluten» garantizan que no hay alérgenos? No. Revisa siempre los ingredientes."
+      ]
+    },
+    "equipment": {
+      "title": "Categorías, etiquetas y utensilios",
+      "body": [
+        "Cada receta puede tener varias categorías y etiquetas. Hay un catálogo común (desayunos, legumbres, vegana, para llevar…) y cada hogar puede añadir los suyos.",
+        "Solo quien administra el hogar puede crear, editar, borrar u ocultar categorías, etiquetas y utensilios (en Perfil › Categorías, etiquetas y utensilios). El resto del hogar los usa en sus recetas y filtros. Ocultar algo del catálogo común no lo quita de las recetas que ya lo tienen.",
+        "Algunas etiquetas se calculan solas y se ven con un destello: Muy rápida (15 min o menos), Rápida (hasta 30 min), Poco tiempo activo (15 min o menos), Fácil, Air fryer y Sin horno. No se ponen si falta información.",
+        "En «Mi cocina» marcáis los utensilios que tenéis; nada viene marcado de antemano y cualquiera del hogar puede cambiarlo. En cada receta, «Utensilios necesarios» es opcional: sin especificar, no necesita nada especial, o una lista de utensilios. Si hay otra forma de hacerla (por ejemplo, Lékué o horno), añade un método alternativo: la receta se puede preparar si tenéis todo lo de al menos un método.",
+        "Con el equipamiento configurado, el recetario oculta por defecto las recetas para las que os falta algo y muestra las que podéis preparar y las que no tienen información. «Mostrar todas» las enseña de nuevo, y en Filtros puedes desactivar el filtrado automático o buscar recetas con un utensilio concreto."
+      ]
+    },
+    "history": {
+      "title": "Historial y tiempos reales",
+      "body": [
+        "Tras cocinar, pulsa «He cocinado esta receta» y apunta cuánto tardaste (y, si quieres, el tiempo activo, las raciones y notas). Es voluntario.",
+        "Todo el hogar ve el historial; cada persona solo puede editar o borrar sus propios registros.",
+        "Con 3 o más registros tuyos, los filtros de duración y las etiquetas de tiempo usan tu mediana; si no, la del hogar cuando tiene 3 o más; si no, el tiempo de la receta. Los tiempos escritos en la receta no cambian."
       ]
     }
   }

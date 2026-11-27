@@ -13,8 +13,9 @@
     "invite": "Invite someone",
     "manage": "View household"
   },
-  "comingNext": {
-    "title": "We're setting up your kitchen",
-    "body": "This is an early version of QuéComo. The recipe book, weekly menu and shared shopping list are coming in the next releases."
+  "recipesCard": {
+    "title": "Your recipe book",
+    "body": "Keep your household's recipes and adjust quantities to how many are eating. The weekly menu and shopping list come in the next deliveries.",
+    "action": "Go to recipes"
   }
 }

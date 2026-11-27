@@ -36,6 +36,7 @@ jobs:
       - run: npm run i18n:check
       - run: npm run docs:check
       - run: npm run test
+      - run: npm run db:verify
       - run: npm run build
 
   e2e:

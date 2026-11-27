@@ -1,4 +1,14 @@
-import { Download, HelpCircle, Home, LogOut, Salad, ShieldCheck, UserRound } from 'lucide-react';
+import {
+  CookingPot,
+  Download,
+  HelpCircle,
+  Home,
+  LogOut,
+  Salad,
+  ShieldCheck,
+  Tags,
+  UserRound,
+} from 'lucide-react';
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -12,7 +22,7 @@ import { supabase } from '@/lib/supabase/client';
 import { useChangeLocale, useProfile } from './hooks';
 
 export function ProfilePage() {
-  const { t, i18n } = useTranslation(['profile', 'auth', 'households']);
+  const { t, i18n } = useTranslation(['profile', 'auth', 'households', 'recipes']);
   const user = useCurrentUser();
   const profile = useProfile();
   const { households } = useActiveHousehold();
@@ -57,6 +67,8 @@ export function ProfilePage() {
           label={t('households:list.title')}
           detail={households.map((h) => h.name).join(' · ')}
         />
+        <ListRow to="/kitchen" icon={CookingPot} label={t('recipes:kitchen.title')} />
+        <ListRow to="/recipes/catalogs" icon={Tags} label={t('recipes:catalogs.title')} />
       </ListGroup>
 
       <section className="flex flex-col gap-2">

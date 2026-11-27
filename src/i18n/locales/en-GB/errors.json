@@ -16,6 +16,8 @@
   "QC_USE_LEAVE": "To remove yourself, use “Leave household”.",
   "QC_NOT_A_MEMBER": "That person is no longer part of the household.",
   "QC_INVALID_TARGET": "Choose another household member.",
+  "QC_RECIPE_INGREDIENTS": "Add at least one ingredient (100 at most).",
+  "QC_RECIPE_STEPS": "Add at least one step (100 at most).",
   "auth": {
     "invalid_credentials": "The email or password is incorrect.",
     "email_not_confirmed": "You haven't confirmed your email yet. Check your inbox.",
@@ -24,5 +26,7 @@
     "over_email_send_rate_limit": "Too many emails have been sent. Wait a few minutes and try again.",
     "over_request_rate_limit": "Too many attempts. Please wait a few minutes.",
     "same_password": "The new password must be different from the old one."
-  }
+  },
+  "QC_CATALOG_DUPLICATE": "An item with that name already exists in the catalogue.",
+  "QC_RECIPE_EQUIPMENT": "Add at least one utensil to each preparation method (5 methods and 20 utensils per method at most)."
 }

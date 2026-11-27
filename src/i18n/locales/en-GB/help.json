@@ -27,6 +27,24 @@
         "The invited person opens the link, creates an account or signs in, and taps “Join household”."
       ]
     },
+    "recipes": {
+      "title": "Recipes",
+      "body": [
+        "Recipes holds the active household's recipe book: every member sees and can edit the same recipes.",
+        "Tap “New recipe” and write each ingredient as you'd say it (“400 g rice”, “salt to taste”). QuéComo splits out the quantity when it's safe and keeps your text.",
+        "When creating a recipe, paste all the ingredients and all the steps into their boxes and tap «Split»: QuéComo turns them into rows you can review before saving. You can also «Add one by one», and use «Paste more» on an existing recipe.",
+        "From a recipe you can favourite it, rate it, duplicate, archive or delete it. Favourites and ratings are yours; other members have their own.",
+        "Photos are private to the household. You can add one when editing a saved recipe."
+      ]
+    },
+    "servings": {
+      "title": "Adjusting servings",
+      "body": [
+        "In a recipe, use the − and + buttons next to the ingredients to change the servings.",
+        "Quantities are recalculated proportionally and the original recipe doesn't change. Amounts without a number (“to taste”) are not scaled.",
+        "Check times and dish size: they don't grow in the same proportion."
+      ]
+    },
     "install": {
       "title": "Installing the app",
       "body": [
@@ -47,6 +65,24 @@
         "Does it work offline? You can open the installed app offline. As the recipe book, menu and shopping list arrive, you'll be able to view them offline too.",
         "Does it cost anything? No. QuéComo is a free private beta.",
         "Do “gluten-free” tags guarantee there are no allergens? No. Always check the ingredients."
+      ]
+    },
+    "equipment": {
+      "title": "Categories, tags and utensils",
+      "body": [
+        "Each recipe can have several categories and tags. There is a shared catalogue (breakfasts, legumes, vegan, packed lunch…) and each household can add its own.",
+        "Only the household owner can create, edit, delete or hide categories, tags and utensils (in Profile › Categories, tags and utensils). Everyone else in the household uses them in recipes and filters. Hiding a shared item doesn't remove it from recipes that already have it.",
+        "Some tags are worked out automatically and show a sparkle: Very quick (15 min or less), Quick (up to 30 min), Little hands-on time (15 min or less), Easy, Air fryer and No oven. They aren't added when information is missing.",
+        "In “My kitchen” you tick the utensils you have; nothing is ticked in advance and anyone in the household can change it. In each recipe, “Utensils needed” is optional: not specified, nothing special needed, or a list of utensils. If there is another way to make it (for example Lékué or oven), add an alternative method: the recipe can be made if you have everything for at least one method.",
+        "Once your equipment is set up, the recipe book hides recipes you are missing something for and shows the ones you can make plus those without information. “Show all” brings them back, and in Filters you can turn off automatic filtering or look for recipes with a specific utensil."
+      ]
+    },
+    "history": {
+      "title": "History and real times",
+      "body": [
+        "After cooking, tap “I cooked this recipe” and note how long it took (and, if you like, hands-on time, servings and notes). It's optional.",
+        "The whole household sees the history; each person can only edit or delete their own entries.",
+        "With 3 or more of your own entries, duration filters and time tags use your median; otherwise the household's when it has 3 or more; otherwise the recipe's time. The times written in the recipe don't change."
       ]
     }
   }
