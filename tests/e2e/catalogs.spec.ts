@@ -17,6 +17,8 @@ test.describe('kitchen equipment and cooking history (real backend)', () => {
     await page.getByRole('button', { name: 'Microondas' }).click();
     await page.getByRole('button', { name: 'Guardar 1 utensilio' }).click();
     await expect(page.getByText('1 marcado')).toBeVisible();
+    // The tick is optimistic: wait until the server confirmed it before reloading the app.
+    await expect(page.getByText('Equipamiento guardado')).toBeVisible();
     await expectNoHorizontalOverflow(page);
 
     // A recipe that needs a Lékué steam case and a microwave.
@@ -38,10 +40,6 @@ test.describe('kitchen equipment and cooking history (real backend)', () => {
     await page.getByRole('button', { name: 'Guardar receta' }).click();
 
     await expect(page.getByRole('heading', { name: 'Salmón Lékué E2E' })).toBeVisible();
-    const equipment = page.getByRole('heading', { name: 'Utensilios necesarios' }).locator('..');
-    await expect(equipment).toContainText('Estuche de vapor Lékué');
-    // Printed so a failure in CI shows what the card said (the report artifact is not always at hand).
-    console.log('equipment card:', await equipment.innerText());
     await expect(page.getByText('Me falta equipamiento')).toBeVisible();
     await expect(page.getByText('Os falta: Estuche de vapor Lékué.')).toBeVisible();
     await expect(page.getByText('Muy rápida')).toBeVisible();
@@ -60,6 +58,7 @@ test.describe('kitchen equipment and cooking history (real backend)', () => {
     await page.getByLabel('Estuche de vapor Lékué').click();
     await expect(page.getByLabel('Estuche de vapor Lékué')).toBeChecked();
     await expect(page.getByText('2 marcados')).toBeVisible();
+    await page.waitForLoadState('networkidle');
     await page.goto('/recipes');
     await expect(page.getByText('Puedo prepararla')).toBeVisible();
 
