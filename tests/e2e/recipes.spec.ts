@@ -34,8 +34,13 @@ test.describe('recipes (real backend)', () => {
     await expect(page.getByText('45 min')).toBeVisible();
     await page.getByRole('button', { name: 'Menos raciones' }).click();
     await page.getByRole('button', { name: 'Menos raciones' }).click();
-    await expect(page.getByRole('listitem').filter({ hasText: 'arroz' })).toContainText('200');
-    await expect(page.getByRole('listitem').filter({ hasText: 'cebollas' })).toContainText('1');
+    const ingredients = page.getByRole('list', { name: 'Ingredientes' });
+    await expect(ingredients.getByRole('listitem').filter({ hasText: 'arroz' })).toContainText(
+      '200',
+    );
+    await expect(ingredients.getByRole('listitem').filter({ hasText: 'cebollas' })).toContainText(
+      '1',
+    );
     await expect(page.getByText('Sal al gusto')).toBeVisible();
     await expectNoHorizontalOverflow(page);
 

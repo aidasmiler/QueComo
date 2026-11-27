@@ -205,7 +205,9 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:items-start">
         <Card className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-2xl">{t('detail.ingredients')}</h2>
+            <h2 id="ingredients-title" className="text-2xl">
+              {t('detail.ingredients')}
+            </h2>
             <div
               className="bg-surface-muted flex items-center gap-1 rounded-full p-1"
               role="group"
@@ -253,7 +255,10 @@ function RecipeView({ recipe }: { recipe: RecipeDetail }) {
               </Button>
             </div>
           )}
-          <ul className="divide-border/70 flex flex-col divide-y">
+          <ul
+            className="divide-border/70 flex flex-col divide-y"
+            aria-labelledby="ingredients-title"
+          >
             {recipe.ingredients.map((ingredient) => {
               const amount = scaleQuantity(ingredient, base, servings);
               return (
