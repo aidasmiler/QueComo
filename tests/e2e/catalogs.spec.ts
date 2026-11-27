@@ -32,7 +32,7 @@ test.describe('kitchen equipment and cooking history (real backend)', () => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Cena' }).click();
     await page.getByLabel('Indicar utensilios').check();
-    await page.getByRole('button', { name: 'Elegir utensilios' }).click();
+    await page.getByRole('button', { name: 'Elegir utensilios', exact: true }).click();
     const dialog = page.getByRole('dialog');
     await dialog.getByPlaceholder('Buscar utensilios').fill('lékué');
     await dialog.getByLabel('Estuche de vapor Lékué').check();
