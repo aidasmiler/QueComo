@@ -40,7 +40,71 @@ supabase/migrations  SQL versionado · tests/{unit,integration,e2e}
 | `household_invitations`    | `token_hash` (SHA-256, único), `expires_at` (7 días), `accepted_at/by`, `revoked_at`. El token en claro solo se devuelve una vez al crearlo.       |
 | `user_dietary_preferences` | Personales: `preset_key` (lista cerrada, identificador estable) **o** `custom_label`; `kind` preferencia/restricción.                              |
 
-Pendiente (llegará con cada módulo, ver §45 de la spec): recetas, ingredientes, pasos, categorías, etiquetas, favoritos, valoraciones, plan de comidas, listas de compra con procedencia (`shopping_item_sources`).
+### Recetario (migración `20261127000000_recipes.sql`, ADR 0006)
+
+| Tabla                   | Notas                                                                                                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `recipes`               | Del hogar (`household_id`). Raciones base, dificultad, tiempos activo/pasivo/total (§7.2), etiquetas (`text[]`), fuente, notas y conservación, foto, `archived_at`. |
+| `recipe_ingredients`    | Texto original + `quantity`/`unit`/`name` solo si el análisis es seguro; `scalable=false` para «al gusto»; `optional`; `position`.                                  |
+| `recipe_steps`          | Texto y temporizador opcional; `position`.                                                                                                                          |
+| `recipe_categories`     | Propias del hogar, nombre único sin distinguir mayúsculas (desde ADR 0007: solo propietarios las gestionan).                                                        |
+| `recipe_category_links` | N:M con categorías globales o propias (ver ADR 0007).                                                                                                               |
+| `recipe_user_state`     | Personal: favorita y valoración 1–5 por persona.                                                                                                                    |
+| Storage `recipe-photos` | Bucket **privado**, ruta `<household_id>/<recipe_id>/<archivo>`; solo miembros; URLs firmadas de 1 h; 5 MB, JPEG/PNG/WebP; se reduce en el navegador.               |
+
+Las tablas hijas llevan `household_id` con FK compuesta `(recipe_id, household_id)`, así una fila nunca puede apuntar a una receta de otro hogar. Las recetas se guardan con la RPC `save_recipe(jsonb)` (**SECURITY INVOKER**: añade validación y atomicidad, pero todo se ejecuta bajo la RLS de quien llama). El escalado vive en `src/domain/recipes/quantity.ts` (puro, con tests) y nunca modifica la receta.
+
+### Catálogos, equipamiento e historial (migración `20261127120000_recipe_catalogs.sql`, ADR 0007)
+
+| Tabla                                                                  | Notas                                                                                                                               |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `category_definitions`, `tag_definitions`, `utensil_definitions`       | Catálogos globales (17 categorías, 15 etiquetas manuales en grupos dieta/práctico/momento, 36 utensilios). Solo lectura para todos. |
+| `recipe_categories`, `household_tags`, `household_utensils`            | Elementos propios del hogar. Leen los miembros; crean, editan y borran solo propietarios. Sin duplicados con el catálogo efectivo.  |
+| `household_hidden_items`                                               | Globales ocultos por hogar (solo propietarios). Ocultar no borra enlaces.                                                           |
+| `recipe_category_links`, `recipe_tag_links`                            | Enlace a un global **o** a uno propio (`num_nonnulls = 1`), FK compuesta con el hogar.                                              |
+| `recipes.equipment_status`, `recipe_methods`, `recipe_method_utensils` | Sin especificar / nada especial / definido con 1–5 métodos alternativos.                                                            |
+| `household_utensil_availability`, `household_kitchen`                  | Lo que tiene el hogar (cualquier miembro lo cambia) y si ya lo configuró.                                                           |
+| `recipe_cook_logs`                                                     | Historial: el hogar lee, cada persona escribe lo suyo. Preparado para el temporizador (`source`, `started_at`, `finished_at`).      |
+
+La lógica pura vive en `src/domain/recipes/` (`equipment.ts`, `auto-tags.ts`, `estimates.ts`, `catalog.ts`) con pruebas unitarias; `src/features/recipes/insights.ts` la combina por receta y `recipe-filters.ts` aplica los filtros combinables. `save_recipe` acepta `categories`, `tag_links`, `equipment_status` y `methods` y sigue aceptando el formato anterior (`category_ids`).
+
+### Clasificación inteligente (migración `20261127180000_recipe_classification.sql`, ADR 0008)
+
+| Elemento                                                                  | Notas                                                                                                          |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `keywords` en `recipe_categories`, `household_tags`, `household_utensils` | Palabras clave por hogar para el clasificador. Escriben solo propietarios (políticas de ADR 0007).             |
+| `recipes.dismissed_suggestions`                                           | Sugerencias rechazadas (`category:def:pasta`…), para no volver a preseleccionarlas.                            |
+| `recipe_optional_utensils`                                                | Utensilios opcionales («global o propio», FK compuesta, RLS de miembros). No cuentan para «se puede preparar». |
+
+El motor vive en `src/domain/classification/` (puro y probado): `ClassifiableRecipe` → `RecipeClassifier.classify()` → `Suggestion[]` con confianza y motivo; `decisions.ts` gestiona preselección, aceptación y rechazo. En la interfaz, `src/features/recipes/recipe-classification-state.ts` lo conecta al formulario (debounce de 700 ms) y `recipe-classification.tsx` muestra la sección compacta. Las etiquetas deterministas siguen en `src/domain/recipes/auto-tags.ts`.
+
+### Entrada de recetas: arquitectura común prevista (§106–§107)
+
+Todos los métodos de creación (manual, texto pegado, dictado y, más adelante, URL/JSON-LD, OCR, redes sociales o IA) seguirán el mismo flujo, sin duplicar lógica:
+
+```
+adaptador de entrada → normalización → extracción → borrador de receta común → clasificación → formulario simplificado → save_recipe
+```
+
+- **Borrador común**: datos estructurados y/o texto libre, con origen (URL, autoría, método de importación), texto original para la revisión, campos dudosos pendientes de confirmar y sugerencias. Los datos estructurados (p. ej. JSON-LD) entran directamente, sin pasar a texto.
+- **Reutilización**: `paste.ts` y `quantity.ts` para ingredientes y pasos; `ClassifiableRecipe` + `RecipeClassifier` para clasificar; el mismo esquema Zod y `save_recipe` para validar y guardar.
+- Solo se implementará lo necesario en cada PR: el formulario simplificado (§106) primero y después texto completo + dictado (§107), sin botones activos para importaciones aún no disponibles.
+
+### Planificador, productos y nutrición: modelo previsto (§108–§109, propuesta)
+
+Propuesta para validar antes de la primera migración del planificador; no hay tablas todavía. Sigue las convenciones de ADR 0003/0007 (RLS de miembros, `household_id` en cada fila, FK compuestas, referencias «A o B» con `num_nonnulls`).
+
+| Tabla prevista                             | Contenido y reglas                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `meal_plan_items`                          | Un elemento planificado: hogar, fecha, momento de consumo, posición y `kind` (`recipe`, `product`, `food`, `text`, `leftover`, `eating_out`). Una columna de referencia por tipo (`recipe_id`, `product_id`…) con `check` por tipo y FK compuestas. Cantidad según el tipo: raciones, envases o cantidad + unidad. Varios elementos por momento. |
+| `household_products`                       | Producto del hogar (todos los miembros crean y editan): nombre, marca, supermercado, foto privada, cantidad neta + unidad, raciones por envase, tiempo, `equipment_status` + utensilios (mismo modelo que recetas), categorías/etiquetas, notas, precio, código de barras, `external_product_id` opcional.                                       |
+| `external_products`                        | Caché **global y de solo lectura** de Open Food Facts por código de barras: datos normalizados, Nutri-Score, alérgenos, ingredientes, licencia/atribución, `source` y `fetched_at`. Sin datos de hogares. La escribe solo la Edge Function.                                                                                                      |
+| `nutrition_facts` (o columnas por fuente)  | Valores por 100 g / 100 ml con base y unidad explícitas, estado «como se vende» / «preparado», `null` = desconocido. Origen `external` (enlazado a `external_products`) o `manual` (del hogar, sobre su producto, sin tocar el dato externo).                                                                                                    |
+| `shopping_items` + `shopping_item_sources` | La compra se genera por tipo (§108.4) y guarda de qué elementos planificados viene cada línea; productos idénticos se agrupan por `product_id`; envases = ⌈raciones / raciones por envase⌉ solo si ambos datos existen.                                                                                                                          |
+
+Lógica pura prevista en `src/domain/`: `planner/` (qué genera cada tipo), `shopping/` (agrupación y envases), `nutrition/` (por cantidad, ración, envase o fracción; sin convertir peso ↔ volumen; totales marcados como incompletos si falta algún dato). Open Food Facts entra por un adaptador `ProductInfoProvider` (llamado desde una Supabase Edge Function gratuita que identifica la app con un User-Agent propio, limita peticiones y cachea en `external_products`); la interfaz solo ve productos normalizados. Escaneo: `BarcodeDetector` donde exista y ZXing cargado bajo demanda como alternativa; siempre con entrada manual. Objetivos y consumo real serán tablas **personales** (`user_id`), no del hogar.
+
+Pendiente (llegará con cada módulo, ver §45 de la spec): plan de comidas, listas de compra con procedencia (`shopping_item_sources`).
 
 ## Seguridad
 
@@ -51,7 +115,7 @@ Pendiente (llegará con cada módulo, ver §45 de la spec): recetas, ingrediente
 - El linter de Supabase avisa (`0029`) de que `authenticated` puede ejecutar estas funciones: es **intencionado**; cada una valida internamente.
 - Regla de negocio: el último propietario no puede abandonar el hogar (`QC_LAST_OWNER`); debe transferir o eliminar.
 - Invitaciones: 32 bytes aleatorios, hash SHA-256, un solo uso, caducidad y revocación validadas en servidor; aceptación transaccional.
-- Pruebas: `tests/integration/rls.test.ts` usa identidades reales (sin `service_role`) contra el proyecto de pruebas.
+- Pruebas: `tests/integration/rls.test.ts` usa identidades reales (sin `service_role`) contra el proyecto de pruebas (job `backend` de CI). `npm run db:verify` aplica todas las migraciones en PGlite (Postgres en WASM, sin Docker) y comprueba la RLS del recetario con dos usuarios.
 
 ## Autenticación
 

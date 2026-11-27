@@ -4,6 +4,7 @@ Estas guías se generan automáticamente desde la ayuda integrada de la app (Per
 
 - [Primeros pasos](GETTING_STARTED.md)
 - [Hogares e invitaciones](HOUSEHOLDS.md)
+- [Recetas y raciones](RECIPES.md)
 - [Instalar la app](INSTALLATION.md)
 - [Configuración e idioma](SETTINGS.md)
 - [Preguntas frecuentes](FAQ.md)

@@ -79,8 +79,14 @@ export function HomePage() {
           <span className="bg-accent-strong grid size-11 place-items-center rounded-full text-white">
             <ChefHat aria-hidden="true" className="size-5" />
           </span>
-          <h2 className="text-2xl">{t('comingNext.title')}</h2>
-          <p className="text-charcoal-700">{t('comingNext.body')}</p>
+          <h2 className="text-2xl">{t('recipesCard.title')}</h2>
+          <p className="text-charcoal-700">{t('recipesCard.body')}</p>
+          <Button variant="accent" asChild className="mt-auto self-start">
+            <Link to="/recipes">
+              {t('recipesCard.action')}
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          </Button>
         </Card>
       </div>
     </div>

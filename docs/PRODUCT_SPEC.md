@@ -3666,3 +3666,183 @@ No almacenes secretos, credenciales, tokens ni datos privados de usuarios en Not
 No desarrolles integraciones complejas de sincronización entre Notion y GitHub salvo que exista una necesidad real y se apruebe expresamente.
 
 La finalidad de Notion es facilitar la coordinación y la revisión del producto, no aumentar la burocracia del desarrollo.
+
+## 105. Clasificación inteligente de recetas
+
+_Ampliación pedida por Aída el 27/11/2026. Implementación: ADR 0008 y PR de clasificación (apilada sobre la PR #3)._
+
+El objetivo es reducir al máximo la introducción manual de información, aprovechando los datos que el usuario ya proporciona al crear o importar una receta.
+
+### 105.1 Fuentes de información
+
+Título, descripción, ingredientes originales y normalizados, cantidades y unidades cuando aporten información relevante, pasos, tiempos originales y estimaciones personalizadas, dificultad, utensilios, métodos de preparación e indicaciones de conservación, congelación y recalentamiento.
+
+### 105.2 Tipos de clasificación
+
+- **Deterministas:** calculadas a partir de datos estructurados (Rápida, Muy rápida, Poco tiempo activo, Fácil, Air fryer…). No requieren confirmación y se actualizan cuando cambian los datos de origen.
+- **Sugerencias:** categorías, etiquetas y utensilios que pueden deducirse razonablemente del contenido, pero cuya asignación requiere revisión.
+- **Manuales:** elementos seleccionados expresamente por el usuario.
+
+### 105.3 Motor de clasificación
+
+Motor de reglas y diccionarios, sin servicios externos de IA ni APIs de pago. Debe: normalizar mayúsculas, minúsculas, tildes y espacios; reconocer sinónimos y variantes; funcionar en español e inglés; identificar familias de ingredientes; analizar palabras y expresiones completas evitando coincidencias accidentales; dar más peso al título y a los ingredientes principales; usar descripción y pasos como información complementaria; reconocer utensilios y electrodomésticos; tener en cuenta negaciones («sin horno», «no utilizar»); sugerir solo elementos existentes en el catálogo global o en el del hogar activo; no crear elementos automáticamente. No clasificar por un ingrediente secundario (una tarta con huevos no es de la categoría Huevos). Lógica de dominio independiente de la interfaz y de Supabase.
+
+### 105.4 Confianza
+
+Cada sugerencia incluye identificador, tipo (categoría, etiqueta o utensilio), confianza (alta, media, baja) y motivo. Alta: preseleccionada en el formulario. Media: disponible para aceptación manual. Baja: no se muestra inicialmente. Los niveles representan la solidez de las reglas, no probabilidades calibradas. Las sugerencias son modificables y descartables.
+
+### 105.5 Categorías
+
+Se sugieren a partir de título, descripción, ingredientes principales y elaboración. Ejemplos: Espaguetis a la boloñesa → Pasta; Risotto de champiñones → Arroces y cereales; Crema de calabacín → Sopas y cremas; Tarta de queso → Postres y repostería; Ensalada de garbanzos → Ensaladas y Legumbres. Una receta puede recibir varias categorías justificadas.
+
+### 105.6 Etiquetas alimentarias
+
+Vegetariana y Vegana pueden sugerirse cuando la información lo permita. No se deduce compatibilidad con alergias o intolerancias por la ausencia de un ingrediente. Sin gluten y Sin lactosa requieren confirmación explícita. Con ingredientes ambiguos, procesados o información insuficiente no se hacen afirmaciones concluyentes. Nunca se presentan como garantías de seguridad alimentaria.
+
+### 105.7 Utensilios
+
+Se detectan principalmente en los pasos («Precalentar el horno» → Horno; «Triturar con una batidora de mano» → Batidora de mano; «Introducir el estuche Lékué en el microondas» → Estuche de vapor Lékué y Microondas; «Cocinar en la air fryer» → Freidora de aire), con sinónimos, variantes y nombres comerciales. Son sugerencias: no se asume que sean obligatorios ni se generan métodos alternativos sin información suficiente. El usuario confirma si son necesarios, opcionales o alternativos. La detección nunca marca el equipamiento como completo sin confirmación (evita ocultar recetas por error).
+
+### 105.8 Personalización por hogar
+
+Respeta hogares y roles. El propietario puede añadir palabras clave y sinónimos a sus categorías, etiquetas y utensilios propios; el motor las usa y no afectan a otros hogares. Los miembros aceptan o rechazan sugerencias y usan elementos existentes, pero no crean elementos ni modifican sus reglas.
+
+### 105.9 Experiencia
+
+Sección de clasificación en el formulario de creación y edición: consultar, aceptar una a una o todas las válidas, rechazar, modificar, consultar el motivo y volver a analizar. No sobrescribir decisiones manuales; no volver a preseleccionar lo rechazado; sin recalcular en cada pulsación (debounce); nunca bloquear el guardado; deterministas diferenciadas de las sugerencias.
+
+### 105.10 Filtros
+
+Lo confirmado funciona con todos los filtros; las sugerencias no confirmadas no afectan al recetario; las deterministas pueden filtrarse directamente. Se mantienen el filtro por disponibilidad de utensilios y las estimaciones personalizadas.
+
+### 105.11 Futuras importaciones
+
+Motor reutilizable para importación desde URL, texto, OCR, vídeos y clasificación asistida por IA, con una interfaz de dominio que permita sustituirlo o complementarlo. Sin integraciones externas innecesarias ahora.
+
+### 105.12 Pruebas
+
+Recetas habituales, sinónimos, normalización, español e inglés, utensilios, ingredientes secundarios, negaciones y ambigüedad, información incompleta, niveles de confianza, etiquetas que requieren confirmación, palabras clave por hogar, conservación de decisiones manuales, sugerencias rechazadas e integración con filtros.
+
+## 106. Formulario de recetas simplificado (divulgación progresiva)
+
+_Ampliación pedida por Aída el 27/11/2026. Orden acordado: después de cerrar las PR en curso (#2, #3 y clasificación), en una PR independiente._
+
+Objetivo: crear recetas de forma rápida y sencilla por defecto, sobre todo en móvil, sin renunciar a los datos avanzados. Un único formulario con divulgación progresiva, no dos formularios.
+
+**Básico (visible al abrir):** título obligatorio; raciones (4 por defecto); ingredientes obligatorios con opción de pegar la lista completa; preparación obligatoria con opción de pegar las instrucciones; tiempo total opcional; acceso sencillo para añadir foto; resumen compacto de categorías, etiquetas y utensilios sugeridos. Se puede guardar sin tocar ninguna opción avanzada. Se mantiene el guardado directo de texto pegado sin pulsar «Separar».
+
+**«Añadir más detalles»** (plegable), con subsecciones plegables: 1) descripción y dificultad; 2) tiempos detallados; 3) categorías y etiquetas; 4) utensilios y métodos; 5) conservación y congelación; 6) notas, fuente y autoría; 7) temporizadores por paso. No se muestran todos los campos a la vez; cada subsección muestra un resumen compacto cuando tiene datos.
+
+**Comportamiento:** conservar valores al plegar; conservar decisiones manuales de clasificación; si un campo avanzado tiene un error, abrir su sección y llevar a él; los avanzados vacíos no bloquean; no modificar datos de recetas antiguas al editarlas; indicador de datos avanzados aunque la sección esté cerrada; mantener navegación y confirmación de salida; botón Guardar accesible en móvil sin que lo tape el teclado; sin asistente obligatorio de varios pasos.
+
+**Fotografía:** seleccionable durante la creación; se sube al completar el guardado con el almacenamiento privado actual; sin archivos huérfanos y conservando los mensajes de error.
+
+**Borradores:** guardado local recuperable para recetas en creación, separado por cuenta y hogar; al volver, recuperar o descartar; limpiar tras guardar; sin fotos ni datos sensibles en almacenamiento local sin considerar su ciclo de vida y seguridad.
+
+**Clasificación:** el motor de §105 integrado de forma discreta, sin convertirse en otro formulario obligatorio; aceptar, modificar o descartar sin sobrescribir decisiones manuales.
+
+**Diseño:** móvil, accesibilidad y pocas interacciones; reutilizar componentes, estilos, React Hook Form, Zod e i18next; coherente en escritorio; sin dependencias nuevas salvo necesidad justificada.
+
+**Validación:** creación rápida; creación completa; edición de recetas antiguas; plegado sin pérdida; errores en apartados cerrados; pegado de ingredientes y pasos; selección y subida de foto; recuperación y limpieza de borradores; aislamiento de borradores entre cuentas y hogares; teclado móvil y lectores de pantalla; pantallas pequeñas. Controles de calidad y PR para revisión sin fusionar.
+
+## 107. Creación por texto completo y dictado por voz, y arquitectura común de importación
+
+_Ampliación pedida por Aída el 27/11/2026. Orden acordado: después de §106, en una PR independiente. Coste adicional de infraestructura: 0 €._
+
+### 107.1 Modos de creación
+
+Escribir manualmente, dictar la receta completa o pegar el texto completo. Todos desembocan en el mismo formulario simplificado (§106), sin formularios independientes ni lógica duplicada.
+
+### 107.2 Dictado por voz
+
+Web Speech API del navegador cuando esté disponible (comprobar Safari, iOS, Android, Chrome y la PWA instalada). Inicio y fin del dictado; indicador visible de escucha; transcripción provisional y definitiva si el navegador lo permite; edición manual del texto; idioma según las preferencias de la aplicación; permisos de micrófono; interrupciones y errores; alternativa con el dictado nativo del teclado cuando no haya reconocimiento integrado. No prometer funcionamiento offline ni procesamiento local si el navegador no lo garantiza. No almacenar audio. Informar si el reconocimiento depende de servicios externos del navegador.
+
+### 107.3 Procesamiento de texto
+
+Motor de extracción desde texto libre, independiente del origen, que intente identificar título, descripción, raciones, ingredientes con cantidades y unidades, pasos, tiempo total, tiempos activo y pasivo cuando sean explícitos, dificultad indicada, utensilios mencionados y notas de conservación. Reutiliza `src/domain/recipes/paste.ts`, `src/domain/recipes/quantity.ts` y el clasificador de §105. Reglas, expresiones regulares y diccionarios, sin APIs de pago. Reconoce lenguaje hablado («media cebolla», «un cuarto de kilo», «dos cucharadas y media», «un par de dientes de ajo», «sal al gusto», «para cuatro personas», «durante diez minutos»). No inventa información ni convierte expresiones ambiguas en cantidades exactas sin justificación; conserva el texto original cuando no se pueda interpretar.
+
+### 107.4 Experiencia
+
+Tras dictar o pegar: rellenar el formulario simplificado, permitir revisar y corregir todo, marcar discretamente lo dudoso, presentar sugerencias de clasificación, no sobrescribir cambios manuales, no obligar a completar campos avanzados y no guardar sin confirmación. Rápido y sin navegar por varias pantallas.
+
+### 107.5 Arquitectura común de importación
+
+Compatible con: creación manual, pegado de texto, dictado, importación por URL, páginas con datos estructurados (schema.org/Recipe, JSON-LD), fotos y capturas con OCR, redes sociales y vídeos, y futuros proveedores de IA. Arquitectura basada en **adaptadores de entrada → normalización → extracción → clasificación**, que producen un **borrador de receta común** compatible con el formulario simplificado. El borrador admite texto libre y datos estructurados (sin obligar a convertir datos estructurados a texto) y conserva, cuando exista: URL de origen, autoría, método de importación, texto original durante la revisión, datos extraídos, información pendiente de confirmar y sugerencias de clasificación. Mismo motor de normalización de ingredientes, clasificación, validación y guardado para todos los métodos, sin duplicar lógica. El usuario corrige cualquier dato antes de guardar y nunca está obligado a completar campos opcionales. No implementar ahora URL, OCR ni vídeos, ni mostrar botones activos de funciones no disponibles. Responsabilidades separadas (nombres orientativos): `SpeechTranscriptionProvider`, `RecipeTextParser`, `RecipeClassifier`, `RecipeForm`; preparadas para proveedores externos de transcripción o IA sin tocar el formulario. Sin servicios externos, APIs de pago ni modelos Whisper locales por ahora. Evitar abstracciones innecesarias para funciones no implementadas.
+
+### 107.6 Pruebas
+
+Recetas dictadas en lenguaje natural; pegadas desde texto estructurado; cantidades con palabras; ingredientes y tiempos ambiguos; información incompleta; español e inglés; navegadores sin reconocimiento de voz; permiso de micrófono denegado; interrupciones; conservación de modificaciones manuales; integración con el formulario y la clasificación. Actualizar documentación de producto y arquitectura y ejecutar los controles de calidad.
+
+## 108. Planificador con elementos que no son recetas y catálogo de productos del hogar
+
+_Ampliación pedida por Aída el 27/11/2026. Debe tenerse en cuenta antes de cerrar el modelo de datos del planificador (§28) y de la lista de la compra. No amplía las PR en curso._
+
+Objetivo: representar lo que realmente consume un hogar, incluidos productos preparados, alimentos sencillos, sobras y comidas fuera de casa, sin obligar a crear recetas ficticias.
+
+### 108.1 Elementos planificables
+
+Recetas del recetario; productos comerciales o preparados; alimentos sencillos; comidas en texto libre; sobras de elaboraciones anteriores; comidas fuera de casa. Varios elementos en un mismo momento de consumo (p. ej. preparado de ñoquis con pollo de Mercadona + ensalada casera + yogur). Se reutilizan los momentos de consumo ya definidos.
+
+### 108.2 Catálogo de productos del hogar
+
+Producto reutilizable, independiente de las recetas, del hogar activo y compartido por sus miembros: **todos los miembros** pueden crear, editar y usar productos (con aislamiento entre hogares). Campos (todos opcionales salvo el nombre): marca, supermercado habitual, foto, cantidad por envase, unidad, raciones por envase, tiempo de preparación, utensilios, categorías y etiquetas compatibles, notas de preparación, conservación, precio por envase, código de barras e información nutricional. Sin ingredientes ni pasos obligatorios.
+
+### 108.3 Experiencia
+
+Creación rápida y divulgación progresiva como en §106; crear un producto desde el planificador sin salir de él; buscar, reutilizar los habituales o crear uno nuevo con el mínimo de interacciones; campos secundarios en opciones avanzadas. Búsqueda común de recetas y productos distinguiendo su tipo; cada elemento planificado con su cantidad, raciones o número de envases.
+
+### 108.4 Lista de la compra según el tipo
+
+Recetas → ingredientes escalados. Productos → unidades del producto (no sus ingredientes). Alimentos sencillos → cantidades si están definidas. Sobras → nada por defecto. Fuera de casa → nada. Texto libre → nada sin información suficiente. Ejemplo: 2 raciones por envase y 4 raciones planificadas → 2 envases. Sin conversiones inventadas; productos idénticos agrupados; preparado para descontar inventario en el futuro.
+
+### 108.5 Utensilios y clasificación
+
+Reutilizar catálogos globales y del hogar; un producto puede indicar utensilios (microondas, horno, sartén, air fryer…) sin obligación; distinguir «no requiere preparación» de «preparación sin especificar» (mismo modelo de tres estados que las recetas, ADR 0007); compatible con el filtro de disponibilidad.
+
+### 108.6 Arquitectura y evolución
+
+No modelar todo como receta; estructura extensible con integridad referencial; TypeScript strict, RLS y aislamiento entre hogares; reutilizar dominio y componentes sin abstracciones innecesarias. Contemplar sin implementar aún: códigos de barras, Open Food Facts, nutrición, precios, inventario y caducidades, aprovechamiento de sobras y recomendaciones. Sin APIs comerciales ni catálogos de supermercados.
+
+## 109. Identificación de productos (Open Food Facts, códigos de barras) e información nutricional
+
+_Ampliación pedida por Aída el 27/11/2026, con prioridades propias de este bloque que no alteran las generales del proyecto._
+
+### 109.1 Alta de productos
+
+Tres vías: escaneo del código de barras con la cámara, búsqueda por nombre y marca, y creación manual. Proveedor inicial: **Open Food Facts** (consultar su documentación oficial vigente y la versión recomendada de la API al implementar). Sin APIs de pago ni scraping.
+
+### 109.2 Datos del producto
+
+Nombre (único obligatorio), marca, supermercado (distinto de la marca), código EAN/UPC, foto, cantidad neta, unidad, raciones por envase, ingredientes, alérgenos, información nutricional, Nutri-Score si existe, precio, utensilios, tiempo de preparación, notas de preparación y conservación.
+
+### 109.3 Información nutricional
+
+Energía (kcal y kJ), proteínas, hidratos, azúcares, grasas, saturadas, fibra y sal; normalizada a 100 g o 100 ml conservando unidad y base; separar «tal como se vende» de «preparado»; desconocido ≠ 0. Cálculo por gramos/mililitros, por ración (si está definida), por envase y por fracción de envase. No convertir peso ↔ volumen sin información suficiente.
+
+### 109.4 Integración con Open Food Facts
+
+Adaptador de proveedor independiente de la interfaz y del modelo interno: búsqueda por código y por nombre/marca, selección de resultados, normalización, datos incompletos, no encontrado, errores de red, límites de peticiones y caché conforme a sus condiciones. Nunca una búsqueda externa por pulsación. Evaluar una Supabase Edge Function para centralizar consultas, identificar la aplicación, limitar peticiones y normalizar. Revisar atribución, licencia ODbL de la base y licencia de las imágenes antes de persistir datos. Datos del proveedor separados de los privados del hogar; nunca enviar datos personales ni del hogar; guardar origen y fecha de consulta.
+
+### 109.5 Escaneo
+
+Opciones compatibles con la PWA: API nativa del navegador cuando exista y alternativa como ZXing; comprobar Safari, iOS y PWA instalada; siempre se puede escribir el código a mano; no guardar imágenes de la cámara.
+
+### 109.6 Experiencia
+
+Si se encuentra (escaneo o búsqueda): rellenar lo disponible, revisar y corregir, no obligar a completar lo ausente, guardar al momento. Si no: crear a mano sin bloquear. Mantener la creación desde el planificador.
+
+### 109.7 Catálogo y hogares
+
+Separar conceptualmente: identidad e información general del producto comercial; datos nutricionales externos; asociación del producto con el hogar; preferencias y datos privados del hogar; información corregida a mano. Sin duplicar innecesariamente la información externa; los cambios privados de un hogar no alteran a otros; RLS y permisos existentes.
+
+### 109.8 Recetas y planificador nutricional futuros
+
+Los ingredientes de una receta podrán asociarse a alimentos genéricos, productos comerciales o alimentos definidos a mano; no todos tendrán datos; las estimaciones incompletas se marcan como tales. Preparar el modelo para calorías y macros por elemento, comida, día, semana y miembro, y para comparar planificado con consumido. Objetivos e historial de consumo **personales** y no compartidos por defecto. No implementar aún un seguimiento nutricional completo.
+
+### 109.9 Prioridades de este bloque (Aída, 27/11)
+
+- **Alta:** catálogo de productos del hogar; modelo compatible con nutrición; Open Food Facts; búsqueda por nombre y marca; escaneo; productos en planificador y compra; calorías y macros por cantidad, ración y envase.
+- **Media:** nutrición de alimentos genéricos; asociación de ingredientes con alimentos y productos; nutrición de recetas caseras; totales por comida, día y semana.
+- **Futura:** objetivos personales; registro del consumo real; OCR de etiquetas; recomendaciones de menús por objetivos; histórico de precios; integración con aplicaciones de salud. También BEDCA (tras revisar sus condiciones) y actualización de productos.
+
+Principios transversales: mínimas interacciones, nutrición siempre opcional, coste mínimo, mobile-first, reutilización y sin sobreingeniería.
