@@ -59,3 +59,5 @@ Actualizado el 26/11/2026: ficha de entrega de la PR #1 (En revisión, CI pendie
 ## Siguiente acción concreta
 
 Aída revisa el recetario en la preview de la PR #2. Siguiente módulo: menú semanal (§28).
+
+Prioridad acordada con Aída (27/11): justo después del menú semanal, **importar una receta pegando el texto completo** (§8.3, reglas locales, sin IA, con revisión) y recibirla desde el menú «Compartir» del móvil (Web Share Target, Android). Importación desde URL con JSON-LD (§8.1) después del núcleo P0.
