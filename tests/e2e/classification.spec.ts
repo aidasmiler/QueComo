@@ -45,7 +45,7 @@ test.describe('smart classification (real backend)', () => {
     await expect(
       page.getByRole('heading', { name: 'Crema de calabacín ligera E2E' }),
     ).toBeVisible();
-    await expect(page.getByText('Batidora de mano')).toBeVisible();
+    await expect(page.getByText('Batidora de mano', { exact: true })).toBeVisible();
     await expect(page.getByText('Utensilios opcionales')).toBeVisible();
 
     // Editing: the saved rejection is kept and nothing is changed by itself.

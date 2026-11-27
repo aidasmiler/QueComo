@@ -250,12 +250,15 @@ export function UtensilPicker({
   value,
   onChange,
   label,
+  buttonLabel,
 }: {
   items: CatalogItem[];
   maps: Map<ItemKey, CatalogItem>;
   value: ItemKey[];
   onChange: (value: ItemKey[]) => void;
   label: string;
+  /** Distinct button text when several pickers share a page. */
+  buttonLabel?: string;
 }) {
   const { t } = useTranslation(['recipes', 'common']);
   const [open, setOpen] = useState(false);
@@ -296,7 +299,7 @@ export function UtensilPicker({
         onClick={() => setOpen(true)}
       >
         <Plus aria-hidden="true" />
-        {t('equipment.chooseUtensils')}
+        {buttonLabel ?? t('equipment.chooseUtensils')}
       </Button>
       <Dialog
         open={open}

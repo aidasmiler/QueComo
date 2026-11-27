@@ -201,6 +201,7 @@
     "missingList": "Os falta: {{list}}.",
     "methodDoable": "puedes usar este",
     "youLackIt": "no lo tenéis",
+    "chooseOptional": "Elegir utensilios opcionales",
     "optionalTitle": "Utensilios opcionales",
     "optionalHint": "Ayudan, pero no son imprescindibles: la receta no se oculta aunque no los tengas."
   },

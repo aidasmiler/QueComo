@@ -201,6 +201,7 @@
     "missingList": "You're missing: {{list}}.",
     "methodDoable": "you can use this one",
     "youLackIt": "you don't have it",
+    "chooseOptional": "Choose optional utensils",
     "optionalTitle": "Optional utensils",
     "optionalHint": "They help but are not essential: the recipe is not hidden if you do not have them."
   },

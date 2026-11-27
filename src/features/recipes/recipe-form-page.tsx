@@ -954,6 +954,7 @@ function OptionalUtensils({ control }: { control: Control<FormValues> }) {
       <p className="text-fg-muted text-sm">{t('equipment.optionalHint')}</p>
       <UtensilPicker
         label={t('equipment.optionalTitle')}
+        buttonLabel={t('equipment.chooseOptional')}
         items={catalog.data.utensils}
         maps={catalog.data.maps.utensil}
         value={optional.field.value}
