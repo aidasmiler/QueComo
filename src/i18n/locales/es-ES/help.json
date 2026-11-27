@@ -1,0 +1,53 @@
+{
+  "title": "Ayuda y soporte",
+  "intro": "Respuestas rápidas para usar QuéComo en casa.",
+  "contact": "¿Algo no funciona? Cuéntaselo a la administradora de QuéComo con una captura de pantalla y lo revisaremos.",
+  "articles": {
+    "gettingStarted": {
+      "title": "Primeros pasos",
+      "body": [
+        "Crea tu cuenta con tu correo y una contraseña. Si te lo pide, confirma tu correo desde el enlace que recibirás.",
+        "Después crea un hogar o únete al de otra persona con su enlace de invitación.",
+        "Todo lo que guardes en un hogar (recetas, menús y listas) lo verán solo sus miembros."
+      ]
+    },
+    "households": {
+      "title": "Hogares",
+      "body": [
+        "Un hogar es un espacio compartido. Puedes pertenecer a varios, por ejemplo tu casa y la de tu familia.",
+        "Cambia de hogar desde el selector que aparece arriba, junto a su nombre.",
+        "La persona propietaria puede cambiar el nombre, quitar miembros, transferir la propiedad o eliminar el hogar."
+      ]
+    },
+    "invitations": {
+      "title": "Invitaciones",
+      "body": [
+        "Desde Perfil → Hogares → tu hogar, pulsa «Invitar a alguien» y comparte el enlace.",
+        "Cada enlace sirve para una sola persona y caduca a los 7 días. Puedes revocarlo en cualquier momento.",
+        "La persona invitada debe abrir el enlace, crear su cuenta o iniciar sesión, y pulsar «Unirme al hogar»."
+      ]
+    },
+    "install": {
+      "title": "Instalar la app",
+      "body": [
+        "QuéComo es una app web: no hace falta descargarla de ninguna tienda.",
+        "Consulta los pasos para tu dispositivo en Perfil → Instalar la app."
+      ]
+    },
+    "language": {
+      "title": "Cambiar de idioma",
+      "body": [
+        "Ve a Perfil → Configuración → Idioma y elige Español o English.",
+        "El idioma es personal: cada persona del hogar puede usar el suyo. Las recetas y notas no se traducen."
+      ]
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "body": [
+        "¿Funciona sin conexión? Puedes abrir la app instalada sin conexión. A medida que lleguen el recetario, el menú y la compra, podrás consultarlos también sin conexión.",
+        "¿Cuesta dinero? No. QuéComo es una beta privada y gratuita.",
+        "¿Las etiquetas «sin gluten» garantizan que no hay alérgenos? No. Revisa siempre los ingredientes."
+      ]
+    }
+  }
+}

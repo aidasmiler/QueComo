@@ -1,0 +1,20 @@
+{
+  "greeting": {
+    "morning": "Buenos días, {{name}}",
+    "afternoon": "Buenas tardes, {{name}}",
+    "evening": "Buenas noches, {{name}}"
+  },
+  "question": "¿Qué comemos hoy?",
+  "today": "Hoy, {{date}}",
+  "householdCard": {
+    "title": "Tu hogar",
+    "people_one": "Solo tú por ahora",
+    "people_other": "{{count}} personas comparten este hogar",
+    "invite": "Invitar a alguien",
+    "manage": "Ver hogar"
+  },
+  "comingNext": {
+    "title": "Estamos preparando tu cocina",
+    "body": "Esta es una versión temprana de QuéComo. En las próximas entregas llegarán el recetario, el menú semanal y la lista de la compra compartida."
+  }
+}

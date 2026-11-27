@@ -1,0 +1,74 @@
+{
+  "onboarding": {
+    "title": "Bienvenida/o a QuéComo",
+    "subtitle": "Un hogar es el espacio que compartes con tu pareja, tu familia o tus compañeros de piso. Puedes tener varios.",
+    "createTitle": "Crear un hogar",
+    "createHint": "Por ejemplo: «Casa», «Con Marta» o «Familia».",
+    "nameLabel": "Nombre del hogar",
+    "namePlaceholder": "Casa",
+    "create": "Crear hogar",
+    "joinTitle": "¿Te han invitado?",
+    "joinHint": "Pega aquí el enlace de invitación que te han enviado.",
+    "joinLabel": "Enlace de invitación",
+    "join": "Ver invitación",
+    "joinInvalid": "Ese enlace no parece una invitación de QuéComo."
+  },
+  "list": {
+    "title": "Mis hogares",
+    "new": "Nuevo hogar",
+    "active": "Activo",
+    "members_one": "{{count}} persona",
+    "members_other": "{{count}} personas",
+    "makeActive": "Usar este hogar"
+  },
+  "detail": {
+    "members": "Personas",
+    "you": "Tú",
+    "rename": "Cambiar nombre",
+    "renameTitle": "Cambiar nombre del hogar",
+    "invitations": "Invitaciones pendientes",
+    "noInvitations": "No hay invitaciones pendientes.",
+    "invite": "Invitar a alguien",
+    "inviteTitle": "Invitar a {{household}}",
+    "inviteBody": "Comparte este enlace con la persona que quieras invitar. Funciona una sola vez y caduca el {{date}}.",
+    "inviteShareText": "Te invito a nuestro hogar «{{household}}» en QuéComo:",
+    "inviteCreated": "Invitación creada el {{date}} · caduca el {{expires}}",
+    "revoke": "Revocar",
+    "revokeConfirm": "¿Revocar esta invitación? El enlace dejará de funcionar.",
+    "revoked": "Invitación revocada",
+    "remove": "Quitar del hogar",
+    "removeConfirm": "¿Quitar a {{name}} de este hogar? Dejará de ver sus recetas, menús y listas.",
+    "removed": "{{name}} ya no forma parte del hogar",
+    "makeOwner": "Hacer propietaria/o",
+    "transferConfirm": "¿Transferir la propiedad a {{name}}? Pasarás a ser miembro y no podrás deshacerlo tú sola/o.",
+    "transferred": "Propiedad transferida a {{name}}",
+    "dangerZone": "Zona delicada",
+    "leave": "Abandonar hogar",
+    "leaveConfirm": "¿Abandonar «{{household}}»? Dejarás de ver sus datos. Necesitarás una invitación para volver.",
+    "left": "Has abandonado el hogar",
+    "lastOwnerHint": "Eres la única persona propietaria: transfiere la propiedad antes de abandonar el hogar, o elimínalo.",
+    "delete": "Eliminar hogar",
+    "deleteConfirm": "¿Eliminar «{{household}}» y todos sus datos para todas las personas? Esta acción no se puede deshacer.",
+    "deleteTypeName": "Escribe el nombre del hogar para confirmar",
+    "deleted": "Hogar eliminado"
+  },
+  "invite": {
+    "title": "Invitación a un hogar",
+    "body": "{{inviter}} te invita a unirte a «{{household}}».",
+    "bodyNoInviter": "Te han invitado a unirte a «{{household}}».",
+    "accept": "Unirme al hogar",
+    "accepted": "¡Ya formas parte de {{household}}!",
+    "alreadyMember": "Ya formas parte de este hogar.",
+    "goToHousehold": "Ir al hogar",
+    "status": {
+      "revoked": "Esta invitación se ha cancelado.",
+      "accepted": "Esta invitación ya se ha utilizado.",
+      "expired": "Esta invitación ha caducado."
+    },
+    "askNew": "Pide a quien te invitó un enlace nuevo."
+  },
+  "switcher": {
+    "title": "Elige un hogar",
+    "manage": "Gestionar hogares"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "title": "Profile",
+  "sections": {
+    "account": "Your account",
+    "households": "Households",
+    "settings": "Settings",
+    "support": "Help and privacy"
+  },
+  "editProfile": "Edit profile",
+  "editTitle": "Your profile",
+  "preferences": "Dietary preferences",
+  "language": "Language",
+  "languageSaved": "Language updated",
+  "languageNotSaved": "We changed the language on this device but couldn't save it to your account. We'll try again.",
+  "install": "Install the app",
+  "help": "Help and support",
+  "privacy": "Privacy and data",
+  "signedInAs": "Signed in as {{email}}",
+  "prefs": {
+    "title": "Dietary preferences",
+    "intro": "These are personal: other people in your household can't change them. They'll help us suggest recipes.",
+    "restrictionsTitle": "I don't / can't eat",
+    "preferencesTitle": "I'm interested in",
+    "customTitle": "Other tags",
+    "customPlaceholder": "E.g. not spicy",
+    "add": "Add",
+    "disclaimer": "Recipe tags are written by users and don't guarantee that allergens are absent. Always check the ingredients.",
+    "presets": {
+      "vegetarian": "Vegetarian",
+      "vegan": "Vegan",
+      "gluten_free": "Gluten-free",
+      "lactose_free": "Lactose-free",
+      "quick": "Quick",
+      "budget": "Budget",
+      "low_prep": "Low prep",
+      "batch_cooking": "Batch cooking",
+      "freezer_friendly": "Freezer-friendly",
+      "make_ahead": "Make ahead"
+    }
+  },
+  "installGuide": {
+    "title": "Install QuéComo",
+    "intro": "Install QuéComo on your home screen to open it like an app, even offline.",
+    "installed": "QuéComo is already installed on this device.",
+    "installButton": "Install now",
+    "ios": {
+      "title": "iPhone or iPad",
+      "steps": [
+        "Open QuéComo in Safari.",
+        "Tap the Share button (the square with an arrow pointing up).",
+        "Choose “Add to Home Screen” and confirm.",
+        "Open QuéComo from its new icon."
+      ]
+    },
+    "android": {
+      "title": "Android",
+      "steps": [
+        "Open QuéComo in Chrome.",
+        "Tap “Install” if prompted, or open the ⋮ menu and choose “Install app” or “Add to Home screen”.",
+        "Open QuéComo from its icon."
+      ]
+    },
+    "desktop": {
+      "title": "Computer",
+      "steps": [
+        "Open QuéComo in Chrome or Edge.",
+        "Click the install icon in the address bar, or use the browser menu and choose “Install QuéComo”.",
+        "In Safari on Mac: File menu → “Add to Dock”."
+      ]
+    }
+  },
+  "privacyPage": {
+    "title": "Privacy and data",
+    "body1": "Your recipes, menus and lists are stored on our server (Supabase, in the European Union) and are only visible to the people in each household.",
+    "body2": "QuéComo has no advertising or third-party analytics.",
+    "body3": "To download a copy of your data or delete your account, contact the QuéComo administrator. You'll soon be able to do it from here."
+  }
+}

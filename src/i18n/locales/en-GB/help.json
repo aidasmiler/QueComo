@@ -1,0 +1,53 @@
+{
+  "title": "Help and support",
+  "intro": "Quick answers for using QuéComo at home.",
+  "contact": "Something not working? Tell the QuéComo administrator, with a screenshot, and we'll look into it.",
+  "articles": {
+    "gettingStarted": {
+      "title": "Getting started",
+      "body": [
+        "Create your account with your email and a password. If asked, confirm your email using the link you receive.",
+        "Then create a household or join someone else's with their invitation link.",
+        "Everything you save in a household (recipes, menus and lists) is only visible to its members."
+      ]
+    },
+    "households": {
+      "title": "Households",
+      "body": [
+        "A household is a shared space. You can belong to several, for example your home and your family's.",
+        "Switch household using the selector at the top, next to its name.",
+        "The owner can rename it, remove members, transfer ownership or delete the household."
+      ]
+    },
+    "invitations": {
+      "title": "Invitations",
+      "body": [
+        "Go to Profile → Households → your household, tap “Invite someone” and share the link.",
+        "Each link is for one person and expires after 7 days. You can revoke it at any time.",
+        "The invited person opens the link, creates an account or signs in, and taps “Join household”."
+      ]
+    },
+    "install": {
+      "title": "Installing the app",
+      "body": [
+        "QuéComo is a web app: you don't need to download it from an app store.",
+        "See the steps for your device in Profile → Install the app."
+      ]
+    },
+    "language": {
+      "title": "Changing language",
+      "body": [
+        "Go to Profile → Settings → Language and choose Español or English.",
+        "Language is personal: each person in the household can use their own. Recipes and notes are not translated."
+      ]
+    },
+    "faq": {
+      "title": "FAQ",
+      "body": [
+        "Does it work offline? You can open the installed app offline. As the recipe book, menu and shopping list arrive, you'll be able to view them offline too.",
+        "Does it cost anything? No. QuéComo is a free private beta.",
+        "Do “gluten-free” tags guarantee there are no allergens? No. Always check the ingredients."
+      ]
+    }
+  }
+}

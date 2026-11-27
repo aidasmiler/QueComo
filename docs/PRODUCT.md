@@ -1,0 +1,31 @@
+# QuéComo · Resumen operativo de producto
+
+Resumen de trabajo de [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md), que sigue siendo la fuente de verdad. Ante contradicciones prevalecen las secciones posteriores (§80–§104).
+
+## Visión
+
+Reducir la carga mental de la alimentación doméstica conectando: decidir qué comer → planificar → comprobar qué hay → comprar → cocinar → aprovechar. Útil sin IA ni integraciones comerciales.
+
+## Usuarios
+
+Aída, su pareja y su familia (beta privada). Una persona puede pertenecer a varios hogares; los miembros de un hogar pueden tener preferencias distintas (p. ej. vegetariana + no vegetariana).
+
+## Flujo del MVP (§22)
+
+Crear cuenta → crear hogar → invitar familiares → guardar recetas → ajustar raciones → planificar comidas → generar compra → comprar a la vez → cocinar.
+
+## Prioridades
+
+**P0 (lanzamiento):** autenticación, perfiles, hogares compartidos, invitaciones, recetario (ingredientes, pasos, fotos, categorías, etiquetas, favoritos, búsqueda), escalado de raciones, planificador semanal con varias preparaciones por comida, lista de compra generada + productos manuales + comprado / disponible en casa + sincronización, preferencias alimentarias, inicio, responsive, seguridad, PWA instalable, **funcionamiento offline con cola de operaciones (§97–§101)**, i18n es-ES/en-GB (§88), despliegue y pruebas críticas.
+
+**P1:** duplicar/archivar recetas, copiar semanas, valoraciones, filtros por tiempo, sugerencias simples, modo cocina básico, exportación, tema oscuro, importación JSON-LD.
+
+**P2:** inventario, caducidades, calendario, batch cooking, mapa de preparación, compra inteligente, nutrición, hardware.
+
+## Criterios de aceptación del MVP
+
+Los de §75 de la especificación, más: disponible en español e inglés (§93), offline tras la primera sincronización (§98) y 0 €/mes de infraestructura (§103).
+
+## Definition of Done (§59 + §93)
+
+Implementado de extremo a extremo con datos persistentes, autorización correcta en servidor, estados de carga/error/vacío/offline, usable en móvil y escritorio, diseño coherente, ambos idiomas, pruebas proporcionadas al riesgo, documentación técnica y de usuario actualizada, preview y PR con instrucciones de validación, limitaciones documentadas. Validación funcional: solo la Product Owner.

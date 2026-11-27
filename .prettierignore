@@ -1,0 +1,13 @@
+dist
+node_modules
+coverage
+playwright-report
+test-results
+package-lock.json
+docs/PRODUCT_SPEC.md
+docs/references
+src/lib/supabase/database.types.ts
+supabase/.temp
+supabase/config.jsonc
+docs/user-guide/*.md
+!docs/user-guide/README.md

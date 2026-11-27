@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/figtree';
+
+/*
+ * QuéComo design tokens. Components must use these semantic tokens instead of raw colours.
+ * Palette based on PRODUCT_SPEC §33.1, adjusted for WCAG AA contrast (see docs/DESIGN.md).
+ */
+@theme {
+  --font-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+
+  --color-olive-50: #f3f6f1;
+  --color-olive-100: #dde5d5;
+  --color-olive-200: #c3d0b8;
+  --color-olive-300: #9fb291;
+  --color-olive-400: #78906b;
+  --color-olive-500: #5d7356;
+  --color-olive-600: #50634a;
+  --color-olive-700: #3f4f3a;
+  --color-olive-800: #313d2d;
+  --color-olive-900: #232b20;
+
+  --color-terracotta-50: #fbf1ec;
+  --color-terracotta-100: #f5ddd1;
+  --color-terracotta-200: #ebbda8;
+  --color-terracotta-400: #d4906f;
+  --color-terracotta-500: #c47859;
+  --color-terracotta-600: #a85d3f;
+  --color-terracotta-700: #8a4a31;
+
+  --color-cream-50: #fdfcf8;
+  --color-cream-100: #f8f5ed;
+  --color-cream-200: #efe9da;
+  --color-cream-300: #e3dbc6;
+
+  --color-charcoal-500: #5f655b;
+  --color-charcoal-700: #3d423a;
+  --color-charcoal-900: #292d27;
+
+  /* Semantic tokens (light theme) */
+  --color-bg: var(--color-cream-100);
+  --color-surface: var(--color-cream-50);
+  --color-surface-muted: var(--color-cream-200);
+  --color-border: var(--color-cream-300);
+  --color-fg: var(--color-charcoal-900);
+  --color-fg-muted: var(--color-charcoal-500);
+  --color-primary: var(--color-olive-600);
+  --color-primary-hover: var(--color-olive-700);
+  --color-primary-fg: var(--color-cream-50);
+  --color-primary-soft: var(--color-olive-100);
+  --color-accent: var(--color-terracotta-500);
+  --color-accent-strong: var(--color-terracotta-600);
+  --color-accent-soft: var(--color-terracotta-50);
+  --color-danger: #b3261e;
+  --color-danger-soft: #fbe9e7;
+  --color-success: var(--color-olive-600);
+  --color-warning: #8a5a00;
+  --color-warning-soft: #fff4d6;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+
+  --shadow-card: 0 1px 2px rgb(41 45 39 / 0.04), 0 4px 16px rgb(41 45 39 / 0.06);
+  --shadow-float: 0 8px 32px rgb(41 45 39 / 0.14);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--color-bg);
+  }
+
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    min-height: 100dvh;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-fg tracking-tight;
+    font-optical-sizing: auto;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-strong);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
