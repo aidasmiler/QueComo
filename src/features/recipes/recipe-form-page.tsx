@@ -28,6 +28,12 @@ import type { RecipeDetail, RecipeInput } from './api';
 import { useRecipe, useRemovePhoto, useSaveRecipe, useUploadPhoto } from './hooks';
 import { preparePhoto } from './image';
 import { RecipePhoto } from './recipe-photo';
+import { SmartClassification } from './recipe-classification';
+import {
+  ClassificationContext,
+  useClassification,
+  useRecipeClassification,
+} from './recipe-classification-state';
 
 const optionalMinutes = z
   .string()
@@ -54,6 +60,8 @@ const schema = z.object({
   methods: z
     .array(z.object({ label: z.string().max(60), utensils: z.array(z.custom<ItemKey>()).max(20) }))
     .max(5),
+  /** Utensils that help but are not needed: never used to hide a recipe. */
+  optionalUtensils: z.array(z.custom<ItemKey>()).max(20),
   sourceUrl: z
     .string()
     .trim()
@@ -72,6 +80,7 @@ const schema = z.object({
 });
 
 type FormValues = z.infer<typeof schema>;
+export type RecipeFormValues = FormValues;
 type ValidationKey =
   | 'titleRequired'
   | 'servings'
@@ -99,6 +108,7 @@ function toFormValues(recipe?: RecipeDetail): FormValues {
     methods: recipe?.equipment.methods.length
       ? recipe.equipment.methods.map((m) => ({ label: m.label ?? '', utensils: m.utensils }))
       : [{ label: '', utensils: [] }],
+    optionalUtensils: recipe?.optionalUtensils ?? [],
     sourceUrl: recipe?.source_url ?? '',
     sourceAuthor: recipe?.source_author ?? '',
     notes: recipe?.notes ?? '',
@@ -147,6 +157,10 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
   const { errors, isDirty } = form.formState;
   const ingredients = useFieldArray({ control: form.control, name: 'ingredients' });
   const steps = useFieldArray({ control: form.control, name: 'steps' });
+  const classification = useRecipeClassification(form, {
+    isNew: !recipe,
+    dismissed: recipe?.dismissed_suggestions ?? [],
+  });
 
   const v = (key?: string) => (key ? t(`form.validation.${key as ValidationKey}`) : undefined);
 
@@ -192,6 +206,8 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
         values.equipmentStatus === 'defined'
           ? methods.map((m) => ({ label: textOrNull(m.label), utensils: m.utensils.map(keyRef) }))
           : [],
+      optional_utensils: values.optionalUtensils.map(keyRef),
+      dismissed_suggestions: classification.dismissed(),
       ingredients: ingredientRows.map((row) => {
         const parsed = parseIngredientLine(row.text);
         return {
@@ -214,7 +230,7 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
   });
 
   return (
-    <>
+    <ClassificationContext.Provider value={classification}>
       <PageHeader title={recipe ? t('form.editTitle') : t('form.newTitle')} />
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6 pb-24">
         {save.isError && <Alert tone="error">{errorMessage(save.error)}</Alert>}
@@ -456,6 +472,8 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
           </div>
         </Card>
 
+        <SmartClassification control={form.control} api={classification} />
+
         <Card className="flex flex-col gap-5">
           <h2 className="text-xl">{t('form.organisation')}</h2>
           <OrganisationFields control={form.control} />
@@ -522,7 +540,7 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
         confirmLabel={t('form.discard')}
         onConfirm={() => void navigate(backTo)}
       />
-    </>
+    </ClassificationContext.Provider>
   );
 }
 
@@ -771,6 +789,7 @@ function PhotoField({ recipe }: { recipe: RecipeDetail }) {
 function OrganisationFields({ control }: { control: Control<FormValues> }) {
   const { t } = useTranslation('recipes');
   const catalog = useCatalog();
+  const classification = useClassification();
   const categories = useController({ control, name: 'categories' });
   const tags = useController({ control, name: 'tagKeys' });
   if (catalog.isError) return <Alert tone="error">{errorMessage(catalog.error)}</Alert>;
@@ -782,7 +801,10 @@ function OrganisationFields({ control }: { control: Control<FormValues> }) {
         legend={t('form.categories')}
         items={catalog.data.categories}
         value={categories.field.value}
-        onChange={categories.field.onChange}
+        onChange={(next) => {
+          classification?.onManualChange('category', categories.field.value, next);
+          categories.field.onChange(next);
+        }}
         max={20}
       />
       <ChipPicker
@@ -790,7 +812,10 @@ function OrganisationFields({ control }: { control: Control<FormValues> }) {
         legend={t('form.tags')}
         items={catalog.data.tags}
         value={tags.field.value}
-        onChange={tags.field.onChange}
+        onChange={(next) => {
+          classification?.onManualChange('tag', tags.field.value, next);
+          tags.field.onChange(next);
+        }}
         max={30}
       />
       <p className="text-fg-muted text-sm">{t('form.autoTagsHint')}</p>
@@ -887,6 +912,7 @@ function EquipmentSection({ control, error }: { control: Control<FormValues>; er
           <p className="text-fg-muted text-sm">{t('equipment.addMethodHint')}</p>
         </div>
       )}
+      <OptionalUtensils control={control} />
     </Card>
   );
 }
@@ -914,5 +940,25 @@ function MethodUtensils({ control, index }: { control: Control<FormValues>; inde
       value={utensils.field.value}
       onChange={utensils.field.onChange}
     />
+  );
+}
+
+function OptionalUtensils({ control }: { control: Control<FormValues> }) {
+  const { t } = useTranslation('recipes');
+  const catalog = useCatalog();
+  const optional = useController({ control, name: 'optionalUtensils' });
+  if (!catalog.data) return null;
+  return (
+    <div className="border-border/70 flex flex-col gap-2 border-t pt-4">
+      <h3 className="font-sans text-base font-semibold">{t('equipment.optionalTitle')}</h3>
+      <p className="text-fg-muted text-sm">{t('equipment.optionalHint')}</p>
+      <UtensilPicker
+        label={t('equipment.optionalTitle')}
+        items={catalog.data.utensils}
+        maps={catalog.data.maps.utensil}
+        value={optional.field.value}
+        onChange={optional.field.onChange}
+      />
+    </div>
   );
 }

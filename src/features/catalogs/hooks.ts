@@ -21,6 +21,8 @@ export interface CatalogItem {
   hidden: boolean;
   /** Utensils proposed by the quick kitchen setup. */
   common: boolean;
+  /** Household keywords for the classifier (custom items only). */
+  keywords: string[];
 }
 
 export interface Catalog {
@@ -76,11 +78,18 @@ export function useCatalog() {
       color: null,
       hidden: isHidden(kind, id),
       common: false,
+      keywords: [],
       ...extra,
     });
     const own = (
       kind: api.CatalogKind,
-      row: { id: string; name: string; icon?: string | null; color?: string | null },
+      row: {
+        id: string;
+        name: string;
+        icon?: string | null;
+        color?: string | null;
+        keywords?: string[];
+      },
     ): CatalogItem => ({
       key: `custom:${row.id}`,
       ref: { custom: row.id },
@@ -93,6 +102,7 @@ export function useCatalog() {
       color: row.color ?? null,
       hidden: false,
       common: false,
+      keywords: row.keywords ?? [],
     });
     const sort = (items: CatalogItem[]) =>
       [...items].sort((a, b) => a.name.localeCompare(b.name, i18n.language));

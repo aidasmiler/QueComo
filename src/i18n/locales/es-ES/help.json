@@ -84,6 +84,16 @@
         "Todo el hogar ve el historial; cada persona solo puede editar o borrar sus propios registros.",
         "Con 3 o más registros tuyos, los filtros de duración y las etiquetas de tiempo usan tu mediana; si no, la del hogar cuando tiene 3 o más; si no, el tiempo de la receta. Los tiempos escritos en la receta no cambian."
       ]
+    },
+    "classification": {
+      "title": "Clasificación inteligente",
+      "body": [
+        "Mientras escribes una receta, QuéComo lee el título, los ingredientes, los pasos y las notas y propone categorías, etiquetas y utensilios del catálogo de tu hogar. No usa inteligencia artificial ni servicios externos: funciona con reglas y diccionarios en español e inglés.",
+        "Lo más claro (por ejemplo, «Pasta» en unos espaguetis) se añade solo y aparece en «Añadidas por QuéComo»: quítalo con la ✕ si no te convence. Lo menos seguro aparece en «Sugerencias» para que lo añadas o lo descartes. Lo que descartas no se vuelve a proponer en esa receta, y QuéComo nunca quita lo que has elegido tú.",
+        "Los utensilios nunca se añaden solos: elige si cada uno es necesario, una alternativa u opcional. Los opcionales no ocultan la receta aunque no los tengáis.",
+        "Vegetariana y Vegana solo se proponen cuando se reconocen todos los ingredientes. Sin gluten y Sin lactosa solo se proponen si la receta lo dice y siempre hay que confirmarlas: QuéComo no garantiza que una receta sea apta para alergias o intolerancias.",
+        "Quien administra el hogar puede añadir palabras clave a sus categorías, etiquetas y utensilios propios (por ejemplo, «táper» para la etiqueta Tupper) en Perfil › Categorías, etiquetas y utensilios. Solo afectan a vuestro hogar."
+      ]
     }
   }
 }

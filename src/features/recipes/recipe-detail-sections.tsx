@@ -209,6 +209,14 @@ export function EquipmentCard({
           })}
         </ol>
       )}
+      {recipe.optionalUtensils.length > 0 && (
+        <div>
+          <h3 className="font-sans text-base font-semibold">{t('equipment.optionalTitle')}</h3>
+          <p className="text-fg-muted mt-1 text-sm">
+            {recipe.optionalUtensils.map(name).join(', ')}
+          </p>
+        </div>
+      )}
     </Card>
   );
 }

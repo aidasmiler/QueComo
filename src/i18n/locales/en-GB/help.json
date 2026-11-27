@@ -84,6 +84,16 @@
         "The whole household sees the history; each person can only edit or delete their own entries.",
         "With 3 or more of your own entries, duration filters and time tags use your median; otherwise the household's when it has 3 or more; otherwise the recipe's time. The times written in the recipe don't change."
       ]
+    },
+    "classification": {
+      "title": "Smart classification",
+      "body": [
+        "While you write a recipe, QuéComo reads the title, ingredients, steps and notes and suggests categories, tags and utensils from your household catalogue. It uses no artificial intelligence or external services: just rules and dictionaries in Spanish and English.",
+        "The clearest ones (for example “Pasta” for spaghetti) are added automatically and shown under “Added by QuéComo”: remove them with the ✕ if they do not fit. Less certain ones appear under “Suggestions” for you to add or dismiss. Dismissed suggestions are not offered again for that recipe, and QuéComo never removes what you picked yourself.",
+        "Utensils are never added on their own: choose whether each one is required, an alternative or optional. Optional utensils never hide a recipe, even if you do not have them.",
+        "Vegetarian and Vegan are only suggested when every ingredient is recognised. Gluten-free and Lactose-free are only suggested if the recipe says so, and always need your confirmation: QuéComo does not guarantee that a recipe is suitable for allergies or intolerances.",
+        "Household owners can add keywords to their own categories, tags and utensils (for example “lunchbox” for a Packed lunch tag) in Profile › Categories, tags and utensils. They only affect your household."
+      ]
     }
   }
 }

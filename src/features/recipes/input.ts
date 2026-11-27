@@ -26,6 +26,8 @@ export function toRecipeInput(recipe: RecipeDetail): RecipeInput {
       label: m.label,
       utensils: m.utensils.map(keyRef),
     })),
+    optional_utensils: recipe.optionalUtensils.map(keyRef),
+    dismissed_suggestions: recipe.dismissed_suggestions ?? [],
     ingredients: recipe.ingredients.map((i) => ({
       original_text: i.original_text,
       quantity: i.quantity === null ? null : Number(i.quantity),

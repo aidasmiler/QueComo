@@ -200,7 +200,9 @@
     "configureNow": "Set up equipment",
     "missingList": "You're missing: {{list}}.",
     "methodDoable": "you can use this one",
-    "youLackIt": "you don't have it"
+    "youLackIt": "you don't have it",
+    "optionalTitle": "Optional utensils",
+    "optionalHint": "They help but are not essential: the recipe is not hidden if you do not have them."
   },
   "availability": {
     "can": "I can make it",
@@ -356,6 +358,72 @@
       "pink": "Pink",
       "teal": "Teal",
       "gray": "Grey"
-    }
+    },
+    "keywords": "Keywords (optional)",
+    "keywordsHint": "Comma-separated. When analysing this household's recipes, QuéComo suggests this item if these words appear.",
+    "keywordsList": "Keywords: {{words}}"
+  },
+  "classification": {
+    "title": "Smart classification",
+    "hint": "QuéComo suggests categories, tags and utensils from what you write. Accept, change or dismiss them; nothing is required.",
+    "reanalyse": "Analyse again",
+    "automatic": "Calculated automatically",
+    "automaticHint": "They depend on times, difficulty and utensils, and update when you change them.",
+    "empty": "No suggestions yet. They appear as you write the title, ingredients or steps.",
+    "added": "Added by QuéComo",
+    "pending": "Suggestions",
+    "utensils": "Utensils mentioned",
+    "utensilsHint": "Say whether each utensil is required, an alternative or optional. Nothing is marked as required without your confirmation.",
+    "removeNamed": "Remove {{name}}",
+    "addNamed": "Add {{name}}",
+    "confirmNamed": "Confirm {{name}}",
+    "dismissNamed": "Dismiss {{name}}",
+    "acceptAll": "Accept all ({{count}})",
+    "showLow_one": "Show {{count}} uncertain suggestion",
+    "showLow_other": "Show {{count}} uncertain suggestions",
+    "hideLow": "Hide uncertain suggestions",
+    "showRejected_one": "{{count}} dismissed",
+    "showRejected_other": "{{count}} dismissed",
+    "rejected": "Dismissed suggestions",
+    "restoreNamed": "Suggest {{name}} again",
+    "why": "Why these suggestions?",
+    "alternativeTo": "Mentioned as an alternative to {{names}}.",
+    "dietWarning": "Only confirm it if you have checked every ingredient and its label. QuéComo does not guarantee that a recipe is suitable for allergies or intolerances.",
+    "kind": {
+      "category": "Category",
+      "tag": "Tag",
+      "utensil": "Utensil"
+    },
+    "confidence": {
+      "high": "high confidence",
+      "medium": "medium confidence",
+      "low": "low confidence"
+    },
+    "role": {
+      "required": "Required",
+      "alternative": "Alternative",
+      "optional": "Optional",
+      "dismiss": "Not used / dismiss"
+    },
+    "source": {
+      "title": "the title",
+      "description": "the description",
+      "mainIngredient": "a main ingredient",
+      "ingredients": "the ingredients",
+      "steps": "the steps",
+      "notes": "the notes",
+      "freezingNotes": "the freezing notes"
+    },
+    "reason": {
+      "mention": "“{{term}}” appears in {{source}}.",
+      "keyword": "Matches your household keyword “{{term}}” in {{source}}.",
+      "dietNoMeat": "Every ingredient is recognised and none is meat or fish.",
+      "dietPlantOnly": "Every ingredient is recognised and all are plant-based.",
+      "dietIncomplete": "Cannot be sure: some ingredients are not recognised.",
+      "dietIncompleteTerm": "Cannot be sure: check “{{term}}”.",
+      "dietConflict": "Contradicts the ingredient “{{term}}”.",
+      "freezingNotes": "The freezing notes say it can be frozen."
+    },
+    "choose": "How is it used?"
   }
 }

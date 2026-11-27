@@ -200,7 +200,9 @@
     "configureNow": "Configurar equipamiento",
     "missingList": "Os falta: {{list}}.",
     "methodDoable": "puedes usar este",
-    "youLackIt": "no lo tenéis"
+    "youLackIt": "no lo tenéis",
+    "optionalTitle": "Utensilios opcionales",
+    "optionalHint": "Ayudan, pero no son imprescindibles: la receta no se oculta aunque no los tengas."
   },
   "availability": {
     "can": "Puedo prepararla",
@@ -356,6 +358,72 @@
       "pink": "Rosa",
       "teal": "Turquesa",
       "gray": "Gris"
-    }
+    },
+    "keywords": "Palabras clave (opcional)",
+    "keywordsHint": "Separadas por comas. Al analizar recetas de este hogar, QuéComo sugerirá este elemento cuando aparezcan estas palabras.",
+    "keywordsList": "Palabras clave: {{words}}"
+  },
+  "classification": {
+    "title": "Clasificación inteligente",
+    "hint": "QuéComo propone categorías, etiquetas y utensilios a partir de lo que escribes. Puedes aceptarlas, cambiarlas o descartarlas; nada es obligatorio.",
+    "reanalyse": "Volver a analizar",
+    "automatic": "Se calculan solas",
+    "automaticHint": "Dependen de los tiempos, la dificultad y los utensilios, y se actualizan cuando los cambias.",
+    "empty": "Sin sugerencias por ahora. Aparecerán al escribir el título, los ingredientes o los pasos.",
+    "added": "Añadidas por QuéComo",
+    "pending": "Sugerencias",
+    "utensils": "Utensilios mencionados",
+    "utensilsHint": "Indica si cada utensilio es necesario, una alternativa o opcional. No se marca nada como necesario sin tu confirmación.",
+    "removeNamed": "Quitar {{name}}",
+    "addNamed": "Añadir {{name}}",
+    "confirmNamed": "Confirmar {{name}}",
+    "dismissNamed": "Descartar {{name}}",
+    "acceptAll": "Aceptar todas ({{count}})",
+    "showLow_one": "Ver {{count}} sugerencia poco segura",
+    "showLow_other": "Ver {{count}} sugerencias poco seguras",
+    "hideLow": "Ocultar sugerencias poco seguras",
+    "showRejected_one": "{{count}} descartada",
+    "showRejected_other": "{{count}} descartadas",
+    "rejected": "Sugerencias descartadas",
+    "restoreNamed": "Volver a sugerir {{name}}",
+    "why": "¿Por qué estas sugerencias?",
+    "alternativeTo": "Mencionado como alternativa a {{names}}.",
+    "dietWarning": "Confírmalo solo si has revisado todos los ingredientes y sus etiquetas. QuéComo no garantiza que una receta sea apta para alergias o intolerancias.",
+    "kind": {
+      "category": "Categoría",
+      "tag": "Etiqueta",
+      "utensil": "Utensilio"
+    },
+    "confidence": {
+      "high": "confianza alta",
+      "medium": "confianza media",
+      "low": "confianza baja"
+    },
+    "role": {
+      "required": "Necesario",
+      "alternative": "Alternativa",
+      "optional": "Opcional",
+      "dismiss": "No se usa / descartar"
+    },
+    "source": {
+      "title": "el título",
+      "description": "la descripción",
+      "mainIngredient": "un ingrediente principal",
+      "ingredients": "los ingredientes",
+      "steps": "los pasos",
+      "notes": "las notas",
+      "freezingNotes": "las notas de congelación"
+    },
+    "reason": {
+      "mention": "Aparece «{{term}}» en {{source}}.",
+      "keyword": "Coincide con la palabra clave «{{term}}» de tu hogar, en {{source}}.",
+      "dietNoMeat": "Se reconocen todos los ingredientes y ninguno es carne ni pescado.",
+      "dietPlantOnly": "Se reconocen todos los ingredientes y todos son de origen vegetal.",
+      "dietIncomplete": "No se puede asegurar: hay ingredientes que no se reconocen.",
+      "dietIncompleteTerm": "No se puede asegurar: revisa «{{term}}».",
+      "dietConflict": "Contradice el ingrediente «{{term}}».",
+      "freezingNotes": "Las notas de congelación indican que se puede congelar."
+    },
+    "choose": "¿Cómo se usa?"
   }
 }

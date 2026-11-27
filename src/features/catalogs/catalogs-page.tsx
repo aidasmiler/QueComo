@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { errorMessage } from '@/lib/supabase/errors';
 import { cn } from '@/lib/utils/cn';
-import type { CatalogKind } from './api';
+import { cleanKeywords, type CatalogKind } from './api';
 import { TAG_GROUPS, UTENSIL_GROUPS } from './catalog-constants';
 import { CATEGORY_COLORS, CATEGORY_ICONS } from './catalog-constants';
 import { CategoryBadge, CategoryIcon } from './catalog-ui';
@@ -136,11 +136,18 @@ function CatalogSection({
           <ul className="divide-border/60 divide-y">
             {customs.map((item) => (
               <li key={item.key} className="flex min-h-14 items-center justify-between gap-2 py-1">
-                {kind === 'category' ? (
-                  <CategoryBadge item={item} />
-                ) : (
-                  <span className="font-medium">{item.name}</span>
-                )}
+                <span className="flex min-w-0 flex-col gap-0.5">
+                  {kind === 'category' ? (
+                    <CategoryBadge item={item} />
+                  ) : (
+                    <span className="font-medium">{item.name}</span>
+                  )}
+                  {item.keywords.length > 0 && (
+                    <span className="text-fg-muted truncate text-xs">
+                      {t('catalogs.keywordsList', { words: item.keywords.join(', ') })}
+                    </span>
+                  )}
+                </span>
                 {isOwner && (
                   <span className="flex gap-1">
                     <Button
@@ -258,11 +265,14 @@ function CustomItemDialog({
   const [name, setName] = useState(item?.name ?? '');
   const [icon, setIcon] = useState(item?.icon ?? 'shapes');
   const [color, setColor] = useState(item?.color ?? 'gray');
+  const [keywords, setKeywords] = useState(item?.keywords.join(', ') ?? '');
   const mutation = item ? update : create;
   const max = kind === 'utensil' ? 60 : 40;
 
   async function submit() {
-    const fields = kind === 'category' ? { name, icon, color } : { name };
+    const words = cleanKeywords(keywords.split(/[,;\n]/), name);
+    const fields =
+      kind === 'category' ? { name, icon, color, keywords: words } : { name, keywords: words };
     if (item) await update.mutateAsync({ id: item.id, fields });
     else await create.mutateAsync(fields);
     onClose();
@@ -292,6 +302,14 @@ function CustomItemDialog({
         {mutation.isError && <Alert tone="error">{errorMessage(mutation.error)}</Alert>}
         <Field label={t('catalogs.name')}>
           <Input value={name} maxLength={max} onChange={(event) => setName(event.target.value)} />
+        </Field>
+        <Field label={t('catalogs.keywords')} hint={t('catalogs.keywordsHint')}>
+          <Input
+            value={keywords}
+            maxLength={600}
+            autoComplete="off"
+            onChange={(event) => setKeywords(event.target.value)}
+          />
         </Field>
         {kind === 'category' && (
           <>
@@ -349,6 +367,7 @@ function CustomItemDialog({
                   color,
                   hidden: false,
                   common: false,
+                  keywords: [],
                 }}
               />
             </div>

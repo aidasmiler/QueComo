@@ -28,5 +28,6 @@
     "same_password": "La nueva contraseña debe ser distinta de la anterior."
   },
   "QC_CATALOG_DUPLICATE": "Ya existe un elemento con ese nombre en el catálogo.",
-  "QC_RECIPE_EQUIPMENT": "Indica al menos un utensilio en cada método de preparación (máximo 5 métodos y 20 utensilios por método)."
+  "QC_RECIPE_EQUIPMENT": "Indica al menos un utensilio en cada método de preparación (máximo 5 métodos y 20 utensilios por método).",
+  "QC_RECIPE_SUGGESTIONS": "No se han podido guardar las sugerencias descartadas de la receta."
 }

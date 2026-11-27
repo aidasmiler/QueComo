@@ -28,5 +28,6 @@
     "same_password": "The new password must be different from the old one."
   },
   "QC_CATALOG_DUPLICATE": "An item with that name already exists in the catalogue.",
-  "QC_RECIPE_EQUIPMENT": "Add at least one utensil to each preparation method (5 methods and 20 utensils per method at most)."
+  "QC_RECIPE_EQUIPMENT": "Add at least one utensil to each preparation method (5 methods and 20 utensils per method at most).",
+  "QC_RECIPE_SUGGESTIONS": "The recipe's dismissed suggestions could not be saved."
 }

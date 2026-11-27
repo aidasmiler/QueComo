@@ -75,7 +75,26 @@ export interface CustomFields {
   name: string;
   icon?: string | null;
   color?: string | null;
+  /** Words the classifier also recognises for this item (owner-only, like the item). */
+  keywords?: string[];
 }
+
+/** Trims, deduplicates (case/accent-insensitive) and limits keywords to the schema's bounds. */
+export function cleanKeywords(raw: readonly string[], name = ''): string[] {
+  const seen = new Set([foldKey(name)]);
+  const out: string[] = [];
+  for (const word of raw) {
+    const value = word.trim().replace(/\s+/g, ' ').slice(0, 40);
+    const key = foldKey(value);
+    if (!value || seen.has(key)) continue;
+    seen.add(key);
+    out.push(value);
+    if (out.length === 20) break;
+  }
+  return out;
+}
+
+const foldKey = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
 
 export async function createCustom(
   kind: CatalogKind,
@@ -92,12 +111,17 @@ export async function createCustom(
             name,
             icon: fields.icon ?? null,
             color: fields.color ?? null,
+            keywords: cleanKeywords(fields.keywords ?? [], name),
           })
           .select('id')
           .single()
       : await supabase
           .from(CUSTOM_TABLE[kind])
-          .insert({ household_id: householdId, name })
+          .insert({
+            household_id: householdId,
+            name,
+            keywords: cleanKeywords(fields.keywords ?? [], name),
+          })
           .select('id')
           .single();
   if (result.error) catalogError(result.error);
@@ -110,10 +134,19 @@ export async function updateCustom(kind: CatalogKind, id: string, fields: Custom
     kind === 'category'
       ? await supabase
           .from('recipe_categories')
-          .update({ name, icon: fields.icon ?? null, color: fields.color ?? null })
+          .update({
+            name,
+            icon: fields.icon ?? null,
+            color: fields.color ?? null,
+            keywords: cleanKeywords(fields.keywords ?? [], name),
+          })
           .eq('id', id)
           .select('id')
-      : await supabase.from(CUSTOM_TABLE[kind]).update({ name }).eq('id', id).select('id');
+      : await supabase
+          .from(CUSTOM_TABLE[kind])
+          .update({ name, keywords: cleanKeywords(fields.keywords ?? [], name) })
+          .eq('id', id)
+          .select('id');
   if (result.error) catalogError(result.error);
   // RLS hides the row from non-owners: no error, nothing updated.
   if (!result.data?.length) throw new AppError('server', 'QC_NOT_OWNER', 'not owner');

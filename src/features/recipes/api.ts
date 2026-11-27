@@ -15,6 +15,8 @@ export interface RecipeSummary extends Recipe {
   categoryKeys: ItemKey[];
   tagKeys: ItemKey[];
   equipment: RecipeEquipment;
+  /** Utensils marked optional: shown, never used to decide whether it can be made. */
+  optionalUtensils: ItemKey[];
 }
 
 export interface RecipeDetail extends RecipeSummary {
@@ -46,6 +48,9 @@ export interface RecipeInput {
   tag_links: ItemRef[];
   equipment_status: EquipmentStatus;
   methods: { label: string | null; utensils: ItemRef[] }[];
+  optional_utensils: ItemRef[];
+  /** Suggestion ids the person rejected (`category:def:pasta`...). */
+  dismissed_suggestions: string[];
   ingredients: {
     original_text: string;
     quantity: number | null;
@@ -60,7 +65,7 @@ export interface RecipeInput {
 const PHOTO_BUCKET = 'recipe-photos';
 
 const LINKS =
-  'recipe_category_links(category_id, category_def_id), recipe_tag_links(tag_def_id, household_tag_id), recipe_methods(position, label, recipe_method_utensils(utensil_def_id, household_utensil_id))';
+  'recipe_category_links(category_id, category_def_id), recipe_tag_links(tag_def_id, household_tag_id), recipe_methods(position, label, recipe_method_utensils(utensil_def_id, household_utensil_id)), recipe_optional_utensils(utensil_def_id, household_utensil_id)';
 
 export async function fetchRecipes(householdId: string): Promise<RecipeSummary[]> {
   const { data, error } = await supabase
@@ -82,6 +87,10 @@ type RecipeRow = Recipe & {
       household_utensil_id: string | null;
     }[];
   }[];
+  recipe_optional_utensils: {
+    utensil_def_id: string | null;
+    household_utensil_id: string | null;
+  }[];
   recipe_ingredients?: RecipeIngredient[];
   recipe_steps?: RecipeStep[];
 };
@@ -91,6 +100,7 @@ function toSummary(row: RecipeRow): RecipeSummary {
     recipe_category_links: categories,
     recipe_tag_links: tags,
     recipe_methods: methods,
+    recipe_optional_utensils: optional,
     recipe_ingredients: _i,
     recipe_steps: _s,
     ...rest
@@ -101,6 +111,7 @@ function toSummary(row: RecipeRow): RecipeSummary {
     ...rest,
     categoryKeys: categories.map((l) => rowKey(l.category_def_id, l.category_id)),
     tagKeys: tags.map((l) => rowKey(l.tag_def_id, l.household_tag_id)),
+    optionalUtensils: (optional ?? []).map((u) => rowKey(u.utensil_def_id, u.household_utensil_id)),
     equipment: {
       status: rest.equipment_status as EquipmentStatus,
       methods: [...methods]

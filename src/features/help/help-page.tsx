@@ -13,6 +13,7 @@ const ARTICLES = [
   'servings',
   'equipment',
   'history',
+  'classification',
   'install',
   'language',
   'faq',
