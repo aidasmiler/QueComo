@@ -4,7 +4,7 @@ _Última actualización: 2026-11-27 (Claude Code en la nube)._
 
 ## Resumen
 
-PR #1 (base + cuentas + hogares + perfil) **integrada en `main`** el 27/11 con aprobación de Aída. Segunda entrega: **recetario** (PR #2, `feature/recipes` → `main`) con CI completo en verde, pendiente de revisión en su preview. Tercera entrega: **catálogos, equipamiento e historial** (`feature/recipe-catalogs`, PR apilada sobre PR #2); migración aplicada en pruebas y CI en verde, pendiente de revisión. Aún no hay menú ni compra.
+PR #1 (base + cuentas + hogares + perfil) **integrada en `main`** el 27/11 con aprobación de Aída. Segunda entrega: **recetario** (PR #2, `feature/recipes` → `main`) con CI completo en verde, pendiente de revisión en su preview. Tercera entrega: **catálogos, equipamiento e historial** (`feature/recipe-catalogs`, PR #3 → `main`; incluye también los commits de la PR #2 porque Netlify solo genera previews de PR contra `main`); migración aplicada en pruebas y CI en verde, pendiente de revisión. Aún no hay menú ni compra.
 
 ## Leyenda
 
@@ -54,6 +54,7 @@ PR #1 (base + cuentas + hogares + perfil) **integrada en `main`** el 27/11 con a
 
 - Bundle JS en un solo chunk: dividir por rutas cuando llegue el menú.
 - Al reducir raciones el nombre del ingrediente no cambia de número («1 cebollas»).
+- Netlify solo crea Deploy Previews para PR cuya base es `main`: una PR apilada sobre otra rama no tiene preview.
 - La nube de Claude Code no alcanza `*.supabase.co` ni las previews de Netlify: las pruebas con backend se ejecutan en CI.
 - Los usuarios de prueba creados por E2E/integración no se borran automáticamente.
 - Límites actuales de los planes gratuitos (Netlify, Supabase, GitHub Actions) pendientes de verificar en sus páginas oficiales y documentar con cifras.
