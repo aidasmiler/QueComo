@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { Dialog } from '@/components/ui/dialog';
+import { splitIngredientLines, splitSteps } from '@/domain/recipes/paste';
 import { Field } from '@/components/ui/field';
 import { Input, Textarea } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -296,7 +297,10 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
               <Plus aria-hidden="true" />
               {t('form.addIngredient')}
             </Button>
-            <PasteIngredients
+            <PasteList
+              label={t('form.pasteIngredients')}
+              hint={t('form.pasteHint')}
+              split={splitIngredientLines}
               onAdd={(lines) => {
                 const current = form.getValues('ingredients').filter((r) => r.text.trim() !== '');
                 ingredients.replace([
@@ -348,15 +352,25 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
               </li>
             ))}
           </ol>
-          <Button
-            type="button"
-            variant="secondary"
-            className="self-start"
-            onClick={() => steps.append({ body: '', timer: '' })}
-          >
-            <Plus aria-hidden="true" />
-            {t('form.addStep')}
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => steps.append({ body: '', timer: '' })}
+            >
+              <Plus aria-hidden="true" />
+              {t('form.addStep')}
+            </Button>
+            <PasteList
+              label={t('form.pasteSteps')}
+              hint={t('form.pasteStepsHint')}
+              split={splitSteps}
+              onAdd={(bodies) => {
+                const current = form.getValues('steps').filter((r) => r.body.trim() !== '');
+                steps.replace([...current, ...bodies.map((body) => ({ body, timer: '' }))]);
+              }}
+            />
+          </div>
         </Card>
 
         <Card className="flex flex-col gap-4">
@@ -518,42 +532,48 @@ function RowActions({
   );
 }
 
-function PasteIngredients({ onAdd }: { onAdd: (lines: string[]) => void }) {
+function PasteList({
+  label,
+  hint,
+  split,
+  onAdd,
+}: {
+  label: string;
+  hint: string;
+  split: (text: string) => string[];
+  onAdd: (items: string[]) => void;
+}) {
   const { t } = useTranslation('recipes');
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
-  const lines = text
-    .split('\n')
-    .map((line) => line.replace(/^\s*[-•*·]\s*/, '').trim())
-    .filter(Boolean)
-    .slice(0, 100);
+  const items = split(text);
   return (
     <>
       <Button type="button" variant="ghost" onClick={() => setOpen(true)}>
         <ClipboardPaste aria-hidden="true" />
-        {t('form.pasteIngredients')}
+        {label}
       </Button>
       <Dialog
         open={open}
         onOpenChange={setOpen}
-        title={t('form.pasteIngredients')}
-        description={t('form.pasteHint')}
+        title={label}
+        description={hint}
         footer={
           <Button
             type="button"
-            disabled={lines.length === 0}
+            disabled={items.length === 0}
             onClick={() => {
-              onAdd(lines);
+              onAdd(items);
               setText('');
               setOpen(false);
             }}
           >
-            {t('form.pasteAdd')}
+            {items.length ? t('form.pasteAddCount', { count: items.length }) : t('form.pasteAdd')}
           </Button>
         }
       >
         <Textarea
-          aria-label={t('form.pasteIngredients')}
+          aria-label={label}
           rows={8}
           value={text}
           onChange={(event) => setText(event.target.value)}

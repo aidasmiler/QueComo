@@ -10,6 +10,8 @@ En Recetas está el recetario del hogar activo: todos sus miembros ven y pueden 
 
 Pulsa «Nueva receta» y escribe cada ingrediente como lo dirías («400 g de arroz», «sal al gusto»). QuéComo separa la cantidad cuando es segura y conserva tu texto.
 
+Si ya tienes la receta escrita, usa «Pegar varios» en los ingredientes y «Pegar pasos» en las instrucciones: pega todo de golpe y QuéComo lo separa en filas que puedes revisar antes de guardar.
+
 Desde una receta puedes marcarla como favorita, valorarla, duplicarla, archivarla o eliminarla. Favoritas y valoraciones son tuyas; el resto del hogar tiene las suyas.
 
 Las fotos son privadas del hogar. Puedes añadirlas al editar una receta ya guardada.
@@ -29,6 +31,8 @@ Revisa los tiempos y el tamaño del recipiente: no aumentan en la misma proporci
 Recipes holds the active household's recipe book: every member sees and can edit the same recipes.
 
 Tap “New recipe” and write each ingredient as you'd say it (“400 g rice”, “salt to taste”). QuéComo splits out the quantity when it's safe and keeps your text.
+
+If the recipe is already written down, use «Paste several» for ingredients and «Paste steps» for the method: paste it all at once and QuéComo splits it into rows you can review before saving.
 
 From a recipe you can favourite it, rate it, duplicate, archive or delete it. Favourites and ratings are yours; other members have their own.
 

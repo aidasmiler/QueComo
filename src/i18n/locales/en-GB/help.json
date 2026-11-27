@@ -32,6 +32,7 @@
       "body": [
         "Recipes holds the active household's recipe book: every member sees and can edit the same recipes.",
         "Tap “New recipe” and write each ingredient as you'd say it (“400 g rice”, “salt to taste”). QuéComo splits out the quantity when it's safe and keeps your text.",
+        "If the recipe is already written down, use «Paste several» for ingredients and «Paste steps» for the method: paste it all at once and QuéComo splits it into rows you can review before saving.",
         "From a recipe you can favourite it, rate it, duplicate, archive or delete it. Favourites and ratings are yours; other members have their own.",
         "Photos are private to the household. You can add one when editing a saved recipe."
       ]
