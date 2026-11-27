@@ -4,7 +4,7 @@ _Última actualización: 2026-11-27 (Claude Code en la nube)._
 
 ## Resumen
 
-PR #1 (base + cuentas + hogares + perfil) **integrada en `main`** el 27/11 con aprobación de Aída. Segunda entrega: **recetario** (PR #2, `feature/recipes` → `main`) con CI completo en verde, pendiente de revisión en su preview. Tercera entrega: **catálogos, equipamiento e historial** (`feature/recipe-catalogs`, PR #3 → `main`; incluye también los commits de la PR #2 porque Netlify solo genera previews de PR contra `main`); migración aplicada en pruebas y CI en verde, pendiente de revisión. Aún no hay menú ni compra.
+PR #1 (base + cuentas + hogares + perfil) **integrada en `main`** el 27/11 con aprobación de Aída. Segunda entrega: **recetario** (PR #2, `feature/recipes` → `main`) con CI completo en verde, pendiente de revisión en su preview. Tercera entrega: **catálogos, equipamiento e historial** (`feature/recipe-catalogs`, PR #3 → `main`; incluye también los commits de la PR #2 porque Netlify solo genera previews de PR contra `main`); migración aplicada en pruebas y CI en verde, pendiente de revisión. Cuarta entrega: **clasificación inteligente** (rama `claude/project-thread-p97x4g`, PR propia apilada sobre la #3, ADR 0008) con una migración nueva **pendiente de aplicar** en pruebas. Ampliaciones §106 (formulario simplificado) y §107 (texto completo y dictado) documentadas y planificadas en PR posteriores. Aún no hay menú ni compra.
 
 ## Leyenda
 
@@ -20,6 +20,9 @@ PR #1 (base + cuentas + hogares + perfil) **integrada en `main`** el 27/11 con a
 | 4 · Recetario                            | Sí (`feature/recipes`)                             | Unit, `db:verify` (RLS en PGlite) y E2E con backend en CI ✔ (migración aplicada el 27/11)                          | Preview PR #2                         | No       |
 | 5 · Escalado de raciones                 | Sí                                                 | Unit (ejemplos §7.1)                                                                                               | Con el recetario                      | No       |
 | 4b · Catálogos, equipamiento e historial | Sí (`feature/recipe-catalogs`)                     | Unit, `db:verify` catálogos en PGlite, integración RLS 8/8 y E2E con backend en CI ✔ (migración aplicada el 27/11) | Preview PR #3                         | No       |
+| 4c · Clasificación inteligente (§105)    | Sí (`claude/project-thread-p97x4g`)                | Unit 33/33, `db:verify` clasificación en PGlite ✔; integración y E2E con backend: pendientes de la migración       | Preview de su PR                      | No       |
+| 4d · Formulario simplificado (§106)      | No (siguiente)                                     | —                                                                                                                  | —                                     | —        |
+| 4e · Texto completo y dictado (§107)     | No                                                 | —                                                                                                                  | —                                     | —        |
 | 6–8, 11                                  | No                                                 | —                                                                                                                  | —                                     | —        |
 
 ## Pruebas ejecutadas (2026-11-26/27, nube Linux, Chromium 1243 de Playwright)

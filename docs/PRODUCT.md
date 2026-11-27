@@ -20,6 +20,10 @@ Crear cuenta → crear hogar → invitar familiares → guardar recetas → ajus
 
 **Ampliación del recetario pedida por Aída (27/11, ADR 0007):** catálogos comunes y propios de categorías, etiquetas y utensilios gestionados solo por propietarios; equipamiento del hogar y filtrado por «puedo prepararla»; métodos alternativos; etiquetas automáticas; historial de cocinado y tiempos estimados.
 
+**Ampliaciones del 27/11 (§105–§107):** clasificación inteligente por reglas (ADR 0008); después, formulario de recetas simplificado con «Añadir más detalles», foto antes de guardar y borradores locales; después, pegado de texto completo y dictado por voz sobre un borrador de receta común preparado para futuras importaciones. Cada una en su PR.
+
+**Planificador con productos y nutrición (§108–§109):** el plan admite recetas, productos del hogar, alimentos sencillos, texto libre, sobras y comidas fuera; la compra depende del tipo. Productos con Open Food Facts, escaneo e información nutricional opcional. Modelo previsto en ARCHITECTURE.md; orden en ROADMAP.md.
+
 **P1:** duplicar/archivar recetas, copiar semanas, valoraciones, filtros por tiempo, sugerencias simples, modo cocina básico, exportación, tema oscuro, importación JSON-LD.
 
 **P2:** inventario, caducidades, calendario, batch cooking, mapa de preparación, compra inteligente, nutrición, hardware.

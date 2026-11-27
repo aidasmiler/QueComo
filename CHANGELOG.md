@@ -6,6 +6,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). L
 
 ### Añadido
 
+- Clasificación inteligente de recetas (reglas y diccionarios es/en, sin IA): sugiere categorías, etiquetas y utensilios con confianza alta/media/baja y motivo; preselecciona solo lo muy claro; respeta lo elegido a mano y no vuelve a proponer lo descartado (se guarda con la receta). Vegetariana/Vegana solo con todos los ingredientes reconocidos; Sin gluten/Sin lactosa solo si la receta lo dice y con confirmación.
+- Palabras clave por hogar en categorías, etiquetas y utensilios propios (solo propietarios, aplicado en RLS) que el clasificador reconoce.
+- Utensilios opcionales en las recetas: se muestran pero nunca ocultan la receta.
 - Catálogos del recetario: 17 categorías comunes con icono y color, etiquetas comunes (dieta, práctico, momento del día) y 36 utensilios; categorías, etiquetas y utensilios propios del hogar; ocultar elementos comunes. Solo quien administra el hogar los gestiona (aplicado en RLS).
 - «Mi cocina»: equipamiento por hogar con búsqueda, grupos y configuración rápida (nada marcado por defecto).
 - «Utensilios necesarios» en cada receta (sin especificar, nada especial o lista) con métodos alternativos; el recetario oculta por defecto lo que no podéis preparar, con «Mostrar todas», filtro automático desactivable y utensilios que faltan.

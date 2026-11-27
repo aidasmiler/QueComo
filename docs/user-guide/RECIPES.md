@@ -44,6 +44,18 @@ Todo el hogar ve el historial; cada persona solo puede editar o borrar sus propi
 
 Con 3 o más registros tuyos, los filtros de duración y las etiquetas de tiempo usan tu mediana; si no, la del hogar cuando tiene 3 o más; si no, el tiempo de la receta. Los tiempos escritos en la receta no cambian.
 
+### Clasificación inteligente
+
+Mientras escribes una receta, QuéComo lee el título, los ingredientes, los pasos y las notas y propone categorías, etiquetas y utensilios del catálogo de tu hogar. No usa inteligencia artificial ni servicios externos: funciona con reglas y diccionarios en español e inglés.
+
+Lo más claro (por ejemplo, «Pasta» en unos espaguetis) se añade solo y aparece en «Añadidas por QuéComo»: quítalo con la ✕ si no te convence. Lo menos seguro aparece en «Sugerencias» para que lo añadas o lo descartes. Lo que descartas no se vuelve a proponer en esa receta, y QuéComo nunca quita lo que has elegido tú.
+
+Los utensilios nunca se añaden solos: elige si cada uno es necesario, una alternativa u opcional. Los opcionales no ocultan la receta aunque no los tengáis.
+
+Vegetariana y Vegana solo se proponen cuando se reconocen todos los ingredientes. Sin gluten y Sin lactosa solo se proponen si la receta lo dice y siempre hay que confirmarlas: QuéComo no garantiza que una receta sea apta para alergias o intolerancias.
+
+Quien administra el hogar puede añadir palabras clave a sus categorías, etiquetas y utensilios propios (por ejemplo, «táper» para la etiqueta Tupper) en Perfil › Categorías, etiquetas y utensilios. Solo afectan a vuestro hogar.
+
 ## English
 
 ### Recipes
@@ -85,3 +97,15 @@ After cooking, tap “I cooked this recipe” and note how long it took (and, if
 The whole household sees the history; each person can only edit or delete their own entries.
 
 With 3 or more of your own entries, duration filters and time tags use your median; otherwise the household's when it has 3 or more; otherwise the recipe's time. The times written in the recipe don't change.
+
+### Smart classification
+
+While you write a recipe, QuéComo reads the title, ingredients, steps and notes and suggests categories, tags and utensils from your household catalogue. It uses no artificial intelligence or external services: just rules and dictionaries in Spanish and English.
+
+The clearest ones (for example “Pasta” for spaghetti) are added automatically and shown under “Added by QuéComo”: remove them with the ✕ if they do not fit. Less certain ones appear under “Suggestions” for you to add or dismiss. Dismissed suggestions are not offered again for that recipe, and QuéComo never removes what you picked yourself.
+
+Utensils are never added on their own: choose whether each one is required, an alternative or optional. Optional utensils never hide a recipe, even if you do not have them.
+
+Vegetarian and Vegan are only suggested when every ingredient is recognised. Gluten-free and Lactose-free are only suggested if the recipe says so, and always need your confirmation: QuéComo does not guarantee that a recipe is suitable for allergies or intolerances.
+
+Household owners can add keywords to their own categories, tags and utensils (for example “lunchbox” for a Packed lunch tag) in Profile › Categories, tags and utensils. They only affect your household.

@@ -68,6 +68,42 @@ Las tablas hijas llevan `household_id` con FK compuesta `(recipe_id, household_i
 
 La lógica pura vive en `src/domain/recipes/` (`equipment.ts`, `auto-tags.ts`, `estimates.ts`, `catalog.ts`) con pruebas unitarias; `src/features/recipes/insights.ts` la combina por receta y `recipe-filters.ts` aplica los filtros combinables. `save_recipe` acepta `categories`, `tag_links`, `equipment_status` y `methods` y sigue aceptando el formato anterior (`category_ids`).
 
+### Clasificación inteligente (migración `20261127180000_recipe_classification.sql`, ADR 0008)
+
+| Elemento                                                                  | Notas                                                                                                          |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `keywords` en `recipe_categories`, `household_tags`, `household_utensils` | Palabras clave por hogar para el clasificador. Escriben solo propietarios (políticas de ADR 0007).             |
+| `recipes.dismissed_suggestions`                                           | Sugerencias rechazadas (`category:def:pasta`…), para no volver a preseleccionarlas.                            |
+| `recipe_optional_utensils`                                                | Utensilios opcionales («global o propio», FK compuesta, RLS de miembros). No cuentan para «se puede preparar». |
+
+El motor vive en `src/domain/classification/` (puro y probado): `ClassifiableRecipe` → `RecipeClassifier.classify()` → `Suggestion[]` con confianza y motivo; `decisions.ts` gestiona preselección, aceptación y rechazo. En la interfaz, `src/features/recipes/recipe-classification-state.ts` lo conecta al formulario (debounce de 700 ms) y `recipe-classification.tsx` muestra la sección compacta. Las etiquetas deterministas siguen en `src/domain/recipes/auto-tags.ts`.
+
+### Entrada de recetas: arquitectura común prevista (§106–§107)
+
+Todos los métodos de creación (manual, texto pegado, dictado y, más adelante, URL/JSON-LD, OCR, redes sociales o IA) seguirán el mismo flujo, sin duplicar lógica:
+
+```
+adaptador de entrada → normalización → extracción → borrador de receta común → clasificación → formulario simplificado → save_recipe
+```
+
+- **Borrador común**: datos estructurados y/o texto libre, con origen (URL, autoría, método de importación), texto original para la revisión, campos dudosos pendientes de confirmar y sugerencias. Los datos estructurados (p. ej. JSON-LD) entran directamente, sin pasar a texto.
+- **Reutilización**: `paste.ts` y `quantity.ts` para ingredientes y pasos; `ClassifiableRecipe` + `RecipeClassifier` para clasificar; el mismo esquema Zod y `save_recipe` para validar y guardar.
+- Solo se implementará lo necesario en cada PR: el formulario simplificado (§106) primero y después texto completo + dictado (§107), sin botones activos para importaciones aún no disponibles.
+
+### Planificador, productos y nutrición: modelo previsto (§108–§109, propuesta)
+
+Propuesta para validar antes de la primera migración del planificador; no hay tablas todavía. Sigue las convenciones de ADR 0003/0007 (RLS de miembros, `household_id` en cada fila, FK compuestas, referencias «A o B» con `num_nonnulls`).
+
+| Tabla prevista                             | Contenido y reglas                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `meal_plan_items`                          | Un elemento planificado: hogar, fecha, momento de consumo, posición y `kind` (`recipe`, `product`, `food`, `text`, `leftover`, `eating_out`). Una columna de referencia por tipo (`recipe_id`, `product_id`…) con `check` por tipo y FK compuestas. Cantidad según el tipo: raciones, envases o cantidad + unidad. Varios elementos por momento. |
+| `household_products`                       | Producto del hogar (todos los miembros crean y editan): nombre, marca, supermercado, foto privada, cantidad neta + unidad, raciones por envase, tiempo, `equipment_status` + utensilios (mismo modelo que recetas), categorías/etiquetas, notas, precio, código de barras, `external_product_id` opcional.                                       |
+| `external_products`                        | Caché **global y de solo lectura** de Open Food Facts por código de barras: datos normalizados, Nutri-Score, alérgenos, ingredientes, licencia/atribución, `source` y `fetched_at`. Sin datos de hogares. La escribe solo la Edge Function.                                                                                                      |
+| `nutrition_facts` (o columnas por fuente)  | Valores por 100 g / 100 ml con base y unidad explícitas, estado «como se vende» / «preparado», `null` = desconocido. Origen `external` (enlazado a `external_products`) o `manual` (del hogar, sobre su producto, sin tocar el dato externo).                                                                                                    |
+| `shopping_items` + `shopping_item_sources` | La compra se genera por tipo (§108.4) y guarda de qué elementos planificados viene cada línea; productos idénticos se agrupan por `product_id`; envases = ⌈raciones / raciones por envase⌉ solo si ambos datos existen.                                                                                                                          |
+
+Lógica pura prevista en `src/domain/`: `planner/` (qué genera cada tipo), `shopping/` (agrupación y envases), `nutrition/` (por cantidad, ración, envase o fracción; sin convertir peso ↔ volumen; totales marcados como incompletos si falta algún dato). Open Food Facts entra por un adaptador `ProductInfoProvider` (llamado desde una Supabase Edge Function gratuita que identifica la app con un User-Agent propio, limita peticiones y cachea en `external_products`); la interfaz solo ve productos normalizados. Escaneo: `BarcodeDetector` donde exista y ZXing cargado bajo demanda como alternativa; siempre con entrada manual. Objetivos y consumo real serán tablas **personales** (`user_id`), no del hogar.
+
 Pendiente (llegará con cada módulo, ver §45 de la spec): plan de comidas, listas de compra con procedencia (`shopping_item_sources`).
 
 ## Seguridad
