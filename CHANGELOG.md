@@ -7,7 +7,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). L
 ### Añadido
 
 - Recetario: crear, editar, duplicar, archivar, restaurar y eliminar recetas del hogar; ingredientes en texto libre con cantidad detectada, pasos con temporizador, tiempos activo/pasivo/total, dificultad, categorías editables, etiquetas, notas de conservación y fuente; foto privada; búsqueda y filtros (favoritas, archivadas, categoría); favoritas y valoración personales.
-- Pegar de golpe la lista de ingredientes o todos los pasos: los pasos se separan por numeración («1.», «Paso 2»), párrafos o líneas, y se revisan antes de guardar.
+- Al crear una receta se empieza pegando de golpe los ingredientes y los pasos («Separar» los convierte en filas revisables); los pasos se separan por numeración («1.», «Paso 2»), párrafos o líneas. «Pegar más» en recetas existentes.
 - Escalado de raciones con fracciones y decimales sin modificar la receta original; lo cualitativo («al gusto») no se escala.
 - `npm run db:verify`: verificación de migraciones y RLS en PGlite, sin Docker.
 - Base técnica: React + TypeScript + Vite, Tailwind con tokens de diseño, PWA instalable, i18n es-ES/en-GB, CI en GitHub Actions y configuración de Netlify.

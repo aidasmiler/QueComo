@@ -99,10 +99,10 @@
     "ingredientsHint": "Write each ingredient as you'd say it: “400 g rice”, “2 onions”, “salt to taste”. We split out the quantity when it's safe.",
     "ingredientLine": "Ingredient {{number}}",
     "addIngredient": "Add ingredient",
-    "pasteIngredients": "Paste several",
-    "pasteHint": "Paste a list: one ingredient per line.",
+    "pasteIngredients": "Paste the ingredients here",
+    "pasteHint": "One per line, as you would say it: «400 g rice», «salt to taste». You can review them one by one afterwards.",
     "pasteAdd": "Add to the list",
-    "pasteSteps": "Paste steps",
+    "pasteSteps": "Paste the steps here",
     "pasteStepsHint": "Paste the method. If it is numbered (1., 2., Step 3…), each number starts a step; otherwise each paragraph or line becomes a step. You can review them before saving.",
     "pasteAddCount_one": "Add {{count}}",
     "pasteAddCount_other": "Add {{count}}",
@@ -152,6 +152,13 @@
       "stepsRequired": "Add at least one step.",
       "minutes": "Enter whole minutes (0 to 10,000).",
       "url": "Enter a link starting with http:// or https://."
-    }
+    },
+    "pasteIngredientsPlaceholder": "400 g rice\n2 onions\nSalt to taste",
+    "pasteStepsPlaceholder": "1. Chop the onion.\n2. Fry for 10 minutes.\n3. Add the rice.",
+    "pasteMore": "Paste more",
+    "split": "Split",
+    "splitCount_one": "Split into {{count}} row",
+    "splitCount_other": "Split into {{count}} rows",
+    "addOneByOne": "Add one by one"
   }
 }

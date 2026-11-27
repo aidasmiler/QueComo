@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowDown, ArrowUp, ClipboardPaste, ImagePlus, Plus, Trash2, X } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { useFieldArray, useForm, useWatch, type Control } from 'react-hook-form';
+import { useController, useFieldArray, useForm, useWatch, type Control } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { z } from 'zod';
@@ -66,6 +66,9 @@ const schema = z.object({
   reheatingNotes: z.string().max(1000),
   ingredients: z.array(z.object({ text: z.string().max(300), optional: z.boolean() })),
   steps: z.array(z.object({ body: z.string().max(4000), timer: optionalMinutes })),
+  /** Pasted text not yet split into rows (new recipes start here). */
+  ingredientsPaste: z.string().max(30000),
+  stepsPaste: z.string().max(60000),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -94,14 +97,12 @@ function toFormValues(recipe?: RecipeDetail): FormValues {
     reheatingNotes: recipe?.reheating_notes ?? '',
     ingredients: recipe?.ingredients.length
       ? recipe.ingredients.map((i) => ({ text: i.original_text, optional: i.optional }))
-      : [
-          { text: '', optional: false },
-          { text: '', optional: false },
-          { text: '', optional: false },
-        ],
+      : [],
     steps: recipe?.steps.length
       ? recipe.steps.map((s) => ({ body: s.body, timer: s.timer_minutes?.toString() ?? '' }))
-      : [{ body: '', timer: '' }],
+      : [],
+    ingredientsPaste: '',
+    stepsPaste: '',
   };
 }
 
@@ -140,8 +141,15 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
   const v = (key?: string) => (key ? t(`form.validation.${key as ValidationKey}`) : undefined);
 
   const onSubmit = form.handleSubmit(async (values) => {
-    const ingredientRows = values.ingredients.filter((row) => row.text.trim() !== '');
-    const stepRows = values.steps.filter((row) => row.body.trim() !== '');
+    // Text still in the paste boxes counts too, so "Guardar" works without pressing "Separar".
+    const ingredientRows = [
+      ...values.ingredients,
+      ...splitIngredientLines(values.ingredientsPaste).map((text) => ({ text, optional: false })),
+    ].filter((row) => row.text.trim() !== '');
+    const stepRows = [
+      ...values.steps,
+      ...splitSteps(values.stepsPaste).map((body) => ({ body, timer: '' })),
+    ].filter((row) => row.body.trim() !== '');
     if (!ingredientRows.length) return setListError('ingredientsRequired');
     if (!stepRows.length) return setListError('stepsRequired');
     setListError(null);
@@ -247,130 +255,168 @@ function RecipeForm({ recipe }: { recipe?: RecipeDetail }) {
             <p className="text-fg-muted mt-1 text-sm">{t('form.ingredientsHint')}</p>
           </div>
           {listError === 'ingredientsRequired' && <Alert tone="error">{v(listError)}</Alert>}
-          <ol className="flex flex-col gap-3">
-            {ingredients.fields.map((field, index) => (
-              <li key={field.id} className="flex flex-col gap-1.5">
-                <div className="flex items-center gap-2">
-                  <Input
-                    aria-label={t('form.ingredientLine', { number: index + 1 })}
-                    maxLength={300}
-                    autoComplete="off"
-                    {...form.register(`ingredients.${index}.text`)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        event.preventDefault();
-                        if (index === ingredients.fields.length - 1) {
-                          ingredients.append({ text: '', optional: false });
-                        } else {
-                          form.setFocus(`ingredients.${index + 1}.text`);
+          {ingredients.fields.length > 0 && (
+            <ol className="flex flex-col gap-3">
+              {ingredients.fields.map((field, index) => (
+                <li key={field.id} className="flex flex-col gap-1.5">
+                  <div className="flex items-center gap-2">
+                    <Input
+                      aria-label={t('form.ingredientLine', { number: index + 1 })}
+                      maxLength={300}
+                      autoComplete="off"
+                      {...form.register(`ingredients.${index}.text`)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault();
+                          if (index === ingredients.fields.length - 1) {
+                            ingredients.append({ text: '', optional: false });
+                          } else {
+                            form.setFocus(`ingredients.${index + 1}.text`);
+                          }
                         }
-                      }
-                    }}
-                  />
-                  <RowActions
-                    index={index}
-                    count={ingredients.fields.length}
-                    onMove={(to) => ingredients.move(index, to)}
-                    onRemove={() => ingredients.remove(index)}
-                  />
-                </div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-1">
-                  <ParsedPreview control={form.control} index={index} />
-                  <label className="text-fg-muted inline-flex min-h-9 items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      className="accent-primary size-4"
-                      {...form.register(`ingredients.${index}.optional`)}
+                      }}
                     />
-                    {t('form.optional')}
-                  </label>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => ingredients.append({ text: '', optional: false })}
-            >
-              <Plus aria-hidden="true" />
-              {t('form.addIngredient')}
-            </Button>
-            <PasteList
+                    <RowActions
+                      index={index}
+                      count={ingredients.fields.length}
+                      onMove={(to) => ingredients.move(index, to)}
+                      onRemove={() => ingredients.remove(index)}
+                    />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-1">
+                    <ParsedPreview control={form.control} index={index} />
+                    <label className="text-fg-muted inline-flex min-h-9 items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        className="accent-primary size-4"
+                        {...form.register(`ingredients.${index}.optional`)}
+                      />
+                      {t('form.optional')}
+                    </label>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          )}
+          {ingredients.fields.length === 0 ? (
+            <BulkEntry
+              name="ingredientsPaste"
+              control={form.control}
               label={t('form.pasteIngredients')}
               hint={t('form.pasteHint')}
+              placeholder={t('form.pasteIngredientsPlaceholder')}
               split={splitIngredientLines}
-              onAdd={(lines) => {
-                const current = form.getValues('ingredients').filter((r) => r.text.trim() !== '');
-                ingredients.replace([
-                  ...current,
-                  ...lines.map((text) => ({ text, optional: false })),
-                ]);
+              onSplit={(lines) => {
+                ingredients.replace(lines.map((text) => ({ text, optional: false })));
+                form.setValue('ingredientsPaste', '');
               }}
+              manualLabel={t('form.addOneByOne')}
+              onManual={() => ingredients.append({ text: '', optional: false })}
             />
-          </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => ingredients.append({ text: '', optional: false })}
+              >
+                <Plus aria-hidden="true" />
+                {t('form.addIngredient')}
+              </Button>
+              <PasteList
+                label={t('form.pasteMore')}
+                hint={t('form.pasteHint')}
+                split={splitIngredientLines}
+                onAdd={(lines) => {
+                  const current = form.getValues('ingredients').filter((r) => r.text.trim() !== '');
+                  ingredients.replace([
+                    ...current,
+                    ...lines.map((text) => ({ text, optional: false })),
+                  ]);
+                }}
+              />
+            </div>
+          )}
         </Card>
 
         <Card className="flex flex-col gap-4">
           <h2 className="text-xl">{t('form.steps')}</h2>
           {listError === 'stepsRequired' && <Alert tone="error">{v(listError)}</Alert>}
-          <ol className="flex flex-col gap-4">
-            {steps.fields.map((field, index) => (
-              <li key={field.id} className="flex gap-3">
-                <span
-                  aria-hidden="true"
-                  className="bg-primary text-primary-fg font-display mt-2 grid size-8 shrink-0 place-items-center rounded-full"
-                >
-                  {index + 1}
-                </span>
-                <div className="flex min-w-0 flex-1 flex-col gap-2">
-                  <Textarea
-                    aria-label={t('form.stepLine', { number: index + 1 })}
-                    placeholder={t('form.stepPlaceholder')}
-                    rows={3}
-                    maxLength={4000}
-                    {...form.register(`steps.${index}.body`)}
-                  />
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Input
-                      aria-label={t('form.stepTimer')}
-                      placeholder={t('form.stepTimer')}
-                      inputMode="numeric"
-                      className="max-w-48"
-                      aria-invalid={errors.steps?.[index]?.timer ? true : undefined}
-                      {...form.register(`steps.${index}.timer`)}
+          {steps.fields.length > 0 && (
+            <ol className="flex flex-col gap-4">
+              {steps.fields.map((field, index) => (
+                <li key={field.id} className="flex gap-3">
+                  <span
+                    aria-hidden="true"
+                    className="bg-primary text-primary-fg font-display mt-2 grid size-8 shrink-0 place-items-center rounded-full"
+                  >
+                    {index + 1}
+                  </span>
+                  <div className="flex min-w-0 flex-1 flex-col gap-2">
+                    <Textarea
+                      aria-label={t('form.stepLine', { number: index + 1 })}
+                      placeholder={t('form.stepPlaceholder')}
+                      rows={3}
+                      maxLength={4000}
+                      {...form.register(`steps.${index}.body`)}
                     />
-                    <RowActions
-                      index={index}
-                      count={steps.fields.length}
-                      onMove={(to) => steps.move(index, to)}
-                      onRemove={() => steps.remove(index)}
-                    />
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <Input
+                        aria-label={t('form.stepTimer')}
+                        placeholder={t('form.stepTimer')}
+                        inputMode="numeric"
+                        className="max-w-48"
+                        aria-invalid={errors.steps?.[index]?.timer ? true : undefined}
+                        {...form.register(`steps.${index}.timer`)}
+                      />
+                      <RowActions
+                        index={index}
+                        count={steps.fields.length}
+                        onMove={(to) => steps.move(index, to)}
+                        onRemove={() => steps.remove(index)}
+                      />
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => steps.append({ body: '', timer: '' })}
-            >
-              <Plus aria-hidden="true" />
-              {t('form.addStep')}
-            </Button>
-            <PasteList
+                </li>
+              ))}
+            </ol>
+          )}
+          {steps.fields.length === 0 ? (
+            <BulkEntry
+              name="stepsPaste"
+              control={form.control}
               label={t('form.pasteSteps')}
               hint={t('form.pasteStepsHint')}
+              placeholder={t('form.pasteStepsPlaceholder')}
               split={splitSteps}
-              onAdd={(bodies) => {
-                const current = form.getValues('steps').filter((r) => r.body.trim() !== '');
-                steps.replace([...current, ...bodies.map((body) => ({ body, timer: '' }))]);
+              onSplit={(bodies) => {
+                steps.replace(bodies.map((body) => ({ body, timer: '' })));
+                form.setValue('stepsPaste', '');
               }}
+              manualLabel={t('form.addOneByOne')}
+              onManual={() => steps.append({ body: '', timer: '' })}
             />
-          </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => steps.append({ body: '', timer: '' })}
+              >
+                <Plus aria-hidden="true" />
+                {t('form.addStep')}
+              </Button>
+              <PasteList
+                label={t('form.pasteMore')}
+                hint={t('form.pasteStepsHint')}
+                split={splitSteps}
+                onAdd={(bodies) => {
+                  const current = form.getValues('steps').filter((r) => r.body.trim() !== '');
+                  steps.replace([...current, ...bodies.map((body) => ({ body, timer: '' }))]);
+                }}
+              />
+            </div>
+          )}
         </Card>
 
         <Card className="flex flex-col gap-4">
@@ -532,6 +578,58 @@ function RowActions({
   );
 }
 
+/** Inline paste box shown while a list is empty: paste everything, then split into rows. */
+function BulkEntry({
+  name,
+  control,
+  label,
+  hint,
+  placeholder,
+  split,
+  onSplit,
+  manualLabel,
+  onManual,
+}: {
+  name: 'ingredientsPaste' | 'stepsPaste';
+  control: Control<FormValues>;
+  label: string;
+  hint: string;
+  placeholder: string;
+  split: (text: string) => string[];
+  onSplit: (items: string[]) => void;
+  manualLabel: string;
+  onManual: () => void;
+}) {
+  const { t } = useTranslation('recipes');
+  const { field } = useController({ control, name });
+  const items = split(field.value);
+  const id = `${name}-hint`;
+  return (
+    <div className="flex flex-col gap-3">
+      <Textarea
+        aria-label={label}
+        aria-describedby={id}
+        placeholder={placeholder}
+        rows={8}
+        {...field}
+      />
+      <p id={id} className="text-fg-muted text-sm">
+        {hint}
+      </p>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button type="button" disabled={items.length === 0} onClick={() => onSplit(items)}>
+          <ClipboardPaste aria-hidden="true" />
+          {items.length ? t('form.splitCount', { count: items.length }) : t('form.split')}
+        </Button>
+        <Button type="button" variant="ghost" onClick={onManual}>
+          <Plus aria-hidden="true" />
+          {manualLabel}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function PasteList({
   label,
   hint,
@@ -549,7 +647,7 @@ function PasteList({
   const items = split(text);
   return (
     <>
-      <Button type="button" variant="ghost" onClick={() => setOpen(true)}>
+      <Button type="button" variant="secondary" onClick={() => setOpen(true)}>
         <ClipboardPaste aria-hidden="true" />
         {label}
       </Button>

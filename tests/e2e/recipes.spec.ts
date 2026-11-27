@@ -17,11 +17,16 @@ test.describe('recipes (real backend)', () => {
 
     await page.getByLabel('Título').fill('Arroz E2E');
     await page.getByLabel('Raciones de la receta').fill('4');
-    await page.getByLabel('Ingrediente 1').fill('400 g de arroz');
-    await page.getByLabel('Ingrediente 2').fill('2 cebollas');
-    await page.getByLabel('Ingrediente 3').fill('Sal al gusto');
+    // New recipes start with paste boxes: everything at once, then split into rows.
+    await page
+      .getByLabel('Pega aquí los ingredientes')
+      .fill('- 400 g de arroz\n2 cebollas\nSal al gusto');
+    await page.getByRole('button', { name: 'Separar en 3 filas' }).click();
+    await expect(page.getByLabel('Ingrediente 3')).toHaveValue('Sal al gusto');
     await expect(page.getByText('400 g · arroz')).toBeVisible();
-    await page.getByLabel('Paso 1').fill('Cocer el arroz.');
+    await page.getByLabel('Pega aquí los pasos').fill('1. Cocer el arroz.\n2. Servir.');
+    await page.getByRole('button', { name: 'Separar en 2 filas' }).click();
+    await expect(page.getByLabel('Paso 2')).toHaveValue('Servir.');
     await page.getByLabel('Activo (min)').fill('20');
     await page.getByLabel('Pasivo (min)').fill('25');
     await page.getByLabel('Nueva categoría').fill('Arroces');

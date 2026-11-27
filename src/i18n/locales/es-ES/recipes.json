@@ -99,10 +99,10 @@
     "ingredientsHint": "Escribe cada ingrediente como lo dirías: «400 g de arroz», «2 cebollas», «sal al gusto». Separamos la cantidad cuando es segura.",
     "ingredientLine": "Ingrediente {{number}}",
     "addIngredient": "Añadir ingrediente",
-    "pasteIngredients": "Pegar varios",
-    "pasteHint": "Pega una lista: un ingrediente por línea.",
+    "pasteIngredients": "Pega aquí los ingredientes",
+    "pasteHint": "Uno por línea, tal como lo dirías: «400 g de arroz», «sal al gusto». Después podrás revisarlos uno a uno.",
     "pasteAdd": "Añadir a la lista",
-    "pasteSteps": "Pegar pasos",
+    "pasteSteps": "Pega aquí los pasos",
     "pasteStepsHint": "Pega las instrucciones. Si están numeradas (1., 2., Paso 3…), cada número empieza un paso; si no, cada párrafo o línea será un paso. Podrás revisarlos antes de guardar.",
     "pasteAddCount_one": "Añadir {{count}}",
     "pasteAddCount_other": "Añadir {{count}}",
@@ -152,6 +152,13 @@
       "stepsRequired": "Añade al menos un paso.",
       "minutes": "Escribe minutos enteros (0 a 10 000).",
       "url": "Escribe un enlace que empiece por http:// o https://."
-    }
+    },
+    "pasteIngredientsPlaceholder": "400 g de arroz\n2 cebollas\nSal al gusto",
+    "pasteStepsPlaceholder": "1. Pica la cebolla.\n2. Sofríe 10 minutos.\n3. Añade el arroz.",
+    "pasteMore": "Pegar más",
+    "split": "Separar",
+    "splitCount_one": "Separar en {{count}} fila",
+    "splitCount_other": "Separar en {{count}} filas",
+    "addOneByOne": "Añadir uno a uno"
   }
 }
