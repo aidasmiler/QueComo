@@ -55,9 +55,9 @@ export type Database = {
         Relationships: [];
       };
       recipe_categories: {
-        Row: { color: string | null; created_at: string; household_id: string; icon: string | null; id: string; name: string };
-        Insert: { color?: string | null; household_id: string; icon?: string | null; id?: string; name: string };
-        Update: { color?: string | null; icon?: string | null; name?: string };
+        Row: { color: string | null; created_at: string; household_id: string; icon: string | null; id: string; keywords: string[]; name: string };
+        Insert: { color?: string | null; household_id: string; icon?: string | null; id?: string; keywords?: string[]; name: string };
+        Update: { color?: string | null; icon?: string | null; keywords?: string[]; name?: string };
         Relationships: [];
       };
       recipe_category_links: {
@@ -149,6 +149,7 @@ export type Database = {
           description: string | null;
           difficulty: string | null;
           equipment_status: string;
+          dismissed_suggestions: string[];
           freezing_notes: string | null;
           household_id: string;
           id: string;
@@ -187,15 +188,15 @@ export type Database = {
         Relationships: [];
       };
       household_tags: {
-        Row: { created_at: string; household_id: string; id: string; name: string };
-        Insert: { household_id: string; name: string };
-        Update: { name?: string };
+        Row: { created_at: string; household_id: string; id: string; keywords: string[]; name: string };
+        Insert: { household_id: string; keywords?: string[]; name: string };
+        Update: { keywords?: string[]; name?: string };
         Relationships: [];
       };
       household_utensils: {
-        Row: { created_at: string; household_id: string; id: string; name: string };
-        Insert: { household_id: string; name: string };
-        Update: { name?: string };
+        Row: { created_at: string; household_id: string; id: string; keywords: string[]; name: string };
+        Insert: { household_id: string; keywords?: string[]; name: string };
+        Update: { keywords?: string[]; name?: string };
         Relationships: [];
       };
       household_hidden_items: {
@@ -233,6 +234,12 @@ export type Database = {
         Insert: never;
         Update: never;
         Relationships: [{ foreignKeyName: 'recipe_method_utensils_method_id_household_id_fkey'; columns: ['method_id', 'household_id']; isOneToOne: false; referencedRelation: 'recipe_methods'; referencedColumns: ['id', 'household_id'] }];
+      };
+      recipe_optional_utensils: {
+        Row: { household_id: string; household_utensil_id: string | null; id: string; recipe_id: string; utensil_def_id: string | null };
+        Insert: never;
+        Update: never;
+        Relationships: [{ foreignKeyName: 'recipe_optional_utensils_recipe_id_household_id_fkey'; columns: ['recipe_id', 'household_id']; isOneToOne: false; referencedRelation: 'recipes'; referencedColumns: ['id', 'household_id'] }];
       };
       recipe_cook_logs: {
         Row: {

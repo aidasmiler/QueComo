@@ -25,7 +25,7 @@
     "db:types": "node scripts/db-types.mjs",
     "test:integration": "vitest run tests/integration --mode integration",
     "docs:check": "node scripts/generate-user-guide.mjs --check",
-    "db:verify": "node scripts/db-verify-pglite.mjs && node scripts/db-verify-catalogs.mjs"
+    "db:verify": "node scripts/db-verify-pglite.mjs && node scripts/db-verify-catalogs.mjs && node scripts/db-verify-classification.mjs"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.3.0",
