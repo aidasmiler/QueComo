@@ -16,6 +16,8 @@
   "QC_USE_LEAVE": "To remove yourself, use “Leave household”.",
   "QC_NOT_A_MEMBER": "That person is no longer part of the household.",
   "QC_INVALID_TARGET": "Choose another household member.",
+  "QC_RECIPE_INGREDIENTS": "Add at least one ingredient (100 at most).",
+  "QC_RECIPE_STEPS": "Add at least one step (100 at most).",
   "auth": {
     "invalid_credentials": "The email or password is incorrect.",
     "email_not_confirmed": "You haven't confirmed your email yet. Check your inbox.",

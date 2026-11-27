@@ -7,6 +7,7 @@ import esHouseholds from './locales/es-ES/households.json';
 import esProfile from './locales/es-ES/profile.json';
 import esHome from './locales/es-ES/home.json';
 import esHelp from './locales/es-ES/help.json';
+import esRecipes from './locales/es-ES/recipes.json';
 import enCommon from './locales/en-GB/common.json';
 import enAuth from './locales/en-GB/auth.json';
 import enErrors from './locales/en-GB/errors.json';
@@ -14,6 +15,7 @@ import enHouseholds from './locales/en-GB/households.json';
 import enProfile from './locales/en-GB/profile.json';
 import enHome from './locales/en-GB/home.json';
 import enHelp from './locales/en-GB/help.json';
+import enRecipes from './locales/en-GB/recipes.json';
 import { DEFAULT_LOCALE, readDeviceLocale, type SupportedLocale } from './locale';
 
 export const resources = {
@@ -25,6 +27,7 @@ export const resources = {
     profile: esProfile,
     home: esHome,
     help: esHelp,
+    recipes: esRecipes,
   },
   'en-GB': {
     common: enCommon,
@@ -34,6 +37,7 @@ export const resources = {
     profile: enProfile,
     home: enHome,
     help: enHelp,
+    recipes: enRecipes,
   },
 } as const;
 

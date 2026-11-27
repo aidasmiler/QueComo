@@ -9,6 +9,8 @@ const ARTICLES = [
   'gettingStarted',
   'households',
   'invitations',
+  'recipes',
+  'servings',
   'install',
   'language',
   'faq',

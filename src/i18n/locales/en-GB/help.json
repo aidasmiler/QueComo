@@ -27,6 +27,24 @@
         "The invited person opens the link, creates an account or signs in, and taps “Join household”."
       ]
     },
+    "recipes": {
+      "title": "Recipes",
+      "body": [
+        "Recipes holds the active household's recipe book: every member sees and can edit the same recipes.",
+        "Tap “New recipe” and write each ingredient as you'd say it (“400 g rice”, “salt to taste”). QuéComo splits out the quantity when it's safe and keeps your text.",
+        "When creating a recipe, paste all the ingredients and all the steps into their boxes and tap «Split»: QuéComo turns them into rows you can review before saving. You can also «Add one by one», and use «Paste more» on an existing recipe.",
+        "From a recipe you can favourite it, rate it, duplicate, archive or delete it. Favourites and ratings are yours; other members have their own.",
+        "Photos are private to the household. You can add one when editing a saved recipe."
+      ]
+    },
+    "servings": {
+      "title": "Adjusting servings",
+      "body": [
+        "In a recipe, use the − and + buttons next to the ingredients to change the servings.",
+        "Quantities are recalculated proportionally and the original recipe doesn't change. Amounts without a number (“to taste”) are not scaled.",
+        "Check times and dish size: they don't grow in the same proportion."
+      ]
+    },
     "install": {
       "title": "Installing the app",
       "body": [

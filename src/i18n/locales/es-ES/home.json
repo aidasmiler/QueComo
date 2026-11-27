@@ -13,8 +13,9 @@
     "invite": "Invitar a alguien",
     "manage": "Ver hogar"
   },
-  "comingNext": {
-    "title": "Estamos preparando tu cocina",
-    "body": "Esta es una versión temprana de QuéComo. En las próximas entregas llegarán el recetario, el menú semanal y la lista de la compra compartida."
+  "recipesCard": {
+    "title": "Tu recetario",
+    "body": "Guarda las recetas de casa y ajusta las cantidades a cuántos vais a comer. El menú semanal y la lista de la compra llegarán en las próximas entregas.",
+    "action": "Ir a recetas"
   }
 }

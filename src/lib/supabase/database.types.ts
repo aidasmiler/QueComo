@@ -54,6 +54,119 @@ export type Database = {
         Update: { avatar_path?: string | null; display_name?: string; locale?: string; timezone?: string };
         Relationships: [];
       };
+      recipe_categories: {
+        Row: { created_at: string; household_id: string; id: string; name: string };
+        Insert: { household_id: string; id?: string; name: string };
+        Update: { name?: string };
+        Relationships: [];
+      };
+      recipe_category_links: {
+        Row: { category_id: string; household_id: string; recipe_id: string };
+        Insert: never;
+        Update: never;
+        Relationships: [
+          {
+            foreignKeyName: 'recipe_category_links_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'recipe_categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'recipe_category_links_recipe_id_household_id_fkey';
+            columns: ['recipe_id', 'household_id'];
+            isOneToOne: false;
+            referencedRelation: 'recipes';
+            referencedColumns: ['id', 'household_id'];
+          },
+        ];
+      };
+      recipe_ingredients: {
+        Row: {
+          household_id: string;
+          id: string;
+          name: string;
+          optional: boolean;
+          original_text: string;
+          position: number;
+          quantity: number | null;
+          recipe_id: string;
+          scalable: boolean;
+          unit: string | null;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [
+          {
+            foreignKeyName: 'recipe_ingredients_recipe_id_household_id_fkey';
+            columns: ['recipe_id', 'household_id'];
+            isOneToOne: false;
+            referencedRelation: 'recipes';
+            referencedColumns: ['id', 'household_id'];
+          },
+        ];
+      };
+      recipe_steps: {
+        Row: {
+          body: string;
+          household_id: string;
+          id: string;
+          position: number;
+          recipe_id: string;
+          timer_minutes: number | null;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [
+          {
+            foreignKeyName: 'recipe_steps_recipe_id_household_id_fkey';
+            columns: ['recipe_id', 'household_id'];
+            isOneToOne: false;
+            referencedRelation: 'recipes';
+            referencedColumns: ['id', 'household_id'];
+          },
+        ];
+      };
+      recipe_user_state: {
+        Row: {
+          favorite: boolean;
+          rating: number | null;
+          recipe_id: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: { favorite?: boolean; rating?: number | null; recipe_id: string; user_id?: string };
+        Update: { favorite?: boolean; rating?: number | null };
+        Relationships: [];
+      };
+      recipes: {
+        Row: {
+          active_minutes: number | null;
+          archived_at: string | null;
+          base_servings: number;
+          created_at: string;
+          created_by: string | null;
+          description: string | null;
+          difficulty: string | null;
+          freezing_notes: string | null;
+          household_id: string;
+          id: string;
+          notes: string | null;
+          passive_minutes: number | null;
+          photo_path: string | null;
+          reheating_notes: string | null;
+          source_author: string | null;
+          source_url: string | null;
+          storage_notes: string | null;
+          tags: string[];
+          title: string;
+          total_minutes: number | null;
+          updated_at: string;
+        };
+        Insert: never;
+        Update: { archived_at?: string | null; photo_path?: string | null };
+        Relationships: [];
+      };
       user_dietary_preferences: {
         Row: {
           created_at: string;
@@ -96,6 +209,7 @@ export type Database = {
       is_household_owner: { Args: { p_household_id: string }; Returns: boolean };
       leave_household: { Args: { p_household_id: string }; Returns: undefined };
       remove_household_member: { Args: { p_household_id: string; p_user_id: string }; Returns: undefined };
+      save_recipe: { Args: { p_recipe: Json }; Returns: string };
       revoke_household_invitation: { Args: { p_invitation_id: string }; Returns: undefined };
       shares_household_with: { Args: { p_user_id: string }; Returns: boolean };
       transfer_household_ownership: {
